@@ -1,6 +1,7 @@
 import type { Element } from '../types';
+import { createGeneratedElements } from './generatedPool';
 
-export const ELEMENTS: Element[] = [
+const CORE_ELEMENTS: Element[] = [
   // PRIMORDIAL (unlocked after Big Bang)
   { id: 'fire', name: 'Fire', category: 'Primordial', emoji: '🔥', description: 'The primal flame', tags: ['hot', 'light', 'energy'], discovered: false, worldEffects: { heat: 2 } },
   { id: 'water', name: 'Water', category: 'Primordial', emoji: '💧', description: 'The source of life', tags: ['wet', 'flow', 'life'], discovered: false, worldEffects: { water: 2 } },
@@ -152,4 +153,9 @@ export const ELEMENTS: Element[] = [
   { id: 'air_purifier', name: 'Air Purifier', category: 'Weird', emoji: '🌬️', description: 'Device that cleans the air', tags: ['clean', 'tech', 'air'], discovered: false, worldEffects: { pollution: -3 } },
   { id: 'climate_change', name: 'Climate Change', category: 'Weird', emoji: '🌡️', description: 'A destabilized planet-wide pattern', tags: ['heat', 'weather', 'instability'], discovered: false, worldEffects: { heat: 2, pollution: 2, life: -1 } },
   { id: 'microplastic', name: 'Microplastic', category: 'Weird', emoji: '🧪', description: 'Tiny synthetic fragments everywhere', tags: ['plastic', 'pollution', 'ocean'], discovered: false, worldEffects: { pollution: 2, life: -1 } },
+];
+
+export const ELEMENTS: Element[] = [
+  ...CORE_ELEMENTS,
+  ...createGeneratedElements(CORE_ELEMENTS),
 ];

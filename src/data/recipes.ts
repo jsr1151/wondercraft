@@ -1,6 +1,7 @@
 import type { Recipe } from '../types';
+import { createGeneratedRecipes } from './generatedPool';
 
-export const RECIPES: Recipe[] = [
+const CORE_RECIPES: Recipe[] = [
   // PRIMORDIAL BASICS
   { id: 'r1', inputA: 'water', inputB: 'earth', output: 'mud' },
   { id: 'r2', inputA: 'fire', inputB: 'water', output: 'steam' },
@@ -198,4 +199,9 @@ export const RECIPES: Recipe[] = [
   { id: 'r161', inputA: 'microplastic', inputB: 'fish', output: 'pollution' },
   { id: 'r162', inputA: 'climate_change', inputB: 'ice', output: 'water' },
   { id: 'r163', inputA: 'climate_change', inputB: 'forest', output: 'drought' },
+];
+
+export const RECIPES: Recipe[] = [
+  ...CORE_RECIPES,
+  ...createGeneratedRecipes(),
 ];
