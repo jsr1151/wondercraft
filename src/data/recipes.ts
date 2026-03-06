@@ -199,6 +199,12 @@ const CORE_RECIPES: Recipe[] = [
   { id: 'r161', inputA: 'microplastic', inputB: 'fish', output: 'pollution' },
   { id: 'r162', inputA: 'climate_change', inputB: 'ice', output: 'water' },
   { id: 'r163', inputA: 'climate_change', inputB: 'forest', output: 'drought' },
+
+  // LOGIC PATCHES
+  { id: 'r164', inputA: 'air', inputB: 'moon', output: 'atmosphere' },
+  { id: 'r165', inputA: 'steam', inputB: 'fire', output: 'energy' },
+  { id: 'r166', inputA: 'steam', inputB: 'water', output: 'cloud' },
+  { id: 'r167', inputA: 'steam', inputB: 'earth', output: 'geyser' },
 ];
 
 export const RECIPES: Recipe[] = [

@@ -13,22 +13,22 @@ const GENERATED_ANCHOR_IDS = [
   'fire', 'water', 'earth', 'air', 'mud', 'steam', 'lava', 'rain', 'plant', 'tree',
   'forest', 'grass', 'seed', 'flower', 'ocean', 'cloud', 'stone', 'metal', 'sand', 'ice',
   'storm', 'lightning', 'life', 'animal', 'human', 'village', 'city', 'tool', 'engine', 'factory',
-  'computer', 'internet', 'robot', 'knowledge', 'magic', 'sun', 'moon', 'star', 'galaxy', 'pollution',
+  'computer', 'robot',
 ] as const;
 
 const ASPECTS: AspectDef[] = [
-  { id: 'ember', label: 'Emberforged', catalyst: 'fire', category: 'Nature', emoji: '🔥', worldEffects: { heat: 1 } },
-  { id: 'tidal', label: 'Tidal', catalyst: 'water', category: 'Nature', emoji: '🌊', worldEffects: { water: 1 } },
-  { id: 'terran', label: 'Terran', catalyst: 'earth', category: 'Materials', emoji: '🪨', worldEffects: { vegetation: 1 } },
-  { id: 'aerial', label: 'Aerial', catalyst: 'air', category: 'Weather', emoji: '💨', worldEffects: { atmosphere: 1 } },
-  { id: 'vital', label: 'Vital', catalyst: 'life', category: 'Life', emoji: '✨', worldEffects: { life: 1 } },
+  { id: 'energized', label: 'Energized', catalyst: 'energy', category: 'Nature', emoji: '⚡', worldEffects: { heat: 1 } },
+  { id: 'oceanic', label: 'Oceanic', catalyst: 'ocean', category: 'Nature', emoji: '🌊', worldEffects: { water: 1 } },
+  { id: 'mineral', label: 'Mineral', catalyst: 'stone', category: 'Materials', emoji: '🪨', worldEffects: { vegetation: 1 } },
+  { id: 'atmospheric', label: 'Atmospheric', catalyst: 'climate', category: 'Weather', emoji: '💨', worldEffects: { atmosphere: 1 } },
+  { id: 'biotic', label: 'Biotic', catalyst: 'life', category: 'Life', emoji: '✨', worldEffects: { life: 1 } },
   { id: 'ancient', label: 'Ancient', catalyst: 'time', category: 'Abstract', emoji: '⌛' },
   { id: 'arcane', label: 'Arcane', catalyst: 'magic', category: 'Abstract', emoji: '🔮', worldEffects: { magic: 1 } },
-  { id: 'metallic', label: 'Metallic', catalyst: 'metal', category: 'Materials', emoji: '⚙️', worldEffects: { technology: 1 } },
-  { id: 'storm', label: 'Stormborn', catalyst: 'lightning', category: 'Weather', emoji: '⚡', worldEffects: { atmosphere: 1 } },
-  { id: 'urban', label: 'Urban', catalyst: 'city', category: 'Civilization', emoji: '🏙️', worldEffects: { civilization: 1 } },
-  { id: 'cosmic', label: 'Cosmic', catalyst: 'star', category: 'Cosmic', emoji: '⭐', worldEffects: { magic: 1 } },
-  { id: 'frozen', label: 'Frozen', catalyst: 'cold', category: 'Nature', emoji: '❄️', worldEffects: { cold: 1 } },
+  { id: 'mechanized', label: 'Mechanized', catalyst: 'engine', category: 'Technology', emoji: '⚙️', worldEffects: { technology: 1 } },
+  { id: 'charged', label: 'Charged', catalyst: 'electricity', category: 'Weather', emoji: '⚡', worldEffects: { atmosphere: 1 } },
+  { id: 'urbanized', label: 'Urbanized', catalyst: 'city', category: 'Civilization', emoji: '🏙️', worldEffects: { civilization: 1 } },
+  { id: 'solar', label: 'Solar', catalyst: 'sun', category: 'Cosmic', emoji: '☀️', worldEffects: { magic: 1 } },
+  { id: 'cryogenic', label: 'Cryogenic', catalyst: 'cold', category: 'Nature', emoji: '❄️', worldEffects: { cold: 1 } },
 ];
 
 const GENERATED_CATEGORY_EFFECTS: Partial<Record<ElementCategory, Partial<WorldInfluence>>> = {
@@ -63,7 +63,7 @@ export function createGeneratedElements(coreElements: Element[]): Element[] {
         name: `${aspect.label} ${anchor.name}`,
         category: aspect.category,
         emoji: aspect.emoji,
-        description: `${anchor.name} reshaped through ${aspect.label.toLowerCase()} influence.`,
+        description: `${anchor.name} transformed by ${aspect.label.toLowerCase()} conditions.`,
         tags: ['fusion', anchor.id, aspect.id, ...anchor.tags.slice(0, 2)],
         discovered: false,
         worldEffects: { ...baseEffects, ...aspect.worldEffects },

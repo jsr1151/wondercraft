@@ -24,6 +24,7 @@ const CORE_ELEMENTS: Element[] = [
   { id: 'mushroom', name: 'Mushroom', category: 'Nature', emoji: '🍄', description: 'Strange growth in the dark', tags: ['fungi', 'life', 'weird'], discovered: false, worldEffects: { vegetation: 1 } },
   { id: 'ocean', name: 'Ocean', category: 'Nature', emoji: '🌊', description: 'Vast body of water', tags: ['water', 'vast', 'deep'], discovered: false, worldEffects: { water: 5 } },
   { id: 'cloud', name: 'Cloud', category: 'Nature', emoji: '☁️', description: 'Water vapor floating above', tags: ['sky', 'water', 'weather'], discovered: false, worldEffects: { atmosphere: 1 } },
+  { id: 'geyser', name: 'Geyser', category: 'Nature', emoji: '♨️', description: 'Pressurized steam erupting from stone', tags: ['steam', 'earth', 'eruption'], discovered: false, worldEffects: { heat: 1, water: 1 } },
   { id: 'river', name: 'River', category: 'Nature', emoji: '🏞️', description: 'Flowing arteries of the land', tags: ['water', 'flow', 'fresh'], discovered: false, worldEffects: { water: 2, life: 1 } },
   { id: 'lake', name: 'Lake', category: 'Nature', emoji: '🛶', description: 'Still inland waters', tags: ['water', 'fresh', 'calm'], discovered: false, worldEffects: { water: 2 } },
   { id: 'desert', name: 'Desert', category: 'Nature', emoji: '🏜️', description: 'Dry lands under relentless sun', tags: ['dry', 'hot', 'sand'], discovered: false, worldEffects: { heat: 2, water: -1 } },
@@ -69,6 +70,7 @@ const CORE_ELEMENTS: Element[] = [
   { id: 'hurricane', name: 'Hurricane', category: 'Weather', emoji: '🌀', description: 'A massive rotating ocean storm', tags: ['storm', 'ocean', 'violent'], discovered: false, worldEffects: { water: 1, atmosphere: 1 } },
   { id: 'rainbow', name: 'Rainbow', category: 'Weather', emoji: '🌈', description: 'Light split across the sky', tags: ['light', 'rain', 'sky'], discovered: false, worldEffects: { magic: 1 } },
   { id: 'climate', name: 'Climate', category: 'Weather', emoji: '🌤️', description: 'Long rhythms of world weather', tags: ['weather', 'balance', 'time'], discovered: false, worldEffects: { atmosphere: 2 } },
+  { id: 'atmosphere', name: 'Atmosphere', category: 'Weather', emoji: '🌎', description: 'A breathable shell around a world', tags: ['air', 'sky', 'planet'], discovered: false, worldEffects: { atmosphere: 3, life: 1 } },
 
   // LIFE
   { id: 'life', name: 'Life', category: 'Life', emoji: '✨', description: 'The spark of existence', tags: ['vital', 'energy', 'exist'], discovered: false, worldEffects: { life: 5 } },
