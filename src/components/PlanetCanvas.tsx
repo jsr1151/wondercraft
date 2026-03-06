@@ -25,26 +25,29 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const W = 200;
-    const H = 200;
+    const W = 520;
+    const H = 520;
     const cx = W / 2;
     const cy = H / 2;
-    const r = 88;
+    const r = 220;
 
     const rng = seededRandom(seed);
-    const terrainPatches: { x: number; y: number; r: number; type: number }[] = [];
-    for (let i = 0; i < 30; i++) {
+    const terrainPatches: { x: number; y: number; radius: number; bias: number }[] = [];
+    for (let i = 0; i < 90; i++) {
       terrainPatches.push({
         x: (rng() * 2 - 1) * r,
         y: (rng() * 2 - 1) * r,
-        r: 10 + rng() * 30,
-        type: rng(),
+        radius: 6 + rng() * 38,
+        bias: rng(),
       });
     }
+
     const starPositions: { x: number; y: number; r: number }[] = [];
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 200; i++) {
       starPositions.push({ x: rng() * W, y: rng() * H, r: rng() * 1.5 });
     }
+
+    const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
     const draw = (t: number) => {
       const phase = t * 0.0003;
@@ -68,42 +71,53 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.clip();
 
-      const waterLevel = Math.max(0, wi.water) / 30;
-      const heatLevel = Math.max(0, wi.heat) / 30;
-      const coldLevel = Math.max(0, wi.cold) / 30;
-      const vegLevel = Math.max(0, wi.vegetation) / 30;
-      const pollLevel = Math.max(0, wi.pollution) / 30;
-      const civLevel = Math.max(0, wi.civilization) / 30;
-      const magicLevel = Math.max(0, wi.magic) / 30;
-      const lifeLevel = Math.max(0, wi.life) / 30;
+      const waterLevel = clamp(Math.max(0, wi.water) / 32, 0, 1);
+      const heatLevel = clamp(Math.max(0, wi.heat) / 32, 0, 1);
+      const coldLevel = clamp(Math.max(0, wi.cold) / 32, 0, 1);
+      const vegLevel = clamp(Math.max(0, wi.vegetation) / 32, 0, 1);
+      const pollLevel = clamp(Math.max(0, wi.pollution) / 32, 0, 1);
+      const civLevel = clamp(Math.max(0, wi.civilization) / 32, 0, 1);
+      const magicLevel = clamp(Math.max(0, wi.magic) / 32, 0, 1);
+      const lifeLevel = clamp(Math.max(0, wi.life) / 32, 0, 1);
+      const atmosLevel = clamp(Math.max(0, wi.atmosphere) / 32, 0, 1);
 
-      const baseR = Math.round(139 - waterLevel * 80 + heatLevel * 60);
-      const baseG = Math.round(100 + waterLevel * 30 + vegLevel * 50);
-      const baseB = Math.round(80 + waterLevel * 120 + coldLevel * 80);
-      ctx.fillStyle = `rgb(${Math.min(255,Math.max(0,baseR))},${Math.min(255,Math.max(0,baseG))},${Math.min(255,Math.max(0,baseB))})`;
+      const development = clamp(
+        waterLevel * 0.9 + vegLevel * 1.2 + lifeLevel + civLevel * 0.9 + atmosLevel * 0.6,
+        0,
+        1
+      );
+
+      // Start from a mostly bare rocky world and shift color with discovered influence.
+      const baseR = Math.round(116 + heatLevel * 58 - waterLevel * 36 + pollLevel * 24);
+      const baseG = Math.round(96 + vegLevel * 92 + waterLevel * 26 - pollLevel * 20);
+      const baseB = Math.round(82 + waterLevel * 112 + coldLevel * 78 - heatLevel * 22);
+      ctx.fillStyle = `rgb(${clamp(baseR, 0, 255)},${clamp(baseG, 0, 255)},${clamp(baseB, 0, 255)})`;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
 
-      for (const patch of terrainPatches) {
+      const patchCount = Math.floor(4 + development * 42 + waterLevel * 8 + vegLevel * 10);
+      for (let i = 0; i < patchCount; i++) {
+        const patch = terrainPatches[i];
         const px = cx + patch.x * Math.cos(phase) - patch.y * Math.sin(phase);
         const py = cy + patch.x * Math.sin(phase) + patch.y * Math.cos(phase);
 
         let patchColor: string;
-        if (patch.type < 0.3 + vegLevel * 0.4) {
-          const g = Math.round(100 + lifeLevel * 80);
-          patchColor = `rgba(30,${Math.min(255,g)},40,0.7)`;
-        } else if (patch.type < 0.5 + waterLevel * 0.3) {
-          patchColor = `rgba(20,80,${Math.round(160 + waterLevel * 60)},0.8)`;
-        } else if (patch.type < 0.7) {
-          const lR = Math.round(120 + heatLevel * 60);
-          const lG = Math.round(90 + vegLevel * 30);
-          patchColor = `rgba(${Math.min(255,lR)},${Math.min(255,lG)},60,0.7)`;
+        const wetBias = waterLevel * 0.75;
+        const greenBias = vegLevel * 0.95 + lifeLevel * 0.4;
+        const dryBias = heatLevel * 0.6 + (1 - waterLevel) * 0.2;
+
+        if (patch.bias < wetBias) {
+          patchColor = `rgba(26, 94, ${Math.round(160 + waterLevel * 80)}, ${0.35 + waterLevel * 0.35})`;
+        } else if (patch.bias < wetBias + greenBias) {
+          patchColor = `rgba(24, ${Math.round(120 + lifeLevel * 70)}, 44, ${0.35 + vegLevel * 0.35})`;
+        } else if (patch.bias < wetBias + greenBias + dryBias) {
+          patchColor = `rgba(${Math.round(138 + heatLevel * 52)}, ${Math.round(110 - waterLevel * 20)}, 72, 0.35)`;
         } else {
-          patchColor = `rgba(100,90,80,0.6)`;
+          patchColor = 'rgba(96, 88, 80, 0.28)';
         }
 
         ctx.fillStyle = patchColor;
         ctx.beginPath();
-        ctx.ellipse(px, py, patch.r, patch.r * 0.7, phase, 0, Math.PI * 2);
+        ctx.ellipse(px, py, patch.radius, patch.radius * 0.65, phase, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -120,13 +134,13 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       }
 
       if (pollLevel > 0.05) {
-        ctx.fillStyle = `rgba(60,50,20,${pollLevel * 0.6})`;
+        ctx.fillStyle = `rgba(66, 58, 44, ${pollLevel * 0.62})`;
         ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
       }
 
       if (civLevel > 0.05) {
         const rng2 = seededRandom(seed + 42);
-        const numCities = Math.floor(civLevel * 20);
+        const numCities = Math.floor(6 + civLevel * 36);
         for (let i = 0; i < numCities; i++) {
           const angle = rng2() * Math.PI * 2 + phase;
           const dist = rng2() * r * 0.8;
@@ -141,7 +155,6 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
 
       ctx.restore();
 
-      const atmosLevel = Math.max(0, wi.atmosphere) / 30;
       if (atmosLevel > 0.01 || pollLevel > 0.05) {
         const haloColor = pollLevel > 0.15
           ? `rgba(120,80,20,${Math.min(0.4, atmosLevel * 0.3 + pollLevel * 0.2)})`
@@ -188,7 +201,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
 
   return (
     <div className="planet-container">
-      <canvas ref={canvasRef} width={200} height={200} className="planet-canvas" />
+      <canvas ref={canvasRef} width={520} height={520} className="planet-canvas" />
       <div className="planet-label">Your World</div>
     </div>
   );

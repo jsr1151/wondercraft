@@ -51,7 +51,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         discoveredElements: discovered,
         worldInfluence,
         recentDiscoveries: [...PRIMORDIAL_ELEMENTS],
-        eventLog: ['🌌 The Big Bang! The universe springs into existence!', '🔥💧🌍💨 The primordial elements emerge: Fire, Water, Earth, Air'],
+        eventLog: ['🌌 The Big Bang! The universe springs into existence!', '🔥💧🟫💨 The primordial elements emerge: Fire, Water, Earth, Air'],
         hints: ['Combine two elements to discover new ones!'],
       };
     }
@@ -99,7 +99,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         eventLog: newEventLog,
         selectedSlotA: null,
         selectedSlotB: null,
-        lastCombinationResult: { success: true, elementId: outputId },
+        lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
       };
     }
 

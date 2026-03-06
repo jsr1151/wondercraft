@@ -127,4 +127,75 @@ export const RECIPES: Recipe[] = [
   { id: 'r106', inputA: 'sun', inputB: 'water', output: 'moon' },
   { id: 'r107', inputA: 'star', inputB: 'void', output: 'moon' },
   { id: 'r108', inputA: 'ocean', inputB: 'sun', output: 'salt' },
+
+  // EXPANDED NATURE
+  { id: 'r109', inputA: 'rain', inputB: 'earth', output: 'river' },
+  { id: 'r110', inputA: 'river', inputB: 'water', output: 'lake' },
+  { id: 'r111', inputA: 'earth', inputB: 'stone', output: 'mountain' },
+  { id: 'r112', inputA: 'lava', inputB: 'mountain', output: 'volcano' },
+  { id: 'r113', inputA: 'sand', inputB: 'sun', output: 'desert' },
+  { id: 'r114', inputA: 'forest', inputB: 'rain', output: 'jungle' },
+  { id: 'r115', inputA: 'ocean', inputB: 'plant', output: 'coral' },
+  { id: 'r116', inputA: 'ocean', inputB: 'earth', output: 'island' },
+  { id: 'r117', inputA: 'stone', inputB: 'plant', output: 'moss' },
+  { id: 'r118', inputA: 'farm', inputB: 'plant', output: 'wheat' },
+  { id: 'r119', inputA: 'mountain', inputB: 'water', output: 'river' },
+  { id: 'r120', inputA: 'desert', inputB: 'rain', output: 'grass' },
+
+  // EXPANDED MATERIALS
+  { id: 'r121', inputA: 'lava', inputB: 'water', output: 'obsidian' },
+  { id: 'r122', inputA: 'metal', inputB: 'earth', output: 'copper' },
+  { id: 'r123', inputA: 'copper', inputB: 'iron', output: 'bronze' },
+  { id: 'r124', inputA: 'swamp', inputB: 'time', output: 'oil' },
+  { id: 'r125', inputA: 'oil', inputB: 'tool', output: 'plastic' },
+  { id: 'r126', inputA: 'clay', inputB: 'stone', output: 'concrete' },
+  { id: 'r127', inputA: 'stone', inputB: 'magic', output: 'crystal' },
+
+  // EXPANDED WEATHER
+  { id: 'r128', inputA: 'air', inputB: 'energy', output: 'wind' },
+  { id: 'r129', inputA: 'storm', inputB: 'ocean', output: 'hurricane' },
+  { id: 'r130', inputA: 'rain', inputB: 'sunlight', output: 'rainbow' },
+  { id: 'r131', inputA: 'air', inputB: 'time', output: 'climate' },
+  { id: 'r132', inputA: 'hurricane', inputB: 'cold', output: 'blizzard' },
+
+  // EXPANDED LIFE
+  { id: 'r133', inputA: 'grass', inputB: 'life', output: 'insect' },
+  { id: 'r134', inputA: 'animal', inputB: 'rain', output: 'reptile' },
+  { id: 'r135', inputA: 'animal', inputB: 'animal', output: 'mammal' },
+  { id: 'r136', inputA: 'fish', inputB: 'ocean', output: 'whale' },
+  { id: 'r137', inputA: 'reptile', inputB: 'time', output: 'dinosaur' },
+  { id: 'r138', inputA: 'life', inputB: 'time', output: 'evolution' },
+
+  // EXPANDED CIVILIZATION
+  { id: 'r139', inputA: 'human', inputB: 'water', output: 'boat' },
+  { id: 'r140', inputA: 'boat', inputB: 'stone', output: 'bridge' },
+  { id: 'r141', inputA: 'village', inputB: 'stone', output: 'castle' },
+  { id: 'r142', inputA: 'castle', inputB: 'city', output: 'kingdom' },
+  { id: 'r143', inputA: 'village', inputB: 'road', output: 'market' },
+  { id: 'r144', inputA: 'knowledge', inputB: 'city', output: 'library' },
+
+  // EXPANDED TECHNOLOGY
+  { id: 'r145', inputA: 'human', inputB: 'plant', output: 'medicine' },
+  { id: 'r146', inputA: 'medicine', inputB: 'life', output: 'vaccine' },
+  { id: 'r147', inputA: 'energy', inputB: 'metal', output: 'battery' },
+  { id: 'r148', inputA: 'battery', inputB: 'sunlight', output: 'solar_panel' },
+  { id: 'r149', inputA: 'engine', inputB: 'air', output: 'airplane' },
+  { id: 'r150', inputA: 'engine', inputB: 'fire', output: 'rocket' },
+  { id: 'r151', inputA: 'rocket', inputB: 'computer', output: 'satellite' },
+  { id: 'r152', inputA: 'computer', inputB: 'robot', output: 'ai' },
+
+  // EXPANDED ABSTRACT + COSMIC
+  { id: 'r153', inputA: 'order', inputB: 'chaos', output: 'balance' },
+  { id: 'r154', inputA: 'stone', inputB: 'void', output: 'asteroid' },
+  { id: 'r155', inputA: 'ice', inputB: 'void', output: 'comet' },
+  { id: 'r156', inputA: 'star', inputB: 'dust', output: 'nebula' },
+  { id: 'r157', inputA: 'earth', inputB: 'cosmos', output: 'planet' },
+  { id: 'r158', inputA: 'planet', inputB: 'rocket', output: 'satellite' },
+
+  // EXPANDED WEIRD
+  { id: 'r159', inputA: 'pollution', inputB: 'time', output: 'climate_change' },
+  { id: 'r160', inputA: 'plastic', inputB: 'ocean', output: 'microplastic' },
+  { id: 'r161', inputA: 'microplastic', inputB: 'fish', output: 'pollution' },
+  { id: 'r162', inputA: 'climate_change', inputB: 'ice', output: 'water' },
+  { id: 'r163', inputA: 'climate_change', inputB: 'forest', output: 'drought' },
 ];

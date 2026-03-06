@@ -32,6 +32,12 @@
   transition: all 0.2s;
 }
 
+.craft-slot.drag-target {
+  border-color: var(--warning);
+  background: rgba(251, 191, 36, 0.12);
+  transform: translateY(-2px);
+}
+
 .craft-slot.filled {
   border-style: solid;
   border-color: var(--accent);

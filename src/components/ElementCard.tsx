@@ -15,26 +15,41 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
   const isSelectedB = selectedSlotB === element.id;
 
   const handleClick = () => {
-    if (!selectedSlotA) {
-      dispatch({ type: 'SELECT_SLOT_A', elementId: element.id });
-    } else if (!selectedSlotB && selectedSlotA !== element.id) {
-      dispatch({ type: 'SELECT_SLOT_B', elementId: element.id });
+    if (isSelectedA && isSelectedB) {
+      dispatch({ type: 'SELECT_SLOT_B', elementId: null });
     } else if (isSelectedA) {
       dispatch({ type: 'SELECT_SLOT_A', elementId: null });
     } else if (isSelectedB) {
       dispatch({ type: 'SELECT_SLOT_B', elementId: null });
+    } else if (!selectedSlotA) {
+      dispatch({ type: 'SELECT_SLOT_A', elementId: element.id });
+    } else if (!selectedSlotB) {
+      dispatch({ type: 'SELECT_SLOT_B', elementId: element.id });
     } else {
       dispatch({ type: 'SELECT_SLOT_A', elementId: element.id });
     }
   };
 
-  const selClass = isSelectedA ? 'selected-a' : isSelectedB ? 'selected-b' : '';
+  const handleDragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
+    event.dataTransfer.setData('text/wondercraft-element-id', element.id);
+    event.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const selClass = isSelectedA && isSelectedB
+    ? 'selected-both'
+    : isSelectedA
+      ? 'selected-a'
+      : isSelectedB
+        ? 'selected-b'
+        : '';
 
   if (compact) {
     return (
       <div
         className={`element-card compact ${selClass}`}
         onClick={handleClick}
+        draggable
+        onDragStart={handleDragStart}
         title={`${element.name}: ${element.description}`}
       >
         <span className="element-emoji">{element.emoji}</span>
@@ -47,6 +62,8 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
     <div
       className={`element-card ${selClass}`}
       onClick={handleClick}
+      draggable
+      onDragStart={handleDragStart}
       title={element.description}
     >
       <span className="element-emoji">{element.emoji}</span>

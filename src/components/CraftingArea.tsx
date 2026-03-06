@@ -1,10 +1,12 @@
+import { useState, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import './CraftingArea.css';
 
 export function CraftingArea() {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, lastCombinationResult, discoveredElements } = state;
+  const { selectedSlotA, selectedSlotB, lastCombinationResult } = state;
+  const [dragTarget, setDragTarget] = useState<'A' | 'B' | null>(null);
 
   const elemA = selectedSlotA ? ELEMENTS.find(e => e.id === selectedSlotA) : null;
   const elemB = selectedSlotB ? ELEMENTS.find(e => e.id === selectedSlotB) : null;
@@ -21,11 +23,36 @@ export function CraftingArea() {
   const clearSlotA = () => dispatch({ type: 'SELECT_SLOT_A', elementId: null });
   const clearSlotB = () => dispatch({ type: 'SELECT_SLOT_B', elementId: null });
 
+  const handleDrop = (slot: 'A' | 'B') => (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const elementId = event.dataTransfer.getData('text/wondercraft-element-id');
+    if (!elementId) return;
+
+    if (slot === 'A') {
+      dispatch({ type: 'SELECT_SLOT_A', elementId });
+    } else {
+      dispatch({ type: 'SELECT_SLOT_B', elementId });
+    }
+    setDragTarget(null);
+  };
+
+  const handleDragOver = (slot: 'A' | 'B') => (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (dragTarget !== slot) setDragTarget(slot);
+  };
+
+  const handleDragLeave = () => setDragTarget(null);
+
   return (
     <div className="crafting-area">
       <h2 className="crafting-title">⚗️ Crafting</h2>
       <div className="crafting-slots">
-        <div className={`craft-slot ${elemA ? 'filled' : 'empty'}`}>
+        <div
+          className={`craft-slot ${elemA ? 'filled' : 'empty'} ${dragTarget === 'A' ? 'drag-target' : ''}`}
+          onDragOver={handleDragOver('A')}
+          onDrop={handleDrop('A')}
+          onDragLeave={handleDragLeave}
+        >
           {elemA ? (
             <div className="craft-slot-content" onClick={clearSlotA}>
               <span className="craft-slot-emoji">{elemA.emoji}</span>
@@ -34,14 +61,19 @@ export function CraftingArea() {
             </div>
           ) : (
             <div className="craft-slot-placeholder">
-              <span>Select element A</span>
+              <span>Drop or click for A</span>
             </div>
           )}
         </div>
 
         <div className="craft-plus">+</div>
 
-        <div className={`craft-slot ${elemB ? 'filled' : 'empty'}`}>
+        <div
+          className={`craft-slot ${elemB ? 'filled' : 'empty'} ${dragTarget === 'B' ? 'drag-target' : ''}`}
+          onDragOver={handleDragOver('B')}
+          onDrop={handleDrop('B')}
+          onDragLeave={handleDragLeave}
+        >
           {elemB ? (
             <div className="craft-slot-content" onClick={clearSlotB}>
               <span className="craft-slot-emoji">{elemB.emoji}</span>
@@ -50,7 +82,7 @@ export function CraftingArea() {
             </div>
           ) : (
             <div className="craft-slot-placeholder">
-              <span>Select element B</span>
+              <span>Drop or click for B</span>
             </div>
           )}
         </div>
@@ -62,7 +94,7 @@ export function CraftingArea() {
             <div className="craft-result-content">
               <span className="craft-result-emoji">{resultElem.emoji}</span>
               <span className="craft-result-name">{resultElem.name}</span>
-              {!discoveredElements.has(resultElem.id) && (
+              {lastCombinationResult.isNew && (
                 <span className="craft-result-new">NEW!</span>
               )}
             </div>

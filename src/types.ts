@@ -48,7 +48,7 @@ export interface GameState {
   selectedSlotA: string | null;
   selectedSlotB: string | null;
   hints: string[];
-  lastCombinationResult: { success: boolean; elementId?: string } | null;
+  lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
 
 export type GameAction =
