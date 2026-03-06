@@ -1,0 +1,18 @@
+.hint-panel {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 220px;
+}
+
+.hint-icon { font-size: 1rem; flex-shrink: 0; }
+
+.hint-text {
+  font-size: 0.8rem;
+  color: var(--warning);
+  line-height: 1.4;
+}
