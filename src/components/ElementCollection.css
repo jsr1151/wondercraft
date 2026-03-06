@@ -69,6 +69,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  max-height: clamp(220px, 34vh, 420px);
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .no-elements {

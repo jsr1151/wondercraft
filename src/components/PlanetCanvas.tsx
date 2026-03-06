@@ -19,6 +19,21 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
 
+  const toLevel = (value: number) => Math.max(0, Math.min(1, value / 32));
+  const waterLevel = toLevel(wi.water);
+  const vegetationLevel = toLevel(wi.vegetation);
+  const lifeLevel = toLevel(wi.life);
+  const civilizationLevel = toLevel(wi.civilization);
+  const pollutionLevel = toLevel(wi.pollution);
+
+  const worldStage = (() => {
+    if (pollutionLevel > 0.62) return 'Smog Choked';
+    if (civilizationLevel > 0.58) return 'Industrial Age';
+    if (lifeLevel > 0.52 && vegetationLevel > 0.45) return 'Living World';
+    if (waterLevel > 0.42 || vegetationLevel > 0.32) return 'Awakening Biosphere';
+    return 'Barren Frontier';
+  })();
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -88,13 +103,13 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       );
 
       // Start from a mostly bare rocky world and shift color with discovered influence.
-      const baseR = Math.round(116 + heatLevel * 58 - waterLevel * 36 + pollLevel * 24);
-      const baseG = Math.round(96 + vegLevel * 92 + waterLevel * 26 - pollLevel * 20);
-      const baseB = Math.round(82 + waterLevel * 112 + coldLevel * 78 - heatLevel * 22);
+      const baseR = Math.round(118 + heatLevel * 76 - waterLevel * 52 + pollLevel * 36);
+      const baseG = Math.round(88 + vegLevel * 122 + waterLevel * 32 - pollLevel * 28);
+      const baseB = Math.round(74 + waterLevel * 144 + coldLevel * 92 - heatLevel * 28);
       ctx.fillStyle = `rgb(${clamp(baseR, 0, 255)},${clamp(baseG, 0, 255)},${clamp(baseB, 0, 255)})`;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
 
-      const patchCount = Math.floor(4 + development * 42 + waterLevel * 8 + vegLevel * 10);
+      const patchCount = Math.floor(2 + development * 72 + waterLevel * 16 + vegLevel * 16);
       for (let i = 0; i < patchCount; i++) {
         const patch = terrainPatches[i];
         const px = cx + patch.x * Math.cos(phase) - patch.y * Math.sin(phase);
@@ -106,13 +121,13 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         const dryBias = heatLevel * 0.6 + (1 - waterLevel) * 0.2;
 
         if (patch.bias < wetBias) {
-          patchColor = `rgba(26, 94, ${Math.round(160 + waterLevel * 80)}, ${0.35 + waterLevel * 0.35})`;
+          patchColor = `rgba(24, 98, ${Math.round(166 + waterLevel * 82)}, ${0.4 + waterLevel * 0.38})`;
         } else if (patch.bias < wetBias + greenBias) {
-          patchColor = `rgba(24, ${Math.round(120 + lifeLevel * 70)}, 44, ${0.35 + vegLevel * 0.35})`;
+          patchColor = `rgba(18, ${Math.round(122 + lifeLevel * 86)}, 42, ${0.42 + vegLevel * 0.35})`;
         } else if (patch.bias < wetBias + greenBias + dryBias) {
-          patchColor = `rgba(${Math.round(138 + heatLevel * 52)}, ${Math.round(110 - waterLevel * 20)}, 72, 0.35)`;
+          patchColor = `rgba(${Math.round(146 + heatLevel * 58)}, ${Math.round(108 - waterLevel * 22)}, 68, 0.38)`;
         } else {
-          patchColor = 'rgba(96, 88, 80, 0.28)';
+          patchColor = 'rgba(98, 90, 82, 0.32)';
         }
 
         ctx.fillStyle = patchColor;
@@ -135,6 +150,12 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
 
       if (pollLevel > 0.05) {
         ctx.fillStyle = `rgba(66, 58, 44, ${pollLevel * 0.62})`;
+        ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      }
+
+      if (development < 0.18) {
+        const dustAlpha = 0.22 - development * 0.7;
+        ctx.fillStyle = `rgba(148, 120, 88, ${Math.max(0, dustAlpha)})`;
         ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
       }
 
@@ -202,7 +223,14 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
   return (
     <div className="planet-container">
       <canvas ref={canvasRef} width={520} height={520} className="planet-canvas" />
-      <div className="planet-label">Your World</div>
+      <div className="planet-label">Your World: {worldStage}</div>
+      <div className="planet-metrics" aria-label="World influence levels">
+        <span>Water {wi.water}</span>
+        <span>Life {wi.life}</span>
+        <span>Green {wi.vegetation}</span>
+        <span>Civ {wi.civilization}</span>
+        <span>Pollution {wi.pollution}</span>
+      </div>
     </div>
   );
 }

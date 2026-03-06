@@ -50,11 +50,11 @@ function GameApp() {
         </div>
         <div className="app-right">
           <CraftingArea />
+          <ElementCollection />
         </div>
       </main>
 
       <RecentDiscoveries />
-      <ElementCollection />
       <EventLog />
     </div>
   );

@@ -19,6 +19,23 @@
   text-align: center;
 }
 
+.planet-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 560px;
+}
+
+.planet-metrics span {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
 @media (max-width: 700px) {
   .planet-canvas {
     width: min(92vw, 560px);

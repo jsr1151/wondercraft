@@ -15,7 +15,9 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
   const isSelectedB = selectedSlotB === element.id;
 
   const handleClick = () => {
-    if (isSelectedA && isSelectedB) {
+    if (isSelectedA && !selectedSlotB) {
+      dispatch({ type: 'SELECT_SLOT_B', elementId: element.id });
+    } else if (isSelectedA && isSelectedB) {
       dispatch({ type: 'SELECT_SLOT_B', elementId: null });
     } else if (isSelectedA) {
       dispatch({ type: 'SELECT_SLOT_A', elementId: null });
