@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://username.github.io/wondercraft",
+  "homepage": "https://jsr1151.github.io/wondercraft",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

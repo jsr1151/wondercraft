@@ -126,5 +126,5 @@ export const RECIPES: Recipe[] = [
   { id: 'r105', inputA: 'star', inputB: 'life', output: 'time' },
   { id: 'r106', inputA: 'sun', inputB: 'water', output: 'moon' },
   { id: 'r107', inputA: 'star', inputB: 'void', output: 'moon' },
-  { id: 'r109', inputA: 'ocean', inputB: 'sun', output: 'salt' },
+  { id: 'r108', inputA: 'ocean', inputB: 'sun', output: 'salt' },
 ];
