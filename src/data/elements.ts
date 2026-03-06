@@ -1,7 +1,7 @@
 import type { Element } from '../types';
 import { createGeneratedElements } from './generatedPool';
 
-const CORE_ELEMENTS: Element[] = [
+export const CORE_ELEMENTS: Element[] = [
   // PRIMORDIAL (unlocked after Big Bang)
   { id: 'fire', name: 'Fire', category: 'Primordial', emoji: '🔥', description: 'The primal flame', tags: ['hot', 'light', 'energy'], discovered: false, worldEffects: { heat: 2 } },
   { id: 'water', name: 'Water', category: 'Primordial', emoji: '💧', description: 'The source of life', tags: ['wet', 'flow', 'life'], discovered: false, worldEffects: { water: 2 } },
@@ -11,7 +11,7 @@ const CORE_ELEMENTS: Element[] = [
   // NATURE
   { id: 'mud', name: 'Mud', category: 'Nature', emoji: '🟫', description: 'Wet earth, base of creation', tags: ['wet', 'earth', 'sticky'], discovered: false },
   { id: 'steam', name: 'Steam', category: 'Nature', emoji: '♨️', description: 'Water transformed by fire', tags: ['hot', 'gas', 'water'], discovered: false, worldEffects: { atmosphere: 1 } },
-  { id: 'lava', name: 'Lava', category: 'Nature', emoji: '🌋', description: 'Molten rock from below', tags: ['hot', 'rock', 'molten'], discovered: false, worldEffects: { heat: 3 } },
+  { id: 'lava', name: 'Lava', category: 'Nature', emoji: '🟥', description: 'Molten rock from below', tags: ['hot', 'rock', 'molten'], discovered: false, worldEffects: { heat: 3 } },
   { id: 'rain', name: 'Rain', category: 'Nature', emoji: '🌧️', description: 'Water falling from the sky', tags: ['water', 'sky', 'wet'], discovered: false, worldEffects: { water: 1 } },
   { id: 'plant', name: 'Plant', category: 'Nature', emoji: '🌿', description: 'The first green life', tags: ['green', 'life', 'grow'], discovered: false, worldEffects: { vegetation: 2 } },
   { id: 'tree', name: 'Tree', category: 'Nature', emoji: '🌳', description: 'Ancient pillar of the forest', tags: ['wood', 'life', 'grow'], discovered: false, worldEffects: { vegetation: 3 } },
@@ -24,7 +24,7 @@ const CORE_ELEMENTS: Element[] = [
   { id: 'mushroom', name: 'Mushroom', category: 'Nature', emoji: '🍄', description: 'Strange growth in the dark', tags: ['fungi', 'life', 'weird'], discovered: false, worldEffects: { vegetation: 1 } },
   { id: 'ocean', name: 'Ocean', category: 'Nature', emoji: '🌊', description: 'Vast body of water', tags: ['water', 'vast', 'deep'], discovered: false, worldEffects: { water: 5 } },
   { id: 'cloud', name: 'Cloud', category: 'Nature', emoji: '☁️', description: 'Water vapor floating above', tags: ['sky', 'water', 'weather'], discovered: false, worldEffects: { atmosphere: 1 } },
-  { id: 'geyser', name: 'Geyser', category: 'Nature', emoji: '♨️', description: 'Pressurized steam erupting from stone', tags: ['steam', 'earth', 'eruption'], discovered: false, worldEffects: { heat: 1, water: 1 } },
+  { id: 'geyser', name: 'Geyser', category: 'Nature', emoji: '⛲', description: 'Pressurized steam erupting from stone', tags: ['steam', 'earth', 'eruption'], discovered: false, worldEffects: { heat: 1, water: 1 } },
   { id: 'river', name: 'River', category: 'Nature', emoji: '🏞️', description: 'Flowing arteries of the land', tags: ['water', 'flow', 'fresh'], discovered: false, worldEffects: { water: 2, life: 1 } },
   { id: 'lake', name: 'Lake', category: 'Nature', emoji: '🛶', description: 'Still inland waters', tags: ['water', 'fresh', 'calm'], discovered: false, worldEffects: { water: 2 } },
   { id: 'desert', name: 'Desert', category: 'Nature', emoji: '🏜️', description: 'Dry lands under relentless sun', tags: ['dry', 'hot', 'sand'], discovered: false, worldEffects: { heat: 2, water: -1 } },

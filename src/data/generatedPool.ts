@@ -1,72 +1,138 @@
-import type { Element, ElementCategory, Recipe, WorldInfluence } from '../types';
+import type { Element, Recipe, WorldInfluence } from '../types';
 
-interface AspectDef {
+interface GeneratedRule {
   id: string;
-  label: string;
   catalyst: string;
-  category: ElementCategory;
   emoji: string;
-  worldEffects?: Partial<WorldInfluence>;
+  effects: Partial<WorldInfluence>;
+  applies: (anchor: Element) => boolean;
+  nameFor: (anchor: Element) => string;
 }
 
 const GENERATED_ANCHOR_IDS = [
   'fire', 'water', 'earth', 'air', 'mud', 'steam', 'lava', 'rain', 'plant', 'tree',
-  'forest', 'grass', 'seed', 'flower', 'ocean', 'cloud', 'stone', 'metal', 'sand', 'ice',
-  'storm', 'lightning', 'life', 'animal', 'human', 'village', 'city', 'tool', 'engine', 'factory',
-  'computer', 'robot',
+  'forest', 'grass', 'seed', 'flower', 'ocean', 'cloud', 'river', 'lake', 'desert', 'mountain',
+  'volcano', 'coral', 'island', 'moss', 'wheat', 'stone', 'metal', 'sand', 'ice', 'snow',
+  'clay', 'brick', 'coal', 'iron', 'steel', 'salt', 'obsidian', 'copper', 'bronze', 'oil',
+  'plastic', 'concrete', 'crystal', 'storm', 'lightning', 'fog', 'tornado', 'blizzard', 'wind', 'hurricane',
+  'life', 'bacteria', 'fish', 'animal', 'human', 'bird', 'insect', 'reptile', 'mammal', 'whale',
+  'tool', 'village', 'city', 'farm', 'road', 'wheel', 'boat', 'bridge', 'castle', 'kingdom',
+  'market', 'library', 'electricity', 'computer', 'internet', 'engine', 'factory', 'robot', 'medicine', 'vaccine',
+  'solar_panel', 'battery', 'satellite', 'airplane', 'rocket', 'asteroid', 'comet', 'planet', 'pollution', 'smog',
+  'haze',
 ] as const;
 
-const ASPECTS: AspectDef[] = [
-  { id: 'energized', label: 'Energized', catalyst: 'energy', category: 'Nature', emoji: '⚡', worldEffects: { heat: 1 } },
-  { id: 'oceanic', label: 'Oceanic', catalyst: 'ocean', category: 'Nature', emoji: '🌊', worldEffects: { water: 1 } },
-  { id: 'mineral', label: 'Mineral', catalyst: 'stone', category: 'Materials', emoji: '🪨', worldEffects: { vegetation: 1 } },
-  { id: 'atmospheric', label: 'Atmospheric', catalyst: 'climate', category: 'Weather', emoji: '💨', worldEffects: { atmosphere: 1 } },
-  { id: 'biotic', label: 'Biotic', catalyst: 'life', category: 'Life', emoji: '✨', worldEffects: { life: 1 } },
-  { id: 'ancient', label: 'Ancient', catalyst: 'time', category: 'Abstract', emoji: '⌛' },
-  { id: 'arcane', label: 'Arcane', catalyst: 'magic', category: 'Abstract', emoji: '🔮', worldEffects: { magic: 1 } },
-  { id: 'mechanized', label: 'Mechanized', catalyst: 'engine', category: 'Technology', emoji: '⚙️', worldEffects: { technology: 1 } },
-  { id: 'charged', label: 'Charged', catalyst: 'electricity', category: 'Weather', emoji: '⚡', worldEffects: { atmosphere: 1 } },
-  { id: 'urbanized', label: 'Urbanized', catalyst: 'city', category: 'Civilization', emoji: '🏙️', worldEffects: { civilization: 1 } },
-  { id: 'solar', label: 'Solar', catalyst: 'sun', category: 'Cosmic', emoji: '☀️', worldEffects: { magic: 1 } },
-  { id: 'cryogenic', label: 'Cryogenic', catalyst: 'cold', category: 'Nature', emoji: '❄️', worldEffects: { cold: 1 } },
+const hasTag = (anchor: Element, tag: string) => anchor.tags.includes(tag);
+const hasAnyTag = (anchor: Element, tags: string[]) => tags.some((tag) => hasTag(anchor, tag));
+const isCategory = (anchor: Element, category: Element['category']) => anchor.category === category;
+
+const GENERATED_RULES: GeneratedRule[] = [
+  {
+    id: 'thermal',
+    catalyst: 'fire',
+    emoji: '🔥',
+    effects: { heat: 1 },
+    applies: (anchor) => !['fire', 'lava', 'sun', 'lightning'].includes(anchor.id),
+    nameFor: (anchor) => {
+      if (hasAnyTag(anchor, ['water', 'wet', 'ocean', 'rain', 'cloud'])) return `Vaporized ${anchor.name}`;
+      if (hasAnyTag(anchor, ['stone', 'metal', 'mineral', 'earth', 'solid', 'sand', 'clay'])) return `Molten ${anchor.name}`;
+      if (hasAnyTag(anchor, ['plant', 'wood', 'animal', 'life'])) return `Charred ${anchor.name}`;
+      return `Heated ${anchor.name}`;
+    },
+  },
+  {
+    id: 'cryo',
+    catalyst: 'cold',
+    emoji: '❄️',
+    effects: { cold: 1 },
+    applies: (anchor) => !['cold', 'ice', 'snow', 'blizzard'].includes(anchor.id),
+    nameFor: (anchor) => {
+      if (hasAnyTag(anchor, ['fire', 'hot', 'molten'])) return `Tempered ${anchor.name}`;
+      return `Frozen ${anchor.name}`;
+    },
+  },
+  {
+    id: 'charged',
+    catalyst: 'electricity',
+    emoji: '⚡',
+    effects: { atmosphere: 1, technology: 1 },
+    applies: (anchor) => !['electricity', 'lightning'].includes(anchor.id),
+    nameFor: (anchor) => `Charged ${anchor.name}`,
+  },
+  {
+    id: 'biotic',
+    catalyst: 'life',
+    emoji: '🧬',
+    effects: { life: 1, vegetation: 1 },
+    applies: (anchor) => !isCategory(anchor, 'Life'),
+    nameFor: (anchor) => `Living ${anchor.name}`,
+  },
+  {
+    id: 'ancient',
+    catalyst: 'time',
+    emoji: '⌛',
+    effects: { civilization: 1 },
+    applies: (anchor) => !['time'].includes(anchor.id),
+    nameFor: (anchor) => `Ancient ${anchor.name}`,
+  },
+  {
+    id: 'arcane',
+    catalyst: 'magic',
+    emoji: '🔮',
+    effects: { magic: 1 },
+    applies: (anchor) => !['magic'].includes(anchor.id),
+    nameFor: (anchor) => `Enchanted ${anchor.name}`,
+  },
+  {
+    id: 'refined',
+    catalyst: 'tool',
+    emoji: '🛠️',
+    effects: { civilization: 1, technology: 1 },
+    applies: (anchor) => !isCategory(anchor, 'Abstract') && !isCategory(anchor, 'Cosmic'),
+    nameFor: (anchor) => `Refined ${anchor.name}`,
+  },
+  {
+    id: 'industrial',
+    catalyst: 'engine',
+    emoji: '🏭',
+    effects: { technology: 1, pollution: 1 },
+    applies: (anchor) => !isCategory(anchor, 'Abstract') && !isCategory(anchor, 'Cosmic'),
+    nameFor: (anchor) => `Industrial ${anchor.name}`,
+  },
+  {
+    id: 'polluted',
+    catalyst: 'pollution',
+    emoji: '☣️',
+    effects: { pollution: 2, life: -1 },
+    applies: (anchor) => anchor.id !== 'pollution',
+    nameFor: (anchor) => `Contaminated ${anchor.name}`,
+  },
 ];
 
-const GENERATED_CATEGORY_EFFECTS: Partial<Record<ElementCategory, Partial<WorldInfluence>>> = {
-  Nature: { vegetation: 1 },
-  Materials: { technology: 1 },
-  Weather: { atmosphere: 1 },
-  Life: { life: 1 },
-  Civilization: { civilization: 1 },
-  Technology: { technology: 1 },
-  Abstract: { magic: 1 },
-  Cosmic: { magic: 1 },
-  Weird: { pollution: 1 },
-};
-
-function buildGeneratedId(anchorId: string, aspectId: string): string {
-  return `${anchorId}_${aspectId}`;
+function buildGeneratedId(anchorId: string, ruleId: string): string {
+  return `${anchorId}_${ruleId}`;
 }
 
 export function createGeneratedElements(coreElements: Element[]): Element[] {
-  const byId = new Map(coreElements.map((element) => [element.id, element]));
+  const anchorLookup = new Map(coreElements.map((element) => [element.id, element]));
   const generated: Element[] = [];
 
   for (const anchorId of GENERATED_ANCHOR_IDS) {
-    const anchor = byId.get(anchorId);
+    const anchor = anchorLookup.get(anchorId);
     if (!anchor) continue;
 
-    for (const aspect of ASPECTS) {
-      const id = buildGeneratedId(anchor.id, aspect.id);
-      const baseEffects = GENERATED_CATEGORY_EFFECTS[aspect.category] ?? {};
+    for (const rule of GENERATED_RULES) {
+      if (!rule.applies(anchor)) continue;
+
       generated.push({
-        id,
-        name: `${aspect.label} ${anchor.name}`,
-        category: aspect.category,
-        emoji: aspect.emoji,
-        description: `${anchor.name} transformed by ${aspect.label.toLowerCase()} conditions.`,
-        tags: ['fusion', anchor.id, aspect.id, ...anchor.tags.slice(0, 2)],
+        id: buildGeneratedId(anchor.id, rule.id),
+        name: rule.nameFor(anchor),
+        category: anchor.category,
+        emoji: rule.emoji,
+        description: `${anchor.name} transformed through a ${rule.id} process.`,
+        tags: ['generated', rule.id, anchor.id, ...anchor.tags.slice(0, 2)],
         discovered: false,
-        worldEffects: { ...baseEffects, ...aspect.worldEffects },
+        worldEffects: { ...(anchor.worldEffects ?? {}), ...rule.effects },
       });
     }
   }
@@ -74,17 +140,23 @@ export function createGeneratedElements(coreElements: Element[]): Element[] {
   return generated;
 }
 
-export function createGeneratedRecipes(): Recipe[] {
+export function createGeneratedRecipes(coreElements: Element[]): Recipe[] {
+  const anchorLookup = new Map(coreElements.map((element) => [element.id, element]));
   const generated: Recipe[] = [];
   let idx = 1;
 
   for (const anchorId of GENERATED_ANCHOR_IDS) {
-    for (const aspect of ASPECTS) {
+    const anchor = anchorLookup.get(anchorId);
+    if (!anchor) continue;
+
+    for (const rule of GENERATED_RULES) {
+      if (!rule.applies(anchor)) continue;
+
       generated.push({
         id: `g${idx++}`,
         inputA: anchorId,
-        inputB: aspect.catalyst,
-        output: buildGeneratedId(anchorId, aspect.id),
+        inputB: rule.catalyst,
+        output: buildGeneratedId(anchorId, rule.id),
       });
     }
   }
