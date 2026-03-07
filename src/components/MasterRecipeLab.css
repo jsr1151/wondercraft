@@ -62,6 +62,59 @@
   font-weight: 600;
 }
 
+.master-recipe-attrs {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.master-recipe-attrs > p {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.master-recipe-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.master-recipe-attr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.master-recipe-attr-field input,
+.master-recipe-attr-add input {
+  background: #0f1530;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 6px 8px;
+}
+
+.master-recipe-attr-add {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 8px;
+}
+
+.master-recipe-attr-add button {
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 6px 10px;
+}
+
 .master-recipe-status {
   font-size: 0.78rem;
   color: var(--success);
@@ -107,7 +160,7 @@
 
 .master-recipe-item {
   display: grid;
-  grid-template-columns: minmax(100px, 1fr) auto minmax(100px, 1fr) auto minmax(120px, 1fr) auto;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(90px, 1fr) auto minmax(110px, 1fr) auto auto;
   gap: 6px;
   align-items: center;
   background: var(--bg-tertiary);
@@ -115,6 +168,15 @@
   border-radius: 8px;
   padding: 6px 8px;
   font-size: 0.8rem;
+}
+
+.master-recipe-attr-tag {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 7px;
+  justify-self: start;
 }
 
 .master-recipe-remove {
@@ -134,6 +196,14 @@
 @media (max-width: 900px) {
   .master-recipe-form,
   .master-recipe-item {
+    grid-template-columns: 1fr;
+  }
+
+  .master-recipe-attr-grid {
+    grid-template-columns: repeat(2, minmax(90px, 1fr));
+  }
+
+  .master-recipe-attr-add {
     grid-template-columns: 1fr;
   }
 }

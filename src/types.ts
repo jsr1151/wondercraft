@@ -18,7 +18,10 @@ export interface WorldInfluence {
   magic: number;
   ruin: number;
   life: number;
+  [key: string]: number;
 }
+
+export type WorldEffectMap = Record<string, number>;
 
 export interface Element {
   id: string;
@@ -28,7 +31,7 @@ export interface Element {
   description: string;
   tags: string[];
   discovered: boolean;
-  worldEffects?: Partial<WorldInfluence>;
+  worldEffects?: WorldEffectMap;
   flavorText?: string;
   emoji?: string;
 }
@@ -43,6 +46,7 @@ export interface Recipe {
 
 export interface MasterRecipe extends Recipe {
   createdAt: number;
+  outputWorldEffects?: WorldEffectMap;
 }
 
 export interface EmojiAtlasEntry {
@@ -65,7 +69,7 @@ export interface GameState {
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
-  effectOverrides: Record<string, Partial<WorldInfluence>>;
+  effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: Set<string>;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
@@ -81,7 +85,7 @@ export type GameAction =
   | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
   | { type: 'SET_ICON_OVERRIDE'; elementId: string; icon: string }
   | { type: 'CLEAR_ICON_OVERRIDE'; elementId: string }
-  | { type: 'SET_EFFECT_OVERRIDE'; elementId: string; worldEffects: Partial<WorldInfluence> }
+  | { type: 'SET_EFFECT_OVERRIDE'; elementId: string; worldEffects: WorldEffectMap }
   | { type: 'CLEAR_EFFECT_OVERRIDE'; elementId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
@@ -97,7 +101,7 @@ export interface SerializableGameState {
   eventLog: string[];
   masterRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
-  effectOverrides: Record<string, Partial<WorldInfluence>>;
+  effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: string[];
   hints: string[];
 }

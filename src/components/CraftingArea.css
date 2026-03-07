@@ -233,6 +233,28 @@
   flex-wrap: wrap;
 }
 
+.attr-key-add {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 8px;
+}
+
+.attr-key-add input {
+  background: #0f1530;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 6px 8px;
+}
+
+.attr-key-add button {
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 6px 10px;
+}
+
 .attr-actions button {
   border-radius: 8px;
   padding: 8px 10px;
@@ -272,6 +294,10 @@
 
   .attr-grid {
     grid-template-columns: repeat(2, minmax(90px, 1fr));
+  }
+
+  .attr-key-add {
+    grid-template-columns: 1fr;
   }
 }
 

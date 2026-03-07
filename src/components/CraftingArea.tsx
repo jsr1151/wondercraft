@@ -2,20 +2,21 @@ import { useState, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { resolveElementIcon } from '../utils/iconResolver';
-import type { WorldInfluence } from '../types';
+import type { WorldEffectMap } from '../types';
 import './CraftingArea.css';
 
-const ATTR_KEYS: (keyof WorldInfluence)[] = [
+const DEFAULT_ATTR_KEYS = [
   'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
   'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
-];
+] as const;
 
-function buildAttrDraft(worldEffects?: Partial<WorldInfluence>): Record<string, string> {
-  const next: Record<string, string> = {};
-  for (const key of ATTR_KEYS) {
-    const value = worldEffects?.[key];
+function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, string> {
+  const next: Record<string, string> = { ...Object.fromEntries(DEFAULT_ATTR_KEYS.map((key) => [key, ''])) };
+
+  for (const [key, value] of Object.entries(worldEffects)) {
     next[key] = typeof value === 'number' ? String(value) : '';
   }
+
   return next;
 }
 
@@ -29,6 +30,7 @@ export function CraftingArea() {
   const [showAttrEditor, setShowAttrEditor] = useState(false);
   const [attrTarget, setAttrTarget] = useState('');
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>({});
+  const [newAttrKey, setNewAttrKey] = useState('');
 
   const elemA = selectedSlotA ? ELEMENTS.find(e => e.id === selectedSlotA) : null;
   const elemB = selectedSlotB ? ELEMENTS.find(e => e.id === selectedSlotB) : null;
@@ -119,17 +121,30 @@ export function CraftingArea() {
     const target = parseElementByNameOrId(attrTarget);
     if (!target) return;
 
-    const worldEffects: Partial<WorldInfluence> = {};
-    for (const key of ATTR_KEYS) {
-      const raw = attrDraft[key]?.trim();
-      if (!raw) continue;
+    const worldEffects: WorldEffectMap = {};
+    for (const [key, rawValue] of Object.entries(attrDraft)) {
+      const keyName = key.trim();
+      const raw = rawValue?.trim();
+      if (!keyName || !raw) continue;
       const num = Number(raw);
       if (!Number.isFinite(num)) continue;
-      worldEffects[key] = num;
+      worldEffects[keyName] = num;
     }
 
     dispatch({ type: 'SET_EFFECT_OVERRIDE', elementId: target.id, worldEffects });
   };
+
+  const addCustomAttrKey = () => {
+    const key = newAttrKey.trim().toLowerCase();
+    if (!key) return;
+    setAttrDraft((prev) => (key in prev ? prev : { ...prev, [key]: '' }));
+    setNewAttrKey('');
+  };
+
+  const orderedAttrKeys = [
+    ...DEFAULT_ATTR_KEYS,
+    ...Object.keys(attrDraft).filter((key) => !DEFAULT_ATTR_KEYS.includes(key as (typeof DEFAULT_ATTR_KEYS)[number])).sort(),
+  ];
 
   const clearAttrOverride = () => {
     const target = parseElementByNameOrId(attrTarget);
@@ -278,7 +293,7 @@ export function CraftingArea() {
           />
 
           <div className="attr-grid">
-            {ATTR_KEYS.map((key) => (
+            {orderedAttrKeys.map((key) => (
               <label key={key} className="attr-field">
                 <span>{key}</span>
                 <input
@@ -288,6 +303,15 @@ export function CraftingArea() {
                 />
               </label>
             ))}
+          </div>
+
+          <div className="attr-key-add">
+            <input
+              value={newAttrKey}
+              onChange={(event) => setNewAttrKey(event.target.value)}
+              placeholder="New attribute key (example: gravity)"
+            />
+            <button onClick={addCustomAttrKey}>Add Attribute Key</button>
           </div>
 
           <div className="attr-actions">

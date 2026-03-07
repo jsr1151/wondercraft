@@ -2,9 +2,14 @@ import { useMemo, useState, type DragEvent } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
-import type { MasterRecipe } from '../types';
+import type { MasterRecipe, WorldEffectMap } from '../types';
 import { resolveElementIcon } from '../utils/iconResolver';
 import './MasterRecipeLab.css';
+
+const DEFAULT_ATTR_KEYS = [
+  'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
+  'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
+] as const;
 
 const ELEMENT_OPTIONS = ELEMENTS
   .map((element) => element.name)
@@ -27,6 +32,14 @@ function elementLabel(id: string, iconOverrides: Record<string, string>): string
   return `${resolveElementIcon(element, iconOverrides)} ${element.name}`;
 }
 
+function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, string> {
+  const next: Record<string, string> = { ...Object.fromEntries(DEFAULT_ATTR_KEYS.map((key) => [key, ''])) };
+  for (const [key, value] of Object.entries(worldEffects)) {
+    next[key] = typeof value === 'number' ? String(value) : '';
+  }
+  return next;
+}
+
 export function MasterRecipeLab() {
   const { state, dispatch } = useGame();
   const [inputA, setInputA] = useState('');
@@ -36,6 +49,8 @@ export function MasterRecipeLab() {
   const [publishGlobal, setPublishGlobal] = useState(false);
   const [token, setToken] = useState(() => localStorage.getItem(GLOBAL_RECIPE_TOKEN_KEY) ?? '');
   const [saving, setSaving] = useState(false);
+  const [attrDraft, setAttrDraft] = useState<Record<string, string>>(buildAttrDraft());
+  const [newAttrKey, setNewAttrKey] = useState('');
 
   const setFromElementDrop = (target: 'A' | 'B' | 'OUT') => (event: DragEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -46,7 +61,11 @@ export function MasterRecipeLab() {
 
     if (target === 'A') setInputA(element.name);
     if (target === 'B') setInputB(element.name);
-    if (target === 'OUT') setOutput(element.name);
+    if (target === 'OUT') {
+      setOutput(element.name);
+      const merged = { ...(element.worldEffects ?? {}), ...(state.effectOverrides[element.id] ?? {}) };
+      setAttrDraft(buildAttrDraft(merged));
+    }
   };
 
   const allowDrop = (event: DragEvent<HTMLInputElement>) => {
@@ -58,6 +77,28 @@ export function MasterRecipeLab() {
     [state.masterRecipes]
   );
 
+  const orderedAttrKeys = [
+    ...DEFAULT_ATTR_KEYS,
+    ...Object.keys(attrDraft).filter((key) => !DEFAULT_ATTR_KEYS.includes(key as (typeof DEFAULT_ATTR_KEYS)[number])).sort(),
+  ];
+
+  const setOutputAndDraft = (value: string) => {
+    setOutput(value);
+    const outputId = lookupElementId(value);
+    if (!outputId) return;
+    const baseElement = ELEMENTS.find((element) => element.id === outputId);
+    if (!baseElement) return;
+    const merged = { ...(baseElement.worldEffects ?? {}), ...(state.effectOverrides[outputId] ?? {}) };
+    setAttrDraft(buildAttrDraft(merged));
+  };
+
+  const addCustomAttrKey = () => {
+    const key = newAttrKey.trim().toLowerCase();
+    if (!key) return;
+    setAttrDraft((prev) => (key in prev ? prev : { ...prev, [key]: '' }));
+    setNewAttrKey('');
+  };
+
   const addMasterRecipe = async () => {
     const inputAId = lookupElementId(inputA);
     const inputBId = lookupElementId(inputB);
@@ -68,15 +109,29 @@ export function MasterRecipeLab() {
       return;
     }
 
+    const outputWorldEffects: WorldEffectMap = {};
+    for (const [key, rawValue] of Object.entries(attrDraft)) {
+      const name = key.trim();
+      const raw = rawValue?.trim();
+      if (!name || !raw) continue;
+      const num = Number(raw);
+      if (!Number.isFinite(num)) continue;
+      outputWorldEffects[name] = num;
+    }
+
     const recipe: MasterRecipe = {
       id: `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       inputA: inputAId,
       inputB: inputBId,
       output: outputId,
       createdAt: Date.now(),
+      outputWorldEffects: Object.keys(outputWorldEffects).length > 0 ? outputWorldEffects : undefined,
     };
 
     dispatch({ type: 'ADD_MASTER_RECIPE', recipe });
+    if (Object.keys(outputWorldEffects).length > 0) {
+      dispatch({ type: 'SET_EFFECT_OVERRIDE', elementId: outputId, worldEffects: outputWorldEffects });
+    }
 
     if (publishGlobal) {
       if (!token.trim()) {
@@ -102,6 +157,7 @@ export function MasterRecipeLab() {
     setInputA('');
     setInputB('');
     setOutput('');
+    setAttrDraft(buildAttrDraft());
   };
 
   return (
@@ -137,12 +193,37 @@ export function MasterRecipeLab() {
         <input
           list="element-options"
           value={output}
-          onChange={(event) => setOutput(event.target.value)}
+          onChange={(event) => setOutputAndDraft(event.target.value)}
           placeholder="Output"
           onDragOver={allowDrop}
           onDrop={setFromElementDrop('OUT')}
         />
         <button onClick={addMasterRecipe}>Save</button>
+      </div>
+
+      <div className="master-recipe-attrs">
+        <p>Output Attributes (optional)</p>
+        <div className="master-recipe-attr-grid">
+          {orderedAttrKeys.map((key) => (
+            <label key={key} className="master-recipe-attr-field">
+              <span>{key}</span>
+              <input
+                value={attrDraft[key] ?? ''}
+                onChange={(event) => setAttrDraft((prev) => ({ ...prev, [key]: event.target.value }))}
+                placeholder="0"
+              />
+            </label>
+          ))}
+        </div>
+
+        <div className="master-recipe-attr-add">
+          <input
+            value={newAttrKey}
+            onChange={(event) => setNewAttrKey(event.target.value)}
+            placeholder="New attribute key (example: gravity)"
+          />
+          <button onClick={addCustomAttrKey}>Add Attribute Key</button>
+        </div>
       </div>
 
       <div className="master-recipe-publish">
@@ -193,6 +274,9 @@ export function MasterRecipeLab() {
               <span>{elementLabel(recipe.inputB, state.iconOverrides)}</span>
               <span>→</span>
               <span>{elementLabel(recipe.output, state.iconOverrides)}</span>
+              <span className="master-recipe-attr-tag">
+                {recipe.outputWorldEffects ? `${Object.keys(recipe.outputWorldEffects).length} attrs` : 'No attrs'}
+              </span>
               <button
                 className="master-recipe-remove"
                 onClick={() => dispatch({ type: 'REMOVE_MASTER_RECIPE', recipeId: recipe.id })}

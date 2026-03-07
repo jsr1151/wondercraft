@@ -1,4 +1,4 @@
-import type { WorldInfluence, Element } from '../types';
+import type { WorldInfluence, Element, WorldEffectMap } from '../types';
 
 export const DEFAULT_WORLD_INFLUENCE: WorldInfluence = {
   water: 0, brightness: 0, earthy: 0, air: 0, vegetation: 0, heat: 0, cold: 0, atmosphere: 0,
@@ -11,7 +11,7 @@ const MIN_INFLUENCE = -10;
 export function calculateWorldInfluence(
   discoveredIds: string[],
   elements: Element[],
-  effectOverrides: Record<string, Partial<WorldInfluence>> = {}
+  effectOverrides: Record<string, WorldEffectMap> = {}
 ): WorldInfluence {
   const result = { ...DEFAULT_WORLD_INFLUENCE };
   const discoveredSet = new Set(discoveredIds);
@@ -24,13 +24,12 @@ export function calculateWorldInfluence(
       };
 
       for (const [key, value] of Object.entries(effectiveEffects)) {
-        const k = key as keyof WorldInfluence;
-        result[k] = (result[k] || 0) + (value || 0);
+        result[key] = (result[key] || 0) + (value || 0);
       }
     }
   }
   
-  for (const key of Object.keys(result) as (keyof WorldInfluence)[]) {
+  for (const key of Object.keys(result)) {
     result[key] = Math.max(MIN_INFLUENCE, Math.min(MAX_INFLUENCE, result[key]));
   }
   

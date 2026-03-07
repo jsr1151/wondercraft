@@ -1,10 +1,10 @@
-import type { Element, Recipe, WorldInfluence } from '../types';
+import type { Element, Recipe, WorldEffectMap } from '../types';
 
 interface GeneratedRule {
   id: string;
   catalyst: string;
   emoji: string;
-  effects: Partial<WorldInfluence>;
+  effects: WorldEffectMap;
   applies: (anchor: Element) => boolean;
   nameFor: (anchor: Element) => string;
 }

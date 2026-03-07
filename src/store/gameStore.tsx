@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction } from '../types';
+import type { GameState, GameAction, WorldEffectMap } from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
@@ -90,6 +90,18 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       const outputId = recipe.output;
       const alreadyDiscovered = state.discoveredElements.has(outputId);
+      const recipeEffects: WorldEffectMap | undefined =
+        'outputWorldEffects' in recipe && recipe.outputWorldEffects
+          ? (recipe.outputWorldEffects as WorldEffectMap)
+          : undefined;
+      let nextOverrides = state.effectOverrides;
+
+      if (recipeEffects && Object.keys(recipeEffects).length > 0) {
+        nextOverrides = {
+          ...state.effectOverrides,
+          [outputId]: recipeEffects,
+        };
+      }
       
       const newDiscovered = new Set(state.discoveredElements);
       newDiscovered.add(outputId);
@@ -98,7 +110,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ? state.recentDiscoveries
         : [outputId, ...state.recentDiscoveries].slice(0, 10);
       
-      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), ELEMENTS, state.effectOverrides);
+      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), ELEMENTS, nextOverrides);
       
       const newEventLog = [...state.eventLog];
       if (!alreadyDiscovered && MAJOR_ELEMENT_EVENTS[outputId]) {
@@ -111,6 +123,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         worldInfluence,
         recentDiscoveries: newRecent,
         eventLog: newEventLog,
+        effectOverrides: nextOverrides,
         attemptedCombinations,
         selectedSlotA: null,
         selectedSlotB: null,
@@ -164,7 +177,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'SET_EFFECT_OVERRIDE': {
-      const nextOverrides = {
+      const nextOverrides: Record<string, WorldEffectMap> = {
         ...state.effectOverrides,
         [action.elementId]: action.worldEffects,
       };
