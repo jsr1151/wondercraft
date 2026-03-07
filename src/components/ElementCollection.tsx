@@ -3,6 +3,7 @@ import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { ElementCard } from './ElementCard';
 import type { ElementCategory } from '../types';
+import { resolveElementName } from '../utils/nameResolver';
 import './ElementCollection.css';
 
 const CATEGORIES: (ElementCategory | 'All')[] = [
@@ -23,12 +24,13 @@ export function ElementCollection() {
     return discoveredElements.filter(e => {
       const matchCat = activeCategory === 'All' || e.category === activeCategory;
       const matchSearch = !search || 
+        resolveElementName(e, state.nameOverrides).toLowerCase().includes(search.toLowerCase()) ||
         e.name.toLowerCase().includes(search.toLowerCase()) ||
         e.description.toLowerCase().includes(search.toLowerCase()) ||
         e.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
       return matchCat && matchSearch;
     });
-  }, [discoveredElements, activeCategory, search]);
+  }, [discoveredElements, activeCategory, search, state.nameOverrides]);
 
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { All: discoveredElements.length };

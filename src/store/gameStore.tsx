@@ -24,6 +24,7 @@ function createInitialState(): GameState {
     masterRecipes: [],
     sharedRecipes: [],
     iconOverrides: {},
+    nameOverrides: {},
     effectOverrides: {},
     attemptedCombinations: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
@@ -176,6 +177,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_NAME_OVERRIDE': {
+      return {
+        ...state,
+        nameOverrides: {
+          ...state.nameOverrides,
+          [action.elementId]: action.name,
+        },
+      };
+    }
+
+    case 'CLEAR_NAME_OVERRIDE': {
+      const next = { ...state.nameOverrides };
+      delete next[action.elementId];
+      return {
+        ...state,
+        nameOverrides: next,
+      };
+    }
+
     case 'SET_EFFECT_OVERRIDE': {
       const nextOverrides: Record<string, WorldEffectMap> = {
         ...state.effectOverrides,
@@ -229,6 +249,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         masterRecipes: saved.masterRecipes ?? [],
         sharedRecipes: state.sharedRecipes,
         iconOverrides: saved.iconOverrides ?? {},
+        nameOverrides: saved.nameOverrides ?? {},
         effectOverrides: loadedOverrides,
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         hints: saved.hints ?? ['Welcome back!'],

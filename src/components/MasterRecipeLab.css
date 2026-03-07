@@ -95,6 +95,10 @@
   gap: 8px;
 }
 
+.master-recipe-icon-row.single {
+  grid-template-columns: minmax(180px, 1fr);
+}
+
 .master-recipe-icon-row input {
   background: #0f1530;
   border: 1px solid var(--border);

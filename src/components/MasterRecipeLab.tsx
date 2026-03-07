@@ -4,6 +4,7 @@ import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
 import type { MasterRecipe, WorldEffectMap } from '../types';
 import { resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
+import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
 import './MasterRecipeLab.css';
 
 const DEFAULT_ATTR_KEYS = [
@@ -29,21 +30,14 @@ const ELEMENT_OPTIONS = ELEMENTS
   .map((element) => element.name)
   .sort((a, b) => a.localeCompare(b));
 
-function lookupElementId(value: string): string | null {
-  const normalized = value.trim().toLowerCase();
-  if (!normalized) return null;
-
-  const byName = ELEMENTS.find((element) => element.name.toLowerCase() === normalized);
-  if (byName) return byName.id;
-
-  const byId = ELEMENTS.find((element) => element.id.toLowerCase() === normalized);
-  return byId?.id ?? null;
-}
-
-function elementLabel(id: string, iconOverrides: Record<string, string>): string {
+function elementLabel(
+  id: string,
+  iconOverrides: Record<string, string>,
+  nameOverrides: Record<string, string>
+): string {
   const element = ELEMENTS.find((item) => item.id === id);
   if (!element) return id;
-  return `${resolveElementIcon(element, iconOverrides)} ${element.name}`;
+  return `${resolveElementIcon(element, iconOverrides)} ${resolveElementName(element, nameOverrides)}`;
 }
 
 function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, string> {
@@ -66,7 +60,13 @@ export function MasterRecipeLab() {
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>(buildAttrDraft());
   const [newAttrKey, setNewAttrKey] = useState('');
   const [outputIcon, setOutputIcon] = useState('');
+  const [outputName, setOutputName] = useState('');
   const [iconStatus, setIconStatus] = useState<string | null>(null);
+
+  const lookupElementId = (value: string): string | null => {
+    const match = findElementByNameOrId(value, ELEMENTS, state.nameOverrides);
+    return match?.id ?? null;
+  };
 
   const setFromElementDrop = (target: 'A' | 'B' | 'OUT') => (event: DragEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -80,6 +80,7 @@ export function MasterRecipeLab() {
     if (target === 'OUT') {
       setOutput(element.name);
       setOutputIcon(resolveElementIconRaw(element, state.iconOverrides));
+      setOutputName(resolveElementName(element, state.nameOverrides));
       const merged = { ...(element.worldEffects ?? {}), ...(state.effectOverrides[element.id] ?? {}) };
       setAttrDraft(buildAttrDraft(merged));
     }
@@ -106,6 +107,7 @@ export function MasterRecipeLab() {
     const baseElement = ELEMENTS.find((element) => element.id === outputId);
     if (!baseElement) return;
     setOutputIcon(resolveElementIconRaw(baseElement, state.iconOverrides));
+    setOutputName(resolveElementName(baseElement, state.nameOverrides));
     const merged = { ...(baseElement.worldEffects ?? {}), ...(state.effectOverrides[outputId] ?? {}) };
     setAttrDraft(buildAttrDraft(merged));
   };
@@ -190,6 +192,9 @@ export function MasterRecipeLab() {
     if (outputIcon.trim()) {
       dispatch({ type: 'SET_ICON_OVERRIDE', elementId: outputId, icon: outputIcon.trim() });
     }
+    if (outputName.trim()) {
+      dispatch({ type: 'SET_NAME_OVERRIDE', elementId: outputId, name: outputName.trim() });
+    }
 
     if (publishGlobal) {
       if (!token.trim()) {
@@ -216,6 +221,7 @@ export function MasterRecipeLab() {
     setInputB('');
     setOutput('');
     setOutputIcon('');
+    setOutputName('');
     setAttrDraft(buildAttrDraft());
   };
 
@@ -261,7 +267,7 @@ export function MasterRecipeLab() {
       </div>
 
       <div className="master-recipe-icon">
-        <p>Output Icon (optional)</p>
+        <p>Output Icon/Name (optional)</p>
         <div className="master-recipe-icon-row">
           <input
             value={outputIcon}
@@ -270,6 +276,13 @@ export function MasterRecipeLab() {
             placeholder="Paste emoji, image URL, or image from clipboard"
           />
           <input type="file" accept="image/*" onChange={(event) => void onIconUpload(event)} />
+        </div>
+        <div className="master-recipe-icon-row single">
+          <input
+            value={outputName}
+            onChange={(event) => setOutputName(event.target.value)}
+            placeholder="Output display name (example: Puddle)"
+          />
         </div>
         {iconStatus && <p className="master-recipe-token-help">{iconStatus}</p>}
       </div>
@@ -342,11 +355,11 @@ export function MasterRecipeLab() {
         ) : (
           sortedRecipes.map((recipe) => (
             <div key={recipe.id} className="master-recipe-item">
-              <span>{elementLabel(recipe.inputA, state.iconOverrides)}</span>
+              <span>{elementLabel(recipe.inputA, state.iconOverrides, state.nameOverrides)}</span>
               <span>+</span>
-              <span>{elementLabel(recipe.inputB, state.iconOverrides)}</span>
+              <span>{elementLabel(recipe.inputB, state.iconOverrides, state.nameOverrides)}</span>
               <span>→</span>
-              <span>{elementLabel(recipe.output, state.iconOverrides)}</span>
+              <span>{elementLabel(recipe.output, state.iconOverrides, state.nameOverrides)}</span>
               <span className="master-recipe-attr-tag">
                 {recipe.outputWorldEffects ? `${Object.keys(recipe.outputWorldEffects).length} attrs` : 'No attrs'}
               </span>

@@ -1,6 +1,7 @@
 import type { Element } from '../types';
 import { useGame } from '../store/useGame';
 import { ElementIcon } from './ElementIcon';
+import { resolveElementName } from '../utils/nameResolver';
 import './ElementCard.css';
 
 interface ElementCardProps {
@@ -10,7 +11,7 @@ interface ElementCardProps {
 
 export function ElementCard({ element, compact = false }: ElementCardProps) {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, iconOverrides } = state;
+  const { selectedSlotA, selectedSlotB, iconOverrides, nameOverrides } = state;
 
   const isSelectedA = selectedSlotA === element.id;
   const isSelectedB = selectedSlotB === element.id;
@@ -53,7 +54,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         onClick={handleClick}
         draggable
         onDragStart={handleDragStart}
-        title={`${element.name}: ${element.description}`}
+        title={`${resolveElementName(element, nameOverrides)}: ${element.description}`}
       >
         <ElementIcon
           element={element}
@@ -61,7 +62,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
           className="element-emoji"
           imageClassName="element-emoji-image"
         />
-        <span className="element-name-compact">{element.name}</span>
+        <span className="element-name-compact">{resolveElementName(element, nameOverrides)}</span>
       </div>
     );
   }
@@ -80,7 +81,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         className="element-emoji"
         imageClassName="element-emoji-image"
       />
-      <span className="element-name">{element.name}</span>
+      <span className="element-name">{resolveElementName(element, nameOverrides)}</span>
       <span className="element-category">{element.category}</span>
     </div>
   );

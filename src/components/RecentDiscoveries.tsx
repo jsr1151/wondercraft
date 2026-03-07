@@ -1,6 +1,7 @@
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { ElementIcon } from './ElementIcon';
+import { resolveElementName } from '../utils/nameResolver';
 import './RecentDiscoveries.css';
 
 export function RecentDiscoveries() {
@@ -23,7 +24,7 @@ export function RecentDiscoveries() {
               className="recent-emoji"
               imageClassName="recent-emoji-image"
             />
-            <span className="recent-name">{elem.name}</span>
+            <span className="recent-name">{resolveElementName(elem, state.nameOverrides)}</span>
           </div>
         ))}
       </div>

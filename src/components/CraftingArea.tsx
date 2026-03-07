@@ -4,6 +4,7 @@ import { ELEMENTS } from '../data/elements';
 import { resolveElementIconRaw } from '../utils/iconResolver';
 import type { WorldEffectMap } from '../types';
 import { ElementIcon } from './ElementIcon';
+import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
 import './CraftingArea.css';
 
 const DEFAULT_ATTR_KEYS = [
@@ -37,7 +38,7 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 
 export function CraftingArea() {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides } = state;
+  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides } = state;
   const [dragTarget, setDragTarget] = useState<'A' | 'B' | null>(null);
   const [showIconEditor, setShowIconEditor] = useState(false);
   const [iconTarget, setIconTarget] = useState('');
@@ -145,10 +146,7 @@ export function CraftingArea() {
     event.target.value = '';
   };
 
-  const parseElementByNameOrId = (value: string) => ELEMENTS.find((element) =>
-    element.name.toLowerCase() === value.trim().toLowerCase() ||
-    element.id.toLowerCase() === value.trim().toLowerCase()
-  );
+  const parseElementByNameOrId = (value: string) => findElementByNameOrId(value, ELEMENTS, nameOverrides);
 
   const loadAttrDraftForTarget = (targetNameOrId: string) => {
     const target = parseElementByNameOrId(targetNameOrId);
@@ -221,7 +219,7 @@ export function CraftingArea() {
                 className="craft-slot-emoji"
                 imageClassName="craft-slot-emoji-image"
               />
-              <span className="craft-slot-name">{elemA.name}</span>
+              <span className="craft-slot-name">{resolveElementName(elemA, nameOverrides)}</span>
               <span className="craft-slot-clear">✕</span>
             </div>
           ) : (
@@ -247,7 +245,7 @@ export function CraftingArea() {
                 className="craft-slot-emoji"
                 imageClassName="craft-slot-emoji-image"
               />
-              <span className="craft-slot-name">{elemB.name}</span>
+              <span className="craft-slot-name">{resolveElementName(elemB, nameOverrides)}</span>
               <span className="craft-slot-clear">✕</span>
             </div>
           ) : (
@@ -268,7 +266,7 @@ export function CraftingArea() {
                 className="craft-result-emoji"
                 imageClassName="craft-result-emoji-image"
               />
-              <span className="craft-result-name">{resultElem.name}</span>
+              <span className="craft-result-name">{resolveElementName(resultElem, nameOverrides)}</span>
               {lastCombinationResult.isNew && (
                 <span className="craft-result-new">NEW!</span>
               )}
@@ -400,7 +398,7 @@ export function CraftingArea() {
               imageClassName="craft-discovery-emoji-image"
             />
             {' '}
-            {resultElem.name}
+            {resolveElementName(resultElem, nameOverrides)}
           </p>
           <p className="discovery-desc">{resultElem.description}</p>
         </div>

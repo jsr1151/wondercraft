@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { resolveElementIcon } from '../utils/iconResolver';
+import { resolveElementName } from '../utils/nameResolver';
 import './UntriedCombosSidebar.css';
 
 const MAX_VISIBLE = 180;
@@ -17,7 +18,7 @@ export function UntriedCombosSidebar() {
   const { total, visible } = useMemo(() => {
     const discovered = ELEMENTS
       .filter((element) => state.discoveredElements.has(element.id))
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => resolveElementName(a, state.nameOverrides).localeCompare(resolveElementName(b, state.nameOverrides)));
 
     const candidates: string[] = [];
 
@@ -27,7 +28,7 @@ export function UntriedCombosSidebar() {
         const b = discovered[j];
         const comboKey = keyFor(a.id, b.id);
         if (!state.attemptedCombinations.has(comboKey)) {
-          candidates.push(`${resolveElementIcon(a, state.iconOverrides)} ${a.name} + ${resolveElementIcon(b, state.iconOverrides)} ${b.name}`);
+          candidates.push(`${resolveElementIcon(a, state.iconOverrides)} ${resolveElementName(a, state.nameOverrides)} + ${resolveElementIcon(b, state.iconOverrides)} ${resolveElementName(b, state.nameOverrides)}`);
         }
       }
     }
@@ -36,7 +37,7 @@ export function UntriedCombosSidebar() {
       total: candidates.length,
       visible: candidates.slice(0, MAX_VISIBLE),
     };
-  }, [state.discoveredElements, state.attemptedCombinations, state.iconOverrides]);
+  }, [state.discoveredElements, state.attemptedCombinations, state.iconOverrides, state.nameOverrides]);
 
   return (
     <aside className={`untried-sidebar ${open ? 'open' : 'closed'}`}>

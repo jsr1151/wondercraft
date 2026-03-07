@@ -69,6 +69,7 @@ export interface GameState {
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
+  nameOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: Set<string>;
   hints: string[];
@@ -85,6 +86,8 @@ export type GameAction =
   | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
   | { type: 'SET_ICON_OVERRIDE'; elementId: string; icon: string }
   | { type: 'CLEAR_ICON_OVERRIDE'; elementId: string }
+  | { type: 'SET_NAME_OVERRIDE'; elementId: string; name: string }
+  | { type: 'CLEAR_NAME_OVERRIDE'; elementId: string }
   | { type: 'SET_EFFECT_OVERRIDE'; elementId: string; worldEffects: WorldEffectMap }
   | { type: 'CLEAR_EFFECT_OVERRIDE'; elementId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
@@ -101,6 +104,7 @@ export interface SerializableGameState {
   eventLog: string[];
   masterRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
+  nameOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: string[];
   hints: string[];
