@@ -4,7 +4,7 @@ import { ELEMENTS } from '../data/elements';
 import { resolveElementIconRaw } from '../utils/iconResolver';
 import type { WorldEffectMap } from '../types';
 import { ElementIcon } from './ElementIcon';
-import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
+import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './CraftingArea.css';
 
 const DEFAULT_ATTR_KEYS = [
@@ -38,7 +38,8 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 
 export function CraftingArea() {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides } = state;
+  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides } = state;
+  const allElements = [...ELEMENTS, ...state.customElements];
   const [dragTarget, setDragTarget] = useState<'A' | 'B' | null>(null);
   const [showIconEditor, setShowIconEditor] = useState(false);
   const [iconTarget, setIconTarget] = useState('');
@@ -49,10 +50,10 @@ export function CraftingArea() {
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>({});
   const [newAttrKey, setNewAttrKey] = useState('');
 
-  const elemA = selectedSlotA ? ELEMENTS.find(e => e.id === selectedSlotA) : null;
-  const elemB = selectedSlotB ? ELEMENTS.find(e => e.id === selectedSlotB) : null;
+  const elemA = selectedSlotA ? allElements.find(e => e.id === selectedSlotA) : null;
+  const elemB = selectedSlotB ? allElements.find(e => e.id === selectedSlotB) : null;
   const resultElem = lastCombinationResult?.elementId
-    ? ELEMENTS.find(e => e.id === lastCombinationResult.elementId)
+    ? allElements.find(e => e.id === lastCombinationResult.elementId)
     : null;
 
   const canCombine = !!selectedSlotA && !!selectedSlotB;
@@ -85,19 +86,13 @@ export function CraftingArea() {
   const handleDragLeave = () => setDragTarget(null);
 
   const applyIconOverride = () => {
-    const target = ELEMENTS.find((element) =>
-      element.name.toLowerCase() === iconTarget.trim().toLowerCase() ||
-      element.id.toLowerCase() === iconTarget.trim().toLowerCase()
-    );
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
     if (!target || !iconValue.trim()) return;
     dispatch({ type: 'SET_ICON_OVERRIDE', elementId: target.id, icon: iconValue.trim() });
   };
 
   const clearIconOverride = () => {
-    const target = ELEMENTS.find((element) =>
-      element.name.toLowerCase() === iconTarget.trim().toLowerCase() ||
-      element.id.toLowerCase() === iconTarget.trim().toLowerCase()
-    );
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
     if (!target) return;
     dispatch({ type: 'CLEAR_ICON_OVERRIDE', elementId: target.id });
   };
@@ -106,9 +101,9 @@ export function CraftingArea() {
     event.preventDefault();
     const elementId = event.dataTransfer.getData('text/wondercraft-element-id');
     if (!elementId) return;
-    const element = ELEMENTS.find((entry) => entry.id === elementId);
+    const element = allElements.find((entry) => entry.id === elementId);
     if (!element) return;
-    setIconTarget(element.name);
+    setIconTarget(resolveElementName(element, nameOverrides));
     setIconValue(resolveElementIconRaw(element, iconOverrides));
   };
 
@@ -146,7 +141,7 @@ export function CraftingArea() {
     event.target.value = '';
   };
 
-  const parseElementByNameOrId = (value: string) => findElementByNameOrId(value, ELEMENTS, nameOverrides);
+  const parseElementByNameOrId = (value: string) => findElementByNameOrId(value, allElements, nameOverrides);
 
   const loadAttrDraftForTarget = (targetNameOrId: string) => {
     const target = parseElementByNameOrId(targetNameOrId);
@@ -159,10 +154,11 @@ export function CraftingArea() {
     event.preventDefault();
     const elementId = event.dataTransfer.getData('text/wondercraft-element-id');
     if (!elementId) return;
-    const element = ELEMENTS.find((entry) => entry.id === elementId);
+    const element = allElements.find((entry) => entry.id === elementId);
     if (!element) return;
-    setAttrTarget(element.name);
-    loadAttrDraftForTarget(element.name);
+    const label = resolveElementName(element, nameOverrides);
+    setAttrTarget(label);
+    loadAttrDraftForTarget(label);
   };
 
   const applyAttrOverride = () => {
@@ -292,7 +288,7 @@ export function CraftingArea() {
         onClick={() => {
           const prefill = elemA ?? resultElem ?? elemB;
           if (prefill) {
-            setIconTarget(prefill.name);
+            setIconTarget(resolveElementName(prefill, nameOverrides));
             setIconValue(resolveElementIconRaw(prefill, iconOverrides));
           }
           setShowIconEditor((v) => !v);
@@ -306,8 +302,9 @@ export function CraftingArea() {
         onClick={() => {
           const prefill = resultElem ?? elemA ?? elemB;
           if (prefill) {
-            setAttrTarget(prefill.name);
-            loadAttrDraftForTarget(prefill.name);
+            const label = resolveElementName(prefill, nameOverrides);
+            setAttrTarget(label);
+            loadAttrDraftForTarget(label);
           }
           setShowAttrEditor((v) => !v);
         }}
@@ -336,8 +333,8 @@ export function CraftingArea() {
           <button className="clear-icon" onClick={clearIconOverride}>Reset</button>
 
           <datalist id="craft-icon-targets">
-            {ELEMENTS.map((element) => (
-              <option key={element.id} value={element.name} />
+            {allElements.map((element) => (
+              <option key={element.id} value={resolveElementName(element, nameOverrides)} />
             ))}
           </datalist>
         </div>
@@ -400,7 +397,7 @@ export function CraftingArea() {
             {' '}
             {resolveElementName(resultElem, nameOverrides)}
           </p>
-          <p className="discovery-desc">{resultElem.description}</p>
+          <p className="discovery-desc">{resolveElementDescription(resultElem, descriptionOverrides)}</p>
         </div>
       )}
     </div>

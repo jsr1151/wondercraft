@@ -15,10 +15,11 @@ export function ElementCollection() {
   const { state } = useGame();
   const [activeCategory, setActiveCategory] = useState<ElementCategory | 'All'>('All');
   const [search, setSearch] = useState('');
+  const allElements = useMemo(() => [...ELEMENTS, ...state.customElements], [state.customElements]);
 
   const discoveredElements = useMemo(() => {
-    return ELEMENTS.filter(e => state.discoveredElements.has(e.id));
-  }, [state.discoveredElements]);
+    return allElements.filter(e => state.discoveredElements.has(e.id));
+  }, [allElements, state.discoveredElements]);
 
   const filteredElements = useMemo(() => {
     return discoveredElements.filter(e => {
@@ -43,7 +44,7 @@ export function ElementCollection() {
   return (
     <div className="element-collection">
       <div className="collection-header">
-        <h2>📦 Elements ({discoveredElements.length}/{ELEMENTS.length})</h2>
+        <h2>📦 Elements ({discoveredElements.length}/{allElements.length})</h2>
         <input
           className="collection-search"
           type="text"

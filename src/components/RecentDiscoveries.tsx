@@ -1,13 +1,14 @@
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { ElementIcon } from './ElementIcon';
-import { resolveElementName } from '../utils/nameResolver';
+import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './RecentDiscoveries.css';
 
 export function RecentDiscoveries() {
   const { state } = useGame();
+  const allElements = [...ELEMENTS, ...state.customElements];
   const recent = state.recentDiscoveries
-    .map(id => ELEMENTS.find(e => e.id === id))
+    .map(id => allElements.find(e => e.id === id))
     .filter((e): e is NonNullable<typeof e> => e != null);
 
   if (recent.length === 0) return null;
@@ -17,7 +18,7 @@ export function RecentDiscoveries() {
       <h3>🕐 Recent Discoveries</h3>
       <div className="recent-scroll">
         {recent.map((elem, i) => (
-          <div key={`${elem.id}-${i}`} className="recent-item" title={elem.description}>
+          <div key={`${elem.id}-${i}`} className="recent-item" title={resolveElementDescription(elem, state.descriptionOverrides)}>
             <ElementIcon
               element={elem}
               iconOverrides={state.iconOverrides}

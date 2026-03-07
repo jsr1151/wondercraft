@@ -1,7 +1,7 @@
 import type { Element } from '../types';
 import { useGame } from '../store/useGame';
 import { ElementIcon } from './ElementIcon';
-import { resolveElementName } from '../utils/nameResolver';
+import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './ElementCard.css';
 
 interface ElementCardProps {
@@ -54,7 +54,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         onClick={handleClick}
         draggable
         onDragStart={handleDragStart}
-        title={`${resolveElementName(element, nameOverrides)}: ${element.description}`}
+        title={`${resolveElementName(element, nameOverrides)}: ${resolveElementDescription(element, state.descriptionOverrides)}`}
       >
         <ElementIcon
           element={element}
@@ -73,7 +73,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
       onClick={handleClick}
       draggable
       onDragStart={handleDragStart}
-      title={element.description}
+      title={resolveElementDescription(element, state.descriptionOverrides)}
     >
       <ElementIcon
         element={element}

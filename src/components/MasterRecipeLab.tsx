@@ -2,9 +2,9 @@ import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler,
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
-import type { MasterRecipe, WorldEffectMap } from '../types';
-import { resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
-import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
+import type { Element, MasterRecipe, WorldEffectMap } from '../types';
+import { isImageIcon, resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
+import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './MasterRecipeLab.css';
 
 const DEFAULT_ATTR_KEYS = [
@@ -26,16 +26,13 @@ async function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
-const ELEMENT_OPTIONS = ELEMENTS
-  .map((element) => element.name)
-  .sort((a, b) => a.localeCompare(b));
-
 function elementLabel(
   id: string,
+  elements: Element[],
   iconOverrides: Record<string, string>,
   nameOverrides: Record<string, string>
 ): string {
-  const element = ELEMENTS.find((item) => item.id === id);
+  const element = elements.find((item) => item.id === id);
   if (!element) return id;
   return `${resolveElementIcon(element, iconOverrides)} ${resolveElementName(element, nameOverrides)}`;
 }
@@ -61,26 +58,51 @@ export function MasterRecipeLab() {
   const [newAttrKey, setNewAttrKey] = useState('');
   const [outputIcon, setOutputIcon] = useState('');
   const [outputName, setOutputName] = useState('');
+  const [outputDescription, setOutputDescription] = useState('');
   const [iconStatus, setIconStatus] = useState<string | null>(null);
 
+  const allElements = useMemo(() => [...ELEMENTS, ...state.customElements], [state.customElements]);
+
+  const elementOptions = useMemo(
+    () => allElements.map((element) => resolveElementName(element, state.nameOverrides)).sort((a, b) => a.localeCompare(b)),
+    [allElements, state.nameOverrides]
+  );
+
   const lookupElementId = (value: string): string | null => {
-    const match = findElementByNameOrId(value, ELEMENTS, state.nameOverrides);
+    const match = findElementByNameOrId(value, allElements, state.nameOverrides);
     return match?.id ?? null;
+  };
+
+  const createCustomElementId = (label: string): string => {
+    const base = label
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '') || 'element';
+
+    let candidate = `custom_${base}`;
+    let idx = 2;
+    const ids = new Set(allElements.map((element) => element.id));
+    while (ids.has(candidate)) {
+      candidate = `custom_${base}_${idx++}`;
+    }
+    return candidate;
   };
 
   const setFromElementDrop = (target: 'A' | 'B' | 'OUT') => (event: DragEvent<HTMLInputElement>) => {
     event.preventDefault();
     const id = event.dataTransfer.getData('text/wondercraft-element-id');
     if (!id) return;
-    const element = ELEMENTS.find((item) => item.id === id);
+    const element = allElements.find((item) => item.id === id);
     if (!element) return;
 
-    if (target === 'A') setInputA(element.name);
-    if (target === 'B') setInputB(element.name);
+    if (target === 'A') setInputA(resolveElementName(element, state.nameOverrides));
+    if (target === 'B') setInputB(resolveElementName(element, state.nameOverrides));
     if (target === 'OUT') {
-      setOutput(element.name);
+      setOutput(resolveElementName(element, state.nameOverrides));
       setOutputIcon(resolveElementIconRaw(element, state.iconOverrides));
       setOutputName(resolveElementName(element, state.nameOverrides));
+      setOutputDescription(resolveElementDescription(element, state.descriptionOverrides));
       const merged = { ...(element.worldEffects ?? {}), ...(state.effectOverrides[element.id] ?? {}) };
       setAttrDraft(buildAttrDraft(merged));
     }
@@ -104,10 +126,11 @@ export function MasterRecipeLab() {
     setOutput(value);
     const outputId = lookupElementId(value);
     if (!outputId) return;
-    const baseElement = ELEMENTS.find((element) => element.id === outputId);
+    const baseElement = allElements.find((element) => element.id === outputId);
     if (!baseElement) return;
     setOutputIcon(resolveElementIconRaw(baseElement, state.iconOverrides));
     setOutputName(resolveElementName(baseElement, state.nameOverrides));
+    setOutputDescription(resolveElementDescription(baseElement, state.descriptionOverrides));
     const merged = { ...(baseElement.worldEffects ?? {}), ...(state.effectOverrides[outputId] ?? {}) };
     setAttrDraft(buildAttrDraft(merged));
   };
@@ -155,15 +178,33 @@ export function MasterRecipeLab() {
   const addMasterRecipe = async () => {
     const inputAId = lookupElementId(inputA);
     const inputBId = lookupElementId(inputB);
-    const outputId = lookupElementId(output);
+    const outputMatch = findElementByNameOrId(output, allElements, state.nameOverrides);
+    const hasOutputText = output.trim().length > 0;
 
-    if (!inputAId || !inputBId || !outputId) {
+    if (!inputAId || !inputBId || !hasOutputText) {
       const missing: string[] = [];
       if (!inputAId) missing.push(`A ("${inputA.trim() || 'empty'}")`);
       if (!inputBId) missing.push(`B ("${inputB.trim() || 'empty'}")`);
-      if (!outputId) missing.push(`Output ("${output.trim() || 'empty'}")`);
-      setStatus(`Invalid element value for: ${missing.join(', ')}. Output must be an existing element name/id.`);
+      if (!hasOutputText) missing.push(`Output ("${output.trim() || 'empty'}")`);
+      setStatus(`Invalid element value for: ${missing.join(', ')}.`);
       return;
+    }
+
+    let outputId = outputMatch?.id;
+    const outputDisplayName = outputName.trim() || output.trim();
+
+    if (!outputId) {
+      outputId = createCustomElementId(outputDisplayName);
+      const newElement: Element = {
+        id: outputId,
+        name: outputDisplayName,
+        category: 'Weird',
+        description: outputDescription.trim() || `A new element born from ${inputA.trim()} + ${inputB.trim()}.`,
+        tags: ['custom', 'player-made'],
+        discovered: false,
+        emoji: outputIcon.trim() && !isImageIcon(outputIcon.trim()) ? outputIcon.trim() : '✨',
+      };
+      dispatch({ type: 'UPSERT_CUSTOM_ELEMENT', element: newElement });
     }
 
     const outputWorldEffects: WorldEffectMap = {};
@@ -195,6 +236,9 @@ export function MasterRecipeLab() {
     if (outputName.trim()) {
       dispatch({ type: 'SET_NAME_OVERRIDE', elementId: outputId, name: outputName.trim() });
     }
+    if (outputDescription.trim()) {
+      dispatch({ type: 'SET_DESCRIPTION_OVERRIDE', elementId: outputId, description: outputDescription.trim() });
+    }
 
     if (publishGlobal) {
       if (!token.trim()) {
@@ -214,7 +258,9 @@ export function MasterRecipeLab() {
         }
       }
     } else {
-      setStatus('Master recipe saved locally. This pairing now crafts immediately.');
+      setStatus(outputMatch
+        ? 'Master recipe saved locally. This pairing now crafts immediately.'
+        : `Master recipe saved locally and new element created: ${outputDisplayName}.`);
     }
 
     setInputA('');
@@ -222,6 +268,7 @@ export function MasterRecipeLab() {
     setOutput('');
     setOutputIcon('');
     setOutputName('');
+    setOutputDescription('');
     setAttrDraft(buildAttrDraft());
   };
 
@@ -233,7 +280,7 @@ export function MasterRecipeLab() {
       </div>
 
       <p className="master-recipe-note">
-        These recipes override normal crafting. If a combo fails, define it here.
+        These recipes override normal crafting. Use an existing output to overwrite, or type a new output name to create a new element.
       </p>
 
       <div className="master-recipe-form">
@@ -282,6 +329,13 @@ export function MasterRecipeLab() {
             value={outputName}
             onChange={(event) => setOutputName(event.target.value)}
             placeholder="Output display name (example: Puddle)"
+          />
+        </div>
+        <div className="master-recipe-icon-row single">
+          <input
+            value={outputDescription}
+            onChange={(event) => setOutputDescription(event.target.value)}
+            placeholder="Output description (optional)"
           />
         </div>
         {iconStatus && <p className="master-recipe-token-help">{iconStatus}</p>}
@@ -341,7 +395,7 @@ export function MasterRecipeLab() {
       </div>
 
       <datalist id="element-options">
-        {ELEMENT_OPTIONS.map((name) => (
+        {elementOptions.map((name) => (
           <option key={name} value={name} />
         ))}
       </datalist>
@@ -355,11 +409,11 @@ export function MasterRecipeLab() {
         ) : (
           sortedRecipes.map((recipe) => (
             <div key={recipe.id} className="master-recipe-item">
-              <span>{elementLabel(recipe.inputA, state.iconOverrides, state.nameOverrides)}</span>
+              <span>{elementLabel(recipe.inputA, allElements, state.iconOverrides, state.nameOverrides)}</span>
               <span>+</span>
-              <span>{elementLabel(recipe.inputB, state.iconOverrides, state.nameOverrides)}</span>
+              <span>{elementLabel(recipe.inputB, allElements, state.iconOverrides, state.nameOverrides)}</span>
               <span>→</span>
-              <span>{elementLabel(recipe.output, state.iconOverrides, state.nameOverrides)}</span>
+              <span>{elementLabel(recipe.output, allElements, state.iconOverrides, state.nameOverrides)}</span>
               <span className="master-recipe-attr-tag">
                 {recipe.outputWorldEffects ? `${Object.keys(recipe.outputWorldEffects).length} attrs` : 'No attrs'}
               </span>

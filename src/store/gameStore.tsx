@@ -10,6 +10,10 @@ import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
 
+function allElements(state: Pick<GameState, 'customElements'>) {
+  return [...ELEMENTS, ...state.customElements];
+}
+
 function createInitialState(): GameState {
   const seed = Math.floor(Math.random() * 0xffffffff);
   return {
@@ -23,8 +27,10 @@ function createInitialState(): GameState {
     selectedSlotB: null,
     masterRecipes: [],
     sharedRecipes: [],
+    customElements: [],
     iconOverrides: {},
     nameOverrides: {},
+    descriptionOverrides: {},
     effectOverrides: {},
     attemptedCombinations: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
@@ -55,7 +61,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'BIG_BANG': {
       const discovered = new Set(PRIMORDIAL_ELEMENTS);
-      const worldInfluence = calculateWorldInfluence(PRIMORDIAL_ELEMENTS, ELEMENTS, state.effectOverrides);
+      const worldInfluence = calculateWorldInfluence(PRIMORDIAL_ELEMENTS, allElements(state), state.effectOverrides);
       return {
         ...state,
         bigBangDone: true,
@@ -111,7 +117,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ? state.recentDiscoveries
         : [outputId, ...state.recentDiscoveries].slice(0, 10);
       
-      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), ELEMENTS, nextOverrides);
+      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), allElements(state), nextOverrides);
       
       const newEventLog = [...state.eventLog];
       if (!alreadyDiscovered && MAJOR_ELEMENT_EVENTS[outputId]) {
@@ -158,6 +164,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'UPSERT_CUSTOM_ELEMENT': {
+      const index = state.customElements.findIndex((element) => element.id === action.element.id);
+      const nextCustomElements = [...state.customElements];
+      if (index >= 0) {
+        nextCustomElements[index] = action.element;
+      } else {
+        nextCustomElements.push(action.element);
+      }
+
+      return {
+        ...state,
+        customElements: nextCustomElements,
+        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), [...ELEMENTS, ...nextCustomElements], state.effectOverrides),
+      };
+    }
+
     case 'SET_ICON_OVERRIDE': {
       return {
         ...state,
@@ -196,6 +218,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_DESCRIPTION_OVERRIDE': {
+      return {
+        ...state,
+        descriptionOverrides: {
+          ...state.descriptionOverrides,
+          [action.elementId]: action.description,
+        },
+      };
+    }
+
+    case 'CLEAR_DESCRIPTION_OVERRIDE': {
+      const next = { ...state.descriptionOverrides };
+      delete next[action.elementId];
+      return {
+        ...state,
+        descriptionOverrides: next,
+      };
+    }
+
     case 'SET_EFFECT_OVERRIDE': {
       const nextOverrides: Record<string, WorldEffectMap> = {
         ...state.effectOverrides,
@@ -204,7 +245,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         effectOverrides: nextOverrides,
-        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), ELEMENTS, nextOverrides),
+        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), allElements(state), nextOverrides),
       };
     }
 
@@ -214,7 +255,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         effectOverrides: nextOverrides,
-        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), ELEMENTS, nextOverrides),
+        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), allElements(state), nextOverrides),
       };
     }
 
@@ -222,7 +263,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const hint = generateHint(
         Array.from(state.discoveredElements),
         RECIPES,
-        ELEMENTS
+        allElements(state)
       );
       return { ...state, hints: [hint, ...state.hints].slice(0, 5) };
     }
@@ -235,8 +276,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const saved = action.state;
       if (!saved) return state;
       const discovered = new Set<string>(saved.discoveredElements ?? []);
+      const customElements = saved.customElements ?? [];
       const loadedOverrides = saved.effectOverrides ?? {};
-      const computedInfluence = calculateWorldInfluence(Array.from(discovered), ELEMENTS, loadedOverrides);
+      const computedInfluence = calculateWorldInfluence(Array.from(discovered), [...ELEMENTS, ...customElements], loadedOverrides);
       const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
       return {
         ...state,
@@ -247,9 +289,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         recentDiscoveries: saved.recentDiscoveries ?? [],
         eventLog: saved.eventLog ?? [],
         masterRecipes: saved.masterRecipes ?? [],
+        customElements,
         sharedRecipes: state.sharedRecipes,
         iconOverrides: saved.iconOverrides ?? {},
         nameOverrides: saved.nameOverrides ?? {},
+        descriptionOverrides: saved.descriptionOverrides ?? {},
         effectOverrides: loadedOverrides,
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         hints: saved.hints ?? ['Welcome back!'],

@@ -14,9 +14,10 @@ function keyFor(a: string, b: string): string {
 export function UntriedCombosSidebar() {
   const { state } = useGame();
   const [open, setOpen] = useState(false);
+  const allElements = [...ELEMENTS, ...state.customElements];
 
   const { total, visible } = useMemo(() => {
-    const discovered = ELEMENTS
+    const discovered = allElements
       .filter((element) => state.discoveredElements.has(element.id))
       .sort((a, b) => resolveElementName(a, state.nameOverrides).localeCompare(resolveElementName(b, state.nameOverrides)));
 
@@ -37,7 +38,7 @@ export function UntriedCombosSidebar() {
       total: candidates.length,
       visible: candidates.slice(0, MAX_VISIBLE),
     };
-  }, [state.discoveredElements, state.attemptedCombinations, state.iconOverrides, state.nameOverrides]);
+  }, [allElements, state.discoveredElements, state.attemptedCombinations, state.iconOverrides, state.nameOverrides]);
 
   return (
     <aside className={`untried-sidebar ${open ? 'open' : 'closed'}`}>

@@ -6,6 +6,15 @@ export function resolveElementName(element: Element | null | undefined, nameOver
   return override || element.name;
 }
 
+export function resolveElementDescription(
+  element: Element | null | undefined,
+  descriptionOverrides: Record<string, string>
+): string {
+  if (!element) return '';
+  const override = descriptionOverrides[element.id]?.trim();
+  return override || element.description;
+}
+
 export function findElementByNameOrId(
   value: string,
   elements: Element[],
