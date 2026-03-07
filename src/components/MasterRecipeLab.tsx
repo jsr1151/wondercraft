@@ -156,7 +156,11 @@ export function MasterRecipeLab() {
     const outputId = lookupElementId(output);
 
     if (!inputAId || !inputBId || !outputId) {
-      setStatus('Use valid element names or ids for A, B, and output.');
+      const missing: string[] = [];
+      if (!inputAId) missing.push(`A ("${inputA.trim() || 'empty'}")`);
+      if (!inputBId) missing.push(`B ("${inputB.trim() || 'empty'}")`);
+      if (!outputId) missing.push(`Output ("${output.trim() || 'empty'}")`);
+      setStatus(`Invalid element value for: ${missing.join(', ')}. Output must be an existing element name/id.`);
       return;
     }
 
