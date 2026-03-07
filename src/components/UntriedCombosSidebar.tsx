@@ -9,6 +9,15 @@ import './UntriedCombosSidebar.css';
 
 const MAX_VISIBLE = 180;
 
+function shuffled<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 function keyFor(a: string, b: string): string {
   return [a, b].sort().join('|');
 }
@@ -34,23 +43,25 @@ export function UntriedCombosSidebar() {
         const b = discovered[j];
         const comboKey = keyFor(a.id, b.id);
         const label = `${resolveElementIcon(a, state.iconOverrides)} ${resolveElementName(a, state.nameOverrides)} + ${resolveElementIcon(b, state.iconOverrides)} ${resolveElementName(b, state.nameOverrides)}`;
+        const hasAnyOutput = !!findRecipe(a.id, b.id, allRecipes) || !!findRecipe(b.id, a.id, allRecipes);
 
-        if (!state.attemptedCombinations.has(comboKey)) {
+        if (hasAnyOutput && !state.attemptedCombinations.has(comboKey)) {
           untriedCandidates.push(label);
         }
 
-        const hasAnyOutput = !!findRecipe(a.id, b.id, allRecipes) || !!findRecipe(b.id, a.id, allRecipes);
         if (!hasAnyOutput) {
           noOutputCandidates.push(label);
         }
       }
     }
 
+    const randomizedNoOutput = shuffled(noOutputCandidates);
+
     return {
       untriedTotal: untriedCandidates.length,
       untriedVisible: untriedCandidates.slice(0, MAX_VISIBLE),
       noOutputTotal: noOutputCandidates.length,
-      noOutputVisible: noOutputCandidates.slice(0, MAX_VISIBLE),
+      noOutputVisible: randomizedNoOutput.slice(0, MAX_VISIBLE),
     };
   }, [
     allElements,
