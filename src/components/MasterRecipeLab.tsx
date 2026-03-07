@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type DragEvent } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
@@ -35,6 +35,22 @@ export function MasterRecipeLab() {
   const [publishGlobal, setPublishGlobal] = useState(false);
   const [token, setToken] = useState(() => localStorage.getItem(GLOBAL_RECIPE_TOKEN_KEY) ?? '');
   const [saving, setSaving] = useState(false);
+
+  const setFromElementDrop = (target: 'A' | 'B' | 'OUT') => (event: DragEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const id = event.dataTransfer.getData('text/wondercraft-element-id');
+    if (!id) return;
+    const element = ELEMENTS.find((item) => item.id === id);
+    if (!element) return;
+
+    if (target === 'A') setInputA(element.name);
+    if (target === 'B') setInputB(element.name);
+    if (target === 'OUT') setOutput(element.name);
+  };
+
+  const allowDrop = (event: DragEvent<HTMLInputElement>) => {
+    event.preventDefault();
+  };
 
   const sortedRecipes = useMemo(
     () => [...state.masterRecipes].sort((a, b) => b.createdAt - a.createdAt),
@@ -104,6 +120,8 @@ export function MasterRecipeLab() {
           value={inputA}
           onChange={(event) => setInputA(event.target.value)}
           placeholder="Input A"
+          onDragOver={allowDrop}
+          onDrop={setFromElementDrop('A')}
         />
         <span>+</span>
         <input
@@ -111,6 +129,8 @@ export function MasterRecipeLab() {
           value={inputB}
           onChange={(event) => setInputB(event.target.value)}
           placeholder="Input B"
+          onDragOver={allowDrop}
+          onDrop={setFromElementDrop('B')}
         />
         <span>→</span>
         <input
@@ -118,6 +138,8 @@ export function MasterRecipeLab() {
           value={output}
           onChange={(event) => setOutput(event.target.value)}
           placeholder="Output"
+          onDragOver={allowDrop}
+          onDrop={setFromElementDrop('OUT')}
         />
         <button onClick={addMasterRecipe}>Save</button>
       </div>
@@ -135,9 +157,18 @@ export function MasterRecipeLab() {
           <input
             type="password"
             value={token}
-            onChange={(event) => setToken(event.target.value)}
+            onChange={(event) => {
+              setToken(event.target.value);
+              localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, event.target.value);
+            }}
             placeholder="GitHub token with Contents: Write"
           />
+        )}
+        {publishGlobal && (
+          <p className="master-recipe-token-help">
+            One-time setup: create a classic token at `github.com/settings/tokens` with `repo` scope.
+            Once entered here, it stays saved in this browser.
+          </p>
         )}
       </div>
 

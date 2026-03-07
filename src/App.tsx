@@ -9,6 +9,7 @@ import { EventLog } from './components/EventLog';
 import { HintPanel } from './components/HintPanel';
 import { MasterRecipeLab } from './components/MasterRecipeLab';
 import { EmojiAtlas } from './components/EmojiAtlas';
+import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
 import './App.css';
 
 function GameApp() {
@@ -60,6 +61,7 @@ function GameApp() {
       <RecentDiscoveries />
       <EventLog />
       <EmojiAtlas />
+      <UntriedCombosSidebar />
     </div>
   );
 }

@@ -23,9 +23,14 @@ function createInitialState(): GameState {
     selectedSlotB: null,
     masterRecipes: [],
     sharedRecipes: [],
+    attemptedCombinations: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
   };
+}
+
+function comboKey(a: string, b: string): string {
+  return [a, b].sort().join('|');
 }
 
 const MAJOR_ELEMENT_EVENTS: Record<string, string> = {
@@ -71,11 +76,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, lastCombinationResult: { success: false } };
       }
 
+      const attemptedCombinations = new Set(state.attemptedCombinations);
+      attemptedCombinations.add(comboKey(selectedSlotA, selectedSlotB));
+
       const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
       const recipe = findRecipe(selectedSlotA, selectedSlotB, allRecipes);
       
       if (!recipe) {
-        return { ...state, lastCombinationResult: { success: false } };
+        return { ...state, attemptedCombinations, lastCombinationResult: { success: false } };
       }
 
       const outputId = recipe.output;
@@ -101,6 +109,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         worldInfluence,
         recentDiscoveries: newRecent,
         eventLog: newEventLog,
+        attemptedCombinations,
         selectedSlotA: null,
         selectedSlotB: null,
         lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
@@ -150,7 +159,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const saved = action.state;
       if (!saved) return state;
       const discovered = new Set<string>(saved.discoveredElements ?? []);
-      const worldInfluence = saved.worldInfluence ?? calculateWorldInfluence(Array.from(discovered), ELEMENTS);
+      const computedInfluence = calculateWorldInfluence(Array.from(discovered), ELEMENTS);
+      const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
       return {
         ...state,
         seed: saved.seed ?? state.seed,
@@ -161,6 +171,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         eventLog: saved.eventLog ?? [],
         masterRecipes: saved.masterRecipes ?? [],
         sharedRecipes: state.sharedRecipes,
+        attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
         selectedSlotB: null,

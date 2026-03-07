@@ -25,8 +25,10 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
   const lifeLevel = toLevel(wi.life);
   const civilizationLevel = toLevel(wi.civilization);
   const pollutionLevel = toLevel(wi.pollution);
+  const brightnessLevel = toLevel(wi.brightness);
 
   const worldStage = (() => {
+    if (brightnessLevel < 0.1) return 'Lightless Rock';
     if (pollutionLevel > 0.62) return 'Smog Choked';
     if (civilizationLevel > 0.58) return 'Industrial Age';
     if (lifeLevel > 0.52 && vegetationLevel > 0.45) return 'Living World';
@@ -95,6 +97,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       const magicLevel = clamp(Math.max(0, wi.magic) / 32, 0, 1);
       const lifeLevel = clamp(Math.max(0, wi.life) / 32, 0, 1);
       const atmosLevel = clamp(Math.max(0, wi.atmosphere) / 32, 0, 1);
+      const brightnessLevel = clamp(Math.max(0, wi.brightness) / 32, 0, 1);
 
       const development = clamp(
         waterLevel * 0.9 + vegLevel * 1.2 + lifeLevel + civLevel * 0.9 + atmosLevel * 0.6,
@@ -103,11 +106,17 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       );
 
       // Start from a mostly bare rocky world and shift color with discovered influence.
-      const baseR = Math.round(118 + heatLevel * 76 - waterLevel * 52 + pollLevel * 36);
-      const baseG = Math.round(88 + vegLevel * 122 + waterLevel * 32 - pollLevel * 28);
-      const baseB = Math.round(74 + waterLevel * 144 + coldLevel * 92 - heatLevel * 28);
+      const baseR = Math.round(52 + brightnessLevel * 85 + heatLevel * 76 - waterLevel * 52 + pollLevel * 30);
+      const baseG = Math.round(38 + brightnessLevel * 70 + vegLevel * 122 + waterLevel * 32 - pollLevel * 24);
+      const baseB = Math.round(34 + brightnessLevel * 75 + waterLevel * 144 + coldLevel * 92 - heatLevel * 28);
       ctx.fillStyle = `rgb(${clamp(baseR, 0, 255)},${clamp(baseG, 0, 255)},${clamp(baseB, 0, 255)})`;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+      if (brightnessLevel < 0.65) {
+        const darkness = 0.8 - brightnessLevel;
+        ctx.fillStyle = `rgba(6, 8, 20, ${clamp(darkness, 0, 0.78)})`;
+        ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      }
 
       const patchCount = Math.floor(2 + development * 72 + waterLevel * 16 + vegLevel * 16);
       for (let i = 0; i < patchCount; i++) {
@@ -201,6 +210,16 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         ctx.fill();
       }
 
+      if (brightnessLevel > 0.05) {
+        const lightAura = ctx.createRadialGradient(cx - r * 0.15, cy - r * 0.15, r * 0.25, cx, cy, r + 40);
+        lightAura.addColorStop(0, `rgba(255, 244, 170, ${0.12 + brightnessLevel * 0.25})`);
+        lightAura.addColorStop(1, 'transparent');
+        ctx.fillStyle = lightAura;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r + 40, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       const rimGrad = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.5, cx, cy, r);
       rimGrad.addColorStop(0, 'rgba(255,255,255,0.1)');
       rimGrad.addColorStop(0.7, 'rgba(0,0,0,0)');
@@ -228,6 +247,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         <span>Water {wi.water}</span>
         <span>Life {wi.life}</span>
         <span>Green {wi.vegetation}</span>
+        <span>Brightness {wi.brightness}</span>
         <span>Civ {wi.civilization}</span>
         <span>Pollution {wi.pollution}</span>
       </div>

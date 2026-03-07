@@ -3,7 +3,7 @@ import { createGeneratedElements } from './generatedPool';
 
 export const CORE_ELEMENTS: Element[] = [
   // PRIMORDIAL (unlocked after Big Bang)
-  { id: 'fire', name: 'Fire', category: 'Primordial', emoji: '🔥', description: 'The primal flame', tags: ['hot', 'light', 'energy'], discovered: false, worldEffects: { heat: 2 } },
+  { id: 'fire', name: 'Fire', category: 'Primordial', emoji: '🔥', description: 'The primal flame', tags: ['hot', 'light', 'energy'], discovered: false, worldEffects: { heat: 2, brightness: 1 } },
   { id: 'water', name: 'Water', category: 'Primordial', emoji: '💧', description: 'The source of life', tags: ['wet', 'flow', 'life'], discovered: false, worldEffects: { water: 2 } },
   { id: 'earth', name: 'Earth', category: 'Primordial', emoji: '🟫', description: 'Solid ground', tags: ['solid', 'ground', 'material'], discovered: false },
   { id: 'air', name: 'Air', category: 'Primordial', emoji: '💨', description: 'The breath of the world', tags: ['gas', 'wind', 'sky'], discovered: false, worldEffects: { atmosphere: 1 } },
@@ -61,7 +61,7 @@ export const CORE_ELEMENTS: Element[] = [
 
   // WEATHER
   { id: 'storm', name: 'Storm', category: 'Weather', emoji: '⛈️', description: 'Electricity and fury', tags: ['violent', 'electric', 'weather'], discovered: false },
-  { id: 'lightning', name: 'Lightning', category: 'Weather', emoji: '⚡', description: 'Raw electrical power', tags: ['electric', 'fast', 'power'], discovered: false },
+  { id: 'lightning', name: 'Lightning', category: 'Weather', emoji: '⚡', description: 'Raw electrical power', tags: ['electric', 'fast', 'power'], discovered: false, worldEffects: { brightness: 2 } },
   { id: 'fog', name: 'Fog', category: 'Weather', emoji: '🌫️', description: 'Mist that obscures vision', tags: ['water', 'air', 'obscure'], discovered: false, worldEffects: { atmosphere: 1 } },
   { id: 'tornado', name: 'Tornado', category: 'Weather', emoji: '🌪️', description: 'Spinning column of air', tags: ['violent', 'air', 'spin'], discovered: false },
   { id: 'blizzard', name: 'Blizzard', category: 'Weather', emoji: '🌨️', description: 'Frozen storm of fury', tags: ['cold', 'violent', 'snow'], discovered: false, worldEffects: { cold: 4 } },
@@ -89,7 +89,7 @@ export const CORE_ELEMENTS: Element[] = [
   { id: 'tool', name: 'Tool', category: 'Civilization', emoji: '🔧', description: 'An instrument of creation', tags: ['craft', 'human', 'make'], discovered: false },
   { id: 'village', name: 'Village', category: 'Civilization', emoji: '🏘️', description: 'A small gathering of people', tags: ['people', 'build', 'community'], discovered: false, worldEffects: { civilization: 2 } },
   { id: 'city', name: 'City', category: 'Civilization', emoji: '🏙️', description: 'A hub of civilization', tags: ['people', 'build', 'urban'], discovered: false, worldEffects: { civilization: 5 } },
-  { id: 'fire_pit', name: 'Fire Pit', category: 'Civilization', emoji: '🪵', description: 'Controlled flame for warmth', tags: ['fire', 'human', 'warm'], discovered: false },
+  { id: 'fire_pit', name: 'Fire Pit', category: 'Civilization', emoji: '🪵', description: 'Controlled flame for warmth', tags: ['fire', 'human', 'warm'], discovered: false, worldEffects: { brightness: 1 } },
   { id: 'shelter', name: 'Shelter', category: 'Civilization', emoji: '🏠', description: 'Protection from the elements', tags: ['build', 'human', 'safe'], discovered: false },
   { id: 'farm', name: 'Farm', category: 'Civilization', emoji: '🌾', description: 'Cultivated land for food', tags: ['food', 'earth', 'grow'], discovered: false, worldEffects: { vegetation: 1, civilization: 1 } },
   { id: 'road', name: 'Road', category: 'Civilization', emoji: '🛣️', description: 'Paths connecting places', tags: ['connect', 'travel', 'build'], discovered: false },
@@ -102,7 +102,7 @@ export const CORE_ELEMENTS: Element[] = [
   { id: 'library', name: 'Library', category: 'Civilization', emoji: '🏛️', description: 'A home for collective memory', tags: ['knowledge', 'learn', 'civilization'], discovered: false, worldEffects: { civilization: 1, technology: 1 } },
 
   // TECHNOLOGY
-  { id: 'electricity', name: 'Electricity', category: 'Technology', emoji: '⚡', description: 'Harnessed lightning', tags: ['power', 'conduct', 'energy'], discovered: false, worldEffects: { technology: 2 } },
+  { id: 'electricity', name: 'Electricity', category: 'Technology', emoji: '⚡', description: 'Harnessed lightning', tags: ['power', 'conduct', 'energy'], discovered: false, worldEffects: { technology: 2, brightness: 2 } },
   { id: 'computer', name: 'Computer', category: 'Technology', emoji: '💻', description: 'A thinking machine', tags: ['digital', 'think', 'tech'], discovered: false, worldEffects: { technology: 5 } },
   { id: 'internet', name: 'Internet', category: 'Technology', emoji: '🌐', description: 'The global mind', tags: ['connect', 'info', 'global'], discovered: false, worldEffects: { technology: 8 } },
   { id: 'engine', name: 'Engine', category: 'Technology', emoji: '🔄', description: 'Mechanical power', tags: ['power', 'machine', 'move'], discovered: false, worldEffects: { technology: 2, pollution: 1 } },
@@ -133,9 +133,9 @@ export const CORE_ELEMENTS: Element[] = [
   { id: 'evolution', name: 'Evolution', category: 'Abstract', emoji: '🧬', description: 'Life adapting over vast time', tags: ['change', 'life', 'time'], discovered: false, worldEffects: { life: 3 } },
 
   // COSMIC
-  { id: 'sun', name: 'Sun', category: 'Cosmic', emoji: '☀️', description: 'The star that gives life', tags: ['star', 'hot', 'light'], discovered: false, worldEffects: { heat: 3, life: 2 } },
+  { id: 'sun', name: 'Sun', category: 'Cosmic', emoji: '☀️', description: 'The star that gives life', tags: ['star', 'hot', 'light'], discovered: false, worldEffects: { heat: 3, life: 2, brightness: 10 } },
   { id: 'moon', name: 'Moon', category: 'Cosmic', emoji: '🌙', description: 'The watcher in the dark', tags: ['night', 'reflect', 'tide'], discovered: false },
-  { id: 'star', name: 'Star', category: 'Cosmic', emoji: '⭐', description: 'A distant sun', tags: ['light', 'far', 'cosmic'], discovered: false },
+  { id: 'star', name: 'Star', category: 'Cosmic', emoji: '⭐', description: 'A distant sun', tags: ['light', 'far', 'cosmic'], discovered: false, worldEffects: { brightness: 4 } },
   { id: 'galaxy', name: 'Galaxy', category: 'Cosmic', emoji: '🌌', description: 'A vast collection of stars', tags: ['cosmic', 'vast', 'spin'], discovered: false },
   { id: 'cosmos', name: 'Cosmos', category: 'Cosmic', emoji: '🔮', description: 'Everything that exists', tags: ['all', 'universe', 'infinite'], discovered: false },
   { id: 'asteroid', name: 'Asteroid', category: 'Cosmic', emoji: '☄️', description: 'Rock wandering through space', tags: ['space', 'rock', 'orbit'], discovered: false },
@@ -151,7 +151,7 @@ export const CORE_ELEMENTS: Element[] = [
   { id: 'singularity', name: 'Singularity', category: 'Weird', emoji: '🌀', description: 'A point beyond comprehension', tags: ['tech', 'infinite', 'beyond'], discovered: false, worldEffects: { technology: 10 } },
   { id: 'meme', name: 'Meme', category: 'Weird', emoji: '😂', description: 'A self-replicating idea', tags: ['culture', 'spread', 'funny'], discovered: false, worldEffects: { civilization: 1 } },
   { id: 'void_life', name: 'Void Life', category: 'Weird', emoji: '👁️', description: 'Life that should not exist', tags: ['weird', 'life', 'void'], discovered: false, worldEffects: { life: 1, magic: 3, ruin: 2 } },
-  { id: 'sunlight', name: 'Sunlight', category: 'Weird', emoji: '☀️', description: 'Pure rays from above', tags: ['light', 'clean', 'bright'], discovered: false, worldEffects: { heat: 1, pollution: -2 } },
+  { id: 'sunlight', name: 'Sunlight', category: 'Weird', emoji: '☀️', description: 'Pure rays from above', tags: ['light', 'clean', 'bright'], discovered: false, worldEffects: { heat: 1, pollution: -2, brightness: 4 } },
   { id: 'air_purifier', name: 'Air Purifier', category: 'Weird', emoji: '🌬️', description: 'Device that cleans the air', tags: ['clean', 'tech', 'air'], discovered: false, worldEffects: { pollution: -3 } },
   { id: 'climate_change', name: 'Climate Change', category: 'Weird', emoji: '🌡️', description: 'A destabilized planet-wide pattern', tags: ['heat', 'weather', 'instability'], discovered: false, worldEffects: { heat: 2, pollution: 2, life: -1 } },
   { id: 'microplastic', name: 'Microplastic', category: 'Weird', emoji: '🧪', description: 'Tiny synthetic fragments everywhere', tags: ['plastic', 'pollution', 'ocean'], discovered: false, worldEffects: { pollution: 2, life: -1 } },

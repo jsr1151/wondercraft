@@ -1,7 +1,7 @@
 import type { WorldInfluence, Element } from '../types';
 
 export const DEFAULT_WORLD_INFLUENCE: WorldInfluence = {
-  water: 0, vegetation: 0, heat: 0, cold: 0, atmosphere: 0,
+  water: 0, brightness: 0, vegetation: 0, heat: 0, cold: 0, atmosphere: 0,
   pollution: 0, civilization: 0, technology: 0, magic: 0, ruin: 0, life: 0
 };
 

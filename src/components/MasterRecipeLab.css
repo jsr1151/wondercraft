@@ -43,6 +43,11 @@
   padding: 8px;
 }
 
+.master-recipe-form input:focus,
+.master-recipe-form input:hover {
+  border-color: var(--accent);
+}
+
 .master-recipe-form span {
   color: var(--text-secondary);
   font-size: 0.85rem;
@@ -84,6 +89,12 @@
   border-radius: 8px;
   color: var(--text-primary);
   padding: 8px;
+}
+
+.master-recipe-token-help {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  line-height: 1.35;
 }
 
 .master-recipe-list {

@@ -5,6 +5,7 @@ export type ElementCategory =
 
 export interface WorldInfluence {
   water: number;
+  brightness: number;
   vegetation: number;
   heat: number;
   cold: number;
@@ -61,6 +62,7 @@ export interface GameState {
   selectedSlotB: string | null;
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
+  attemptedCombinations: Set<string>;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -86,5 +88,6 @@ export interface SerializableGameState {
   recentDiscoveries: string[];
   eventLog: string[];
   masterRecipes: MasterRecipe[];
+  attemptedCombinations: string[];
   hints: string[];
 }
