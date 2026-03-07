@@ -1,14 +1,29 @@
-import { useState, type DragEvent } from 'react';
+import { useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
-import { resolveElementIcon } from '../utils/iconResolver';
+import { resolveElementIconRaw } from '../utils/iconResolver';
 import type { WorldEffectMap } from '../types';
+import { ElementIcon } from './ElementIcon';
 import './CraftingArea.css';
 
 const DEFAULT_ATTR_KEYS = [
   'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
   'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
 ] as const;
+
+const MAX_ICON_IMPORT_BYTES = 400_000;
+
+async function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') resolve(reader.result);
+      else reject(new Error('Invalid file contents'));
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
 
 function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, string> {
   const next: Record<string, string> = { ...Object.fromEntries(DEFAULT_ATTR_KEYS.map((key) => [key, ''])) };
@@ -27,6 +42,7 @@ export function CraftingArea() {
   const [showIconEditor, setShowIconEditor] = useState(false);
   const [iconTarget, setIconTarget] = useState('');
   const [iconValue, setIconValue] = useState('');
+  const [iconStatus, setIconStatus] = useState<string | null>(null);
   const [showAttrEditor, setShowAttrEditor] = useState(false);
   const [attrTarget, setAttrTarget] = useState('');
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>({});
@@ -92,7 +108,41 @@ export function CraftingArea() {
     const element = ELEMENTS.find((entry) => entry.id === elementId);
     if (!element) return;
     setIconTarget(element.name);
-    setIconValue(resolveElementIcon(element, iconOverrides));
+    setIconValue(resolveElementIconRaw(element, iconOverrides));
+  };
+
+  const importIconImage = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setIconStatus('Only image files are supported for icon paste/upload.');
+      return;
+    }
+    if (file.size > MAX_ICON_IMPORT_BYTES) {
+      setIconStatus('Icon image is too large. Keep it under 400KB.');
+      return;
+    }
+
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      setIconValue(dataUrl);
+      setIconStatus('Image pasted into icon value. Click Apply to save it.');
+    } catch {
+      setIconStatus('Failed to import image for icon.');
+    }
+  };
+
+  const onIconPaste: ClipboardEventHandler<HTMLInputElement> = async (event) => {
+    const imageItem = Array.from(event.clipboardData.items).find((item) => item.type.startsWith('image/'));
+    if (!imageItem) return;
+    event.preventDefault();
+    const file = imageItem.getAsFile();
+    if (file) await importIconImage(file);
+  };
+
+  const onIconUpload: ChangeEventHandler<HTMLInputElement> = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    await importIconImage(file);
+    event.target.value = '';
   };
 
   const parseElementByNameOrId = (value: string) => ELEMENTS.find((element) =>
@@ -165,7 +215,12 @@ export function CraftingArea() {
         >
           {elemA ? (
             <div className="craft-slot-content" onClick={clearSlotA}>
-              <span className="craft-slot-emoji">{resolveElementIcon(elemA, iconOverrides)}</span>
+              <ElementIcon
+                element={elemA}
+                iconOverrides={iconOverrides}
+                className="craft-slot-emoji"
+                imageClassName="craft-slot-emoji-image"
+              />
               <span className="craft-slot-name">{elemA.name}</span>
               <span className="craft-slot-clear">✕</span>
             </div>
@@ -186,7 +241,12 @@ export function CraftingArea() {
         >
           {elemB ? (
             <div className="craft-slot-content" onClick={clearSlotB}>
-              <span className="craft-slot-emoji">{resolveElementIcon(elemB, iconOverrides)}</span>
+              <ElementIcon
+                element={elemB}
+                iconOverrides={iconOverrides}
+                className="craft-slot-emoji"
+                imageClassName="craft-slot-emoji-image"
+              />
               <span className="craft-slot-name">{elemB.name}</span>
               <span className="craft-slot-clear">✕</span>
             </div>
@@ -202,7 +262,12 @@ export function CraftingArea() {
         <div className={`craft-result ${lastCombinationResult ? (lastCombinationResult.success ? 'success' : 'fail') : ''}`}>
           {lastCombinationResult?.success && resultElem ? (
             <div className="craft-result-content">
-              <span className="craft-result-emoji">{resolveElementIcon(resultElem, iconOverrides)}</span>
+              <ElementIcon
+                element={resultElem}
+                iconOverrides={iconOverrides}
+                className="craft-result-emoji"
+                imageClassName="craft-result-emoji-image"
+              />
               <span className="craft-result-name">{resultElem.name}</span>
               {lastCombinationResult.isNew && (
                 <span className="craft-result-new">NEW!</span>
@@ -230,7 +295,7 @@ export function CraftingArea() {
           const prefill = elemA ?? resultElem ?? elemB;
           if (prefill) {
             setIconTarget(prefill.name);
-            setIconValue(resolveElementIcon(prefill, iconOverrides));
+            setIconValue(resolveElementIconRaw(prefill, iconOverrides));
           }
           setShowIconEditor((v) => !v);
         }}
@@ -265,8 +330,10 @@ export function CraftingArea() {
           <input
             value={iconValue}
             onChange={(event) => setIconValue(event.target.value)}
-            placeholder="Paste Apple emoji"
+            onPaste={(event) => void onIconPaste(event)}
+            placeholder="Paste Apple emoji, image URL, or image from clipboard"
           />
+          <input type="file" accept="image/*" onChange={(event) => void onIconUpload(event)} />
           <button onClick={applyIconOverride}>Apply</button>
           <button className="clear-icon" onClick={clearIconOverride}>Reset</button>
 
@@ -277,6 +344,8 @@ export function CraftingArea() {
           </datalist>
         </div>
       )}
+
+      {iconStatus && <p className="craft-icon-status">{iconStatus}</p>}
 
       {showAttrEditor && (
         <div className="attr-editor">
@@ -323,7 +392,16 @@ export function CraftingArea() {
 
       {lastCombinationResult?.success && resultElem && (
         <div className="craft-discovery-text">
-          <p className="discovery-name">{resolveElementIcon(resultElem, iconOverrides)} {resultElem.name}</p>
+          <p className="discovery-name">
+            <ElementIcon
+              element={resultElem}
+              iconOverrides={iconOverrides}
+              className="craft-discovery-emoji"
+              imageClassName="craft-discovery-emoji-image"
+            />
+            {' '}
+            {resultElem.name}
+          </p>
           <p className="discovery-desc">{resultElem.description}</p>
         </div>
       )}

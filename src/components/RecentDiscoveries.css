@@ -33,4 +33,5 @@
 }
 
 .recent-emoji { font-size: 1.3rem; }
+.recent-emoji-image { width: 24px; height: 24px; object-fit: contain; border-radius: 6px; }
 .recent-name { font-size: 0.65rem; color: var(--text-secondary); text-align: center; }

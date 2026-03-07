@@ -12,6 +12,21 @@ import { EmojiAtlas } from './components/EmojiAtlas';
 import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
 import './App.css';
 
+interface CollapsiblePanelProps {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}
+
+function CollapsiblePanel({ title, children, defaultOpen = true }: CollapsiblePanelProps) {
+  return (
+    <details className="panel-shell" open={defaultOpen}>
+      <summary className="panel-shell-summary">{title}</summary>
+      <div className="panel-shell-body">{children}</div>
+    </details>
+  );
+}
+
 function GameApp() {
   const { state, dispatch } = useGame();
 
@@ -49,18 +64,32 @@ function GameApp() {
             worldInfluence={state.worldInfluence}
             seed={state.seed}
           />
-          <HintPanel hints={state.hints} />
+          <CollapsiblePanel title="Hints" defaultOpen>
+            <HintPanel hints={state.hints} />
+          </CollapsiblePanel>
         </div>
         <div className="app-right">
-          <CraftingArea />
-          <MasterRecipeLab />
-          <ElementCollection />
+          <CollapsiblePanel title="Crafting" defaultOpen>
+            <CraftingArea />
+          </CollapsiblePanel>
+          <CollapsiblePanel title="Master Recipes" defaultOpen>
+            <MasterRecipeLab />
+          </CollapsiblePanel>
+          <CollapsiblePanel title="Elements" defaultOpen>
+            <ElementCollection />
+          </CollapsiblePanel>
         </div>
       </main>
 
-      <RecentDiscoveries />
-      <EventLog />
-      <EmojiAtlas />
+      <CollapsiblePanel title="Recent Discoveries" defaultOpen>
+        <RecentDiscoveries />
+      </CollapsiblePanel>
+      <CollapsiblePanel title="Event Log" defaultOpen={false}>
+        <EventLog />
+      </CollapsiblePanel>
+      <CollapsiblePanel title="Emoji Atlas" defaultOpen={false}>
+        <EmojiAtlas />
+      </CollapsiblePanel>
       <UntriedCombosSidebar />
     </div>
   );

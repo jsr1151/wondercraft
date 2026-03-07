@@ -58,6 +58,7 @@
 }
 
 .craft-slot-emoji { font-size: 1.8rem; }
+.craft-slot-emoji-image { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
 .craft-slot-name { font-size: 0.75rem; color: var(--text-primary); text-align: center; }
 .craft-slot-clear {
   position: absolute;
@@ -120,6 +121,7 @@
 }
 
 .craft-result-emoji { font-size: 1.8rem; }
+.craft-result-emoji-image { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
 .craft-result-name { font-size: 0.75rem; color: var(--text-primary); text-align: center; }
 
 .craft-result-new {
@@ -272,6 +274,12 @@
   padding: 8px;
 }
 
+.craft-icon-status {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: -6px;
+}
+
 .icon-editor button {
   border-radius: 8px;
   padding: 8px 10px;
@@ -313,6 +321,18 @@
   font-weight: 600;
   color: var(--accent);
   margin-bottom: 4px;
+}
+
+.craft-discovery-emoji {
+  font-size: 1rem;
+}
+
+.craft-discovery-emoji-image {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  border-radius: 4px;
+  vertical-align: text-bottom;
 }
 
 .discovery-desc {

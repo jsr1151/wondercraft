@@ -95,6 +95,64 @@
   margin-bottom: 0;
 }
 
+.panel-shell {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.panel-shell-summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid transparent;
+}
+
+.panel-shell-summary::-webkit-details-marker {
+  display: none;
+}
+
+.panel-shell[open] .panel-shell-summary {
+  border-bottom-color: var(--border);
+}
+
+.panel-shell-summary::before {
+  content: '▸';
+  margin-right: 8px;
+  color: var(--text-secondary);
+}
+
+.panel-shell[open] .panel-shell-summary::before {
+  content: '▾';
+}
+
+.panel-shell-body {
+  padding: 10px;
+}
+
+.panel-shell-body > * {
+  margin: 0;
+}
+
+.panel-shell .crafting-area,
+.panel-shell .master-recipe-lab,
+.panel-shell .element-collection,
+.panel-shell .hint-panel,
+.panel-shell .recent-discoveries,
+.panel-shell .event-log,
+.panel-shell .emoji-atlas {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
 @media (max-width: 700px) {
   .app-main {
     display: flex;

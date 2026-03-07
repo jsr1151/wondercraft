@@ -1,6 +1,6 @@
 import type { Element } from '../types';
 import { useGame } from '../store/useGame';
-import { resolveElementIcon } from '../utils/iconResolver';
+import { ElementIcon } from './ElementIcon';
 import './ElementCard.css';
 
 interface ElementCardProps {
@@ -55,7 +55,12 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         onDragStart={handleDragStart}
         title={`${element.name}: ${element.description}`}
       >
-        <span className="element-emoji">{resolveElementIcon(element, iconOverrides)}</span>
+        <ElementIcon
+          element={element}
+          iconOverrides={iconOverrides}
+          className="element-emoji"
+          imageClassName="element-emoji-image"
+        />
         <span className="element-name-compact">{element.name}</span>
       </div>
     );
@@ -69,7 +74,12 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
       onDragStart={handleDragStart}
       title={element.description}
     >
-      <span className="element-emoji">{resolveElementIcon(element, iconOverrides)}</span>
+      <ElementIcon
+        element={element}
+        iconOverrides={iconOverrides}
+        className="element-emoji"
+        imageClassName="element-emoji-image"
+      />
       <span className="element-name">{element.name}</span>
       <span className="element-category">{element.category}</span>
     </div>

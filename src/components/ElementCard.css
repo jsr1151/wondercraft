@@ -46,6 +46,13 @@
   line-height: 1;
 }
 
+.element-emoji-image {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
 .element-name {
   font-size: 0.75rem;
   color: var(--text-primary);

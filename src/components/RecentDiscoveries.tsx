@@ -1,6 +1,6 @@
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
-import { resolveElementIcon } from '../utils/iconResolver';
+import { ElementIcon } from './ElementIcon';
 import './RecentDiscoveries.css';
 
 export function RecentDiscoveries() {
@@ -17,7 +17,12 @@ export function RecentDiscoveries() {
       <div className="recent-scroll">
         {recent.map((elem, i) => (
           <div key={`${elem.id}-${i}`} className="recent-item" title={elem.description}>
-            <span className="recent-emoji">{resolveElementIcon(elem, state.iconOverrides)}</span>
+            <ElementIcon
+              element={elem}
+              iconOverrides={state.iconOverrides}
+              className="recent-emoji"
+              imageClassName="recent-emoji-image"
+            />
             <span className="recent-name">{elem.name}</span>
           </div>
         ))}

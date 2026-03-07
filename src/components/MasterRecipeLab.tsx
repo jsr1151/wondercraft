@@ -1,15 +1,29 @@
-import { useMemo, useState, type DragEvent } from 'react';
+import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
 import type { MasterRecipe, WorldEffectMap } from '../types';
-import { resolveElementIcon } from '../utils/iconResolver';
+import { resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
 import './MasterRecipeLab.css';
 
 const DEFAULT_ATTR_KEYS = [
   'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
   'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
 ] as const;
+
+const MAX_ICON_IMPORT_BYTES = 400_000;
+
+async function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') resolve(reader.result);
+      else reject(new Error('Invalid file contents'));
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
 
 const ELEMENT_OPTIONS = ELEMENTS
   .map((element) => element.name)
@@ -51,6 +65,8 @@ export function MasterRecipeLab() {
   const [saving, setSaving] = useState(false);
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>(buildAttrDraft());
   const [newAttrKey, setNewAttrKey] = useState('');
+  const [outputIcon, setOutputIcon] = useState('');
+  const [iconStatus, setIconStatus] = useState<string | null>(null);
 
   const setFromElementDrop = (target: 'A' | 'B' | 'OUT') => (event: DragEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -63,6 +79,7 @@ export function MasterRecipeLab() {
     if (target === 'B') setInputB(element.name);
     if (target === 'OUT') {
       setOutput(element.name);
+      setOutputIcon(resolveElementIconRaw(element, state.iconOverrides));
       const merged = { ...(element.worldEffects ?? {}), ...(state.effectOverrides[element.id] ?? {}) };
       setAttrDraft(buildAttrDraft(merged));
     }
@@ -88,8 +105,42 @@ export function MasterRecipeLab() {
     if (!outputId) return;
     const baseElement = ELEMENTS.find((element) => element.id === outputId);
     if (!baseElement) return;
+    setOutputIcon(resolveElementIconRaw(baseElement, state.iconOverrides));
     const merged = { ...(baseElement.worldEffects ?? {}), ...(state.effectOverrides[outputId] ?? {}) };
     setAttrDraft(buildAttrDraft(merged));
+  };
+
+  const importIconImage = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setIconStatus('Only image files are supported for icon paste/upload.');
+      return;
+    }
+    if (file.size > MAX_ICON_IMPORT_BYTES) {
+      setIconStatus('Icon image is too large. Keep it under 400KB.');
+      return;
+    }
+
+    try {
+      setOutputIcon(await fileToDataUrl(file));
+      setIconStatus('Image pasted into output icon. Save recipe to apply.');
+    } catch {
+      setIconStatus('Failed to import image for icon.');
+    }
+  };
+
+  const onIconPaste: ClipboardEventHandler<HTMLInputElement> = async (event) => {
+    const imageItem = Array.from(event.clipboardData.items).find((item) => item.type.startsWith('image/'));
+    if (!imageItem) return;
+    event.preventDefault();
+    const file = imageItem.getAsFile();
+    if (file) await importIconImage(file);
+  };
+
+  const onIconUpload: ChangeEventHandler<HTMLInputElement> = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    await importIconImage(file);
+    event.target.value = '';
   };
 
   const addCustomAttrKey = () => {
@@ -132,6 +183,9 @@ export function MasterRecipeLab() {
     if (Object.keys(outputWorldEffects).length > 0) {
       dispatch({ type: 'SET_EFFECT_OVERRIDE', elementId: outputId, worldEffects: outputWorldEffects });
     }
+    if (outputIcon.trim()) {
+      dispatch({ type: 'SET_ICON_OVERRIDE', elementId: outputId, icon: outputIcon.trim() });
+    }
 
     if (publishGlobal) {
       if (!token.trim()) {
@@ -157,6 +211,7 @@ export function MasterRecipeLab() {
     setInputA('');
     setInputB('');
     setOutput('');
+    setOutputIcon('');
     setAttrDraft(buildAttrDraft());
   };
 
@@ -199,6 +254,20 @@ export function MasterRecipeLab() {
           onDrop={setFromElementDrop('OUT')}
         />
         <button onClick={addMasterRecipe}>Save</button>
+      </div>
+
+      <div className="master-recipe-icon">
+        <p>Output Icon (optional)</p>
+        <div className="master-recipe-icon-row">
+          <input
+            value={outputIcon}
+            onChange={(event) => setOutputIcon(event.target.value)}
+            onPaste={(event) => void onIconPaste(event)}
+            placeholder="Paste emoji, image URL, or image from clipboard"
+          />
+          <input type="file" accept="image/*" onChange={(event) => void onIconUpload(event)} />
+        </div>
+        {iconStatus && <p className="master-recipe-token-help">{iconStatus}</p>}
       </div>
 
       <div className="master-recipe-attrs">
