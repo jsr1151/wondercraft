@@ -38,6 +38,10 @@ export interface Recipe {
   ordered?: boolean;
 }
 
+export interface MasterRecipe extends Recipe {
+  createdAt: number;
+}
+
 export interface GameState {
   seed: number;
   bigBangDone: boolean;
@@ -47,6 +51,7 @@ export interface GameState {
   eventLog: string[];
   selectedSlotA: string | null;
   selectedSlotB: string | null;
+  masterRecipes: MasterRecipe[];
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -56,6 +61,8 @@ export type GameAction =
   | { type: 'SELECT_SLOT_A'; elementId: string | null }
   | { type: 'SELECT_SLOT_B'; elementId: string | null }
   | { type: 'TRY_COMBINE' }
+  | { type: 'ADD_MASTER_RECIPE'; recipe: MasterRecipe }
+  | { type: 'REMOVE_MASTER_RECIPE'; recipeId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
@@ -68,5 +75,6 @@ export interface SerializableGameState {
   worldInfluence: WorldInfluence;
   recentDiscoveries: string[];
   eventLog: string[];
+  masterRecipes: MasterRecipe[];
   hints: string[];
 }

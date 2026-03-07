@@ -20,6 +20,7 @@ function createInitialState(): GameState {
     eventLog: [],
     selectedSlotA: null,
     selectedSlotB: null,
+    masterRecipes: [],
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
   };
@@ -68,7 +69,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, lastCombinationResult: { success: false } };
       }
 
-      const recipe = findRecipe(selectedSlotA, selectedSlotB, RECIPES);
+      const allRecipes = [...state.masterRecipes, ...RECIPES];
+      const recipe = findRecipe(selectedSlotA, selectedSlotB, allRecipes);
       
       if (!recipe) {
         return { ...state, lastCombinationResult: { success: false } };
@@ -103,6 +105,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'ADD_MASTER_RECIPE': {
+      const normalizePair = (a: string, b: string) => [a, b].sort().join('|');
+      const incoming = normalizePair(action.recipe.inputA, action.recipe.inputB);
+      const filtered = state.masterRecipes.filter((recipe) => normalizePair(recipe.inputA, recipe.inputB) !== incoming);
+
+      return {
+        ...state,
+        masterRecipes: [action.recipe, ...filtered].slice(0, 300),
+        eventLog: [...state.eventLog, `🧪 Master recipe added: ${action.recipe.inputA} + ${action.recipe.inputB} -> ${action.recipe.output}`],
+      };
+    }
+
+    case 'REMOVE_MASTER_RECIPE': {
+      return {
+        ...state,
+        masterRecipes: state.masterRecipes.filter((recipe) => recipe.id !== action.recipeId),
+      };
+    }
+
     case 'REQUEST_HINT': {
       const hint = generateHint(
         Array.from(state.discoveredElements),
@@ -129,6 +150,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         worldInfluence,
         recentDiscoveries: saved.recentDiscoveries ?? [],
         eventLog: saved.eventLog ?? [],
+        masterRecipes: saved.masterRecipes ?? [],
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
         selectedSlotB: null,

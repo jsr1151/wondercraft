@@ -1,0 +1,105 @@
+.master-recipe-lab {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.master-recipe-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.master-recipe-count {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.master-recipe-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.master-recipe-form {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) auto minmax(110px, 1fr) auto minmax(120px, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.master-recipe-form input {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+.master-recipe-form span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.master-recipe-form button {
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 10px;
+  font-weight: 600;
+}
+
+.master-recipe-status {
+  font-size: 0.78rem;
+  color: var(--success);
+  margin-bottom: 8px;
+}
+
+.master-recipe-list {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.master-recipe-item {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) auto minmax(100px, 1fr) auto minmax(120px, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+}
+
+.master-recipe-remove {
+  font-size: 0.72rem;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+.master-recipe-empty {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 8px;
+}
+
+@media (max-width: 900px) {
+  .master-recipe-form,
+  .master-recipe-item {
+    grid-template-columns: 1fr;
+  }
+}

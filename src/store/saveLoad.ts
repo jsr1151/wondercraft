@@ -10,6 +10,7 @@ function serializeState(state: GameState): SerializableGameState {
     worldInfluence: state.worldInfluence,
     recentDiscoveries: state.recentDiscoveries,
     eventLog: state.eventLog,
+    masterRecipes: state.masterRecipes,
     hints: state.hints,
   };
 }

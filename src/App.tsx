@@ -7,6 +7,8 @@ import { ElementCollection } from './components/ElementCollection';
 import { RecentDiscoveries } from './components/RecentDiscoveries';
 import { EventLog } from './components/EventLog';
 import { HintPanel } from './components/HintPanel';
+import { MasterRecipeLab } from './components/MasterRecipeLab';
+import { EmojiAtlas } from './components/EmojiAtlas';
 import './App.css';
 
 function GameApp() {
@@ -50,12 +52,14 @@ function GameApp() {
         </div>
         <div className="app-right">
           <CraftingArea />
+          <MasterRecipeLab />
           <ElementCollection />
         </div>
       </main>
 
       <RecentDiscoveries />
       <EventLog />
+      <EmojiAtlas />
     </div>
   );
 }

@@ -13,6 +13,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "emoji-picker-react": "^4.18.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

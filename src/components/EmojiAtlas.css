@@ -1,0 +1,30 @@
+.emoji-atlas {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.emoji-atlas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.emoji-atlas-header span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.emoji-picker-shell {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.emoji-copy-status {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--success);
+}
