@@ -15,6 +15,30 @@ function seededRandom(seed: number) {
   };
 }
 
+function tracePlanetPath(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  radius: number,
+  earthyLevel: number,
+  phase: number
+) {
+  const roughness = 0.004 + earthyLevel * 0.055;
+  const steps = 140;
+
+  for (let i = 0; i <= steps; i++) {
+    const ratio = i / steps;
+    const angle = ratio * Math.PI * 2;
+    const wave = Math.sin(angle * 7 + phase * 2.3) * 0.6 + Math.cos(angle * 11 - phase * 1.5) * 0.4;
+    const radial = radius * (1 + wave * roughness);
+    const x = cx + Math.cos(angle) * radial;
+    const y = cy + Math.sin(angle) * radial;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
 export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
@@ -26,10 +50,14 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
   const civilizationLevel = toLevel(wi.civilization);
   const pollutionLevel = toLevel(wi.pollution);
   const brightnessLevel = toLevel(wi.brightness);
+  const earthyLevel = toLevel(wi.earthy);
+  const airLevel = toLevel(wi.air);
 
   const worldStage = (() => {
     if (brightnessLevel < 0.1) return 'Lightless Rock';
     if (pollutionLevel > 0.62) return 'Smog Choked';
+    if (earthyLevel > 0.5 && lifeLevel < 0.2) return 'Rugged Frontier';
+    if (airLevel > 0.55 && toLevel(wi.atmosphere) > 0.3) return 'Wind-Swept World';
     if (civilizationLevel > 0.58) return 'Industrial Age';
     if (lifeLevel > 0.52 && vegetationLevel > 0.45) return 'Living World';
     if (waterLevel > 0.42 || vegetationLevel > 0.32) return 'Awakening Biosphere';
@@ -85,7 +113,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
 
       ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      tracePlanetPath(ctx, cx, cy, r, earthyLevel, phase);
       ctx.clip();
 
       const waterLevel = clamp(Math.max(0, wi.water) / 32, 0, 1);
@@ -98,6 +126,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       const lifeLevel = clamp(Math.max(0, wi.life) / 32, 0, 1);
       const atmosLevel = clamp(Math.max(0, wi.atmosphere) / 32, 0, 1);
       const brightnessLevel = clamp(Math.max(0, wi.brightness) / 32, 0, 1);
+      const earthyAmount = clamp(Math.max(0, wi.earthy) / 32, 0, 1);
+      const airAmount = clamp(Math.max(0, wi.air) / 32, 0, 1);
 
       const development = clamp(
         waterLevel * 0.9 + vegLevel * 1.2 + lifeLevel + civLevel * 0.9 + atmosLevel * 0.6,
@@ -118,7 +148,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
       }
 
-      const patchCount = Math.floor(2 + development * 72 + waterLevel * 16 + vegLevel * 16);
+      const patchCount = Math.floor(2 + development * 72 + waterLevel * 16 + vegLevel * 16 + earthyAmount * 24);
       for (let i = 0; i < patchCount; i++) {
         const patch = terrainPatches[i];
         const px = cx + patch.x * Math.cos(phase) - patch.y * Math.sin(phase);
@@ -143,6 +173,26 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         ctx.beginPath();
         ctx.ellipse(px, py, patch.radius, patch.radius * 0.65, phase, 0, Math.PI * 2);
         ctx.fill();
+      }
+
+      if (earthyAmount > 0.08) {
+        const ridgeCount = Math.floor(5 + earthyAmount * 18);
+        for (let i = 0; i < ridgeCount; i++) {
+          const rr = seededRandom(seed + i * 31);
+          const angle = rr() * Math.PI * 2 + phase * 0.7;
+          const dist = rr() * r * 0.75;
+          const px = cx + Math.cos(angle) * dist;
+          const py = cy + Math.sin(angle) * dist;
+          const size = 3 + rr() * (12 + earthyAmount * 10);
+
+          ctx.fillStyle = `rgba(118, 96, 74, ${0.15 + earthyAmount * 0.2})`;
+          ctx.beginPath();
+          ctx.moveTo(px, py - size);
+          ctx.lineTo(px + size * 0.8, py + size * 0.7);
+          ctx.lineTo(px - size * 0.9, py + size * 0.6);
+          ctx.closePath();
+          ctx.fill();
+        }
       }
 
       if (coldLevel > 0.05) {
@@ -198,6 +248,19 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         ctx.fill();
       }
 
+      if (airAmount > 0.02) {
+        const ringCount = Math.max(1, Math.floor(airAmount * 5));
+        for (let i = 0; i < ringCount; i++) {
+          const grow = 7 + i * 6;
+          const alpha = Math.max(0.04, airAmount * 0.18 - i * 0.018);
+          ctx.strokeStyle = `rgba(153, 194, 255, ${alpha})`;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, r + grow, r + grow * 0.88, phase * 0.2, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
       if (magicLevel > 0.05) {
         const glowPulse = 0.5 + 0.5 * Math.sin(t * 0.002);
         const grad = ctx.createRadialGradient(cx, cy, r * 0.7, cx, cy, r + 20);
@@ -226,7 +289,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
       rimGrad.addColorStop(1, 'rgba(0,0,0,0.5)');
       ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      tracePlanetPath(ctx, cx, cy, r, earthyLevel, phase);
       ctx.clip();
       ctx.fillStyle = rimGrad;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
@@ -248,6 +311,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed }: PlanetCanvasProps) {
         <span>Life {wi.life}</span>
         <span>Green {wi.vegetation}</span>
         <span>Brightness {wi.brightness}</span>
+        <span>Earthy {wi.earthy}</span>
+        <span>Air {wi.air}</span>
         <span>Civ {wi.civilization}</span>
         <span>Pollution {wi.pollution}</span>
       </div>

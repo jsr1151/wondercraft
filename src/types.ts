@@ -6,6 +6,8 @@ export type ElementCategory =
 export interface WorldInfluence {
   water: number;
   brightness: number;
+  earthy: number;
+  air: number;
   vegetation: number;
   heat: number;
   cold: number;
@@ -63,6 +65,7 @@ export interface GameState {
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
+  effectOverrides: Record<string, Partial<WorldInfluence>>;
   attemptedCombinations: Set<string>;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
@@ -78,6 +81,8 @@ export type GameAction =
   | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
   | { type: 'SET_ICON_OVERRIDE'; elementId: string; icon: string }
   | { type: 'CLEAR_ICON_OVERRIDE'; elementId: string }
+  | { type: 'SET_EFFECT_OVERRIDE'; elementId: string; worldEffects: Partial<WorldInfluence> }
+  | { type: 'CLEAR_EFFECT_OVERRIDE'; elementId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
@@ -92,6 +97,7 @@ export interface SerializableGameState {
   eventLog: string[];
   masterRecipes: MasterRecipe[];
   iconOverrides: Record<string, string>;
+  effectOverrides: Record<string, Partial<WorldInfluence>>;
   attemptedCombinations: string[];
   hints: string[];
 }

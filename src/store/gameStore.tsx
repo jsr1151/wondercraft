@@ -24,6 +24,7 @@ function createInitialState(): GameState {
     masterRecipes: [],
     sharedRecipes: [],
     iconOverrides: {},
+    effectOverrides: {},
     attemptedCombinations: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
@@ -53,7 +54,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'BIG_BANG': {
       const discovered = new Set(PRIMORDIAL_ELEMENTS);
-      const worldInfluence = calculateWorldInfluence(PRIMORDIAL_ELEMENTS, ELEMENTS);
+      const worldInfluence = calculateWorldInfluence(PRIMORDIAL_ELEMENTS, ELEMENTS, state.effectOverrides);
       return {
         ...state,
         bigBangDone: true,
@@ -97,7 +98,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ? state.recentDiscoveries
         : [outputId, ...state.recentDiscoveries].slice(0, 10);
       
-      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), ELEMENTS);
+      const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), ELEMENTS, state.effectOverrides);
       
       const newEventLog = [...state.eventLog];
       if (!alreadyDiscovered && MAJOR_ELEMENT_EVENTS[outputId]) {
@@ -162,6 +163,28 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_EFFECT_OVERRIDE': {
+      const nextOverrides = {
+        ...state.effectOverrides,
+        [action.elementId]: action.worldEffects,
+      };
+      return {
+        ...state,
+        effectOverrides: nextOverrides,
+        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), ELEMENTS, nextOverrides),
+      };
+    }
+
+    case 'CLEAR_EFFECT_OVERRIDE': {
+      const nextOverrides = { ...state.effectOverrides };
+      delete nextOverrides[action.elementId];
+      return {
+        ...state,
+        effectOverrides: nextOverrides,
+        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), ELEMENTS, nextOverrides),
+      };
+    }
+
     case 'REQUEST_HINT': {
       const hint = generateHint(
         Array.from(state.discoveredElements),
@@ -179,7 +202,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const saved = action.state;
       if (!saved) return state;
       const discovered = new Set<string>(saved.discoveredElements ?? []);
-      const computedInfluence = calculateWorldInfluence(Array.from(discovered), ELEMENTS);
+      const loadedOverrides = saved.effectOverrides ?? {};
+      const computedInfluence = calculateWorldInfluence(Array.from(discovered), ELEMENTS, loadedOverrides);
       const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
       return {
         ...state,
@@ -192,6 +216,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         masterRecipes: saved.masterRecipes ?? [],
         sharedRecipes: state.sharedRecipes,
         iconOverrides: saved.iconOverrides ?? {},
+        effectOverrides: loadedOverrides,
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
