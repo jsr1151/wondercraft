@@ -341,30 +341,32 @@ export function MasterRecipeLab() {
         {iconStatus && <p className="master-recipe-token-help">{iconStatus}</p>}
       </div>
 
-      <div className="master-recipe-attrs">
-        <p>Output Attributes (optional)</p>
-        <div className="master-recipe-attr-grid">
-          {orderedAttrKeys.map((key) => (
-            <label key={key} className="master-recipe-attr-field">
-              <span>{key}</span>
-              <input
-                value={attrDraft[key] ?? ''}
-                onChange={(event) => setAttrDraft((prev) => ({ ...prev, [key]: event.target.value }))}
-                placeholder="0"
-              />
-            </label>
-          ))}
-        </div>
+      <details className="master-recipe-section" open>
+        <summary className="master-recipe-section-summary">Output Attributes (optional)</summary>
+        <div className="master-recipe-attrs">
+          <div className="master-recipe-attr-grid">
+            {orderedAttrKeys.map((key) => (
+              <label key={key} className="master-recipe-attr-field">
+                <span>{key}</span>
+                <input
+                  value={attrDraft[key] ?? ''}
+                  onChange={(event) => setAttrDraft((prev) => ({ ...prev, [key]: event.target.value }))}
+                  placeholder="0"
+                />
+              </label>
+            ))}
+          </div>
 
-        <div className="master-recipe-attr-add">
-          <input
-            value={newAttrKey}
-            onChange={(event) => setNewAttrKey(event.target.value)}
-            placeholder="New attribute key (example: gravity)"
-          />
-          <button onClick={addCustomAttrKey}>Add Attribute Key</button>
+          <div className="master-recipe-attr-add">
+            <input
+              value={newAttrKey}
+              onChange={(event) => setNewAttrKey(event.target.value)}
+              placeholder="New attribute key (example: gravity)"
+            />
+            <button onClick={addCustomAttrKey}>Add Attribute Key</button>
+          </div>
         </div>
-      </div>
+      </details>
 
       <div className="master-recipe-publish">
         <label>
@@ -403,31 +405,36 @@ export function MasterRecipeLab() {
       {status && <p className="master-recipe-status">{status}</p>}
       {saving && <p className="master-recipe-status">Publishing...</p>}
 
-      <div className="master-recipe-list">
-        {sortedRecipes.length === 0 ? (
-          <p className="master-recipe-empty">No custom recipes yet.</p>
-        ) : (
-          sortedRecipes.map((recipe) => (
-            <div key={recipe.id} className="master-recipe-item">
-              <span>{elementLabel(recipe.inputA, allElements, state.iconOverrides, state.nameOverrides)}</span>
-              <span>+</span>
-              <span>{elementLabel(recipe.inputB, allElements, state.iconOverrides, state.nameOverrides)}</span>
-              <span>→</span>
-              <span>{elementLabel(recipe.output, allElements, state.iconOverrides, state.nameOverrides)}</span>
-              <span className="master-recipe-attr-tag">
-                {recipe.outputWorldEffects ? `${Object.keys(recipe.outputWorldEffects).length} attrs` : 'No attrs'}
-              </span>
-              <button
-                className="master-recipe-remove"
-                onClick={() => dispatch({ type: 'REMOVE_MASTER_RECIPE', recipeId: recipe.id })}
-                title="Remove recipe"
-              >
-                Remove
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+      <details className="master-recipe-section" open>
+        <summary className="master-recipe-section-summary">
+          Current Local Recipes ({sortedRecipes.length})
+        </summary>
+        <div className="master-recipe-list">
+          {sortedRecipes.length === 0 ? (
+            <p className="master-recipe-empty">No custom recipes yet.</p>
+          ) : (
+            sortedRecipes.map((recipe) => (
+              <div key={recipe.id} className="master-recipe-item">
+                <span>{elementLabel(recipe.inputA, allElements, state.iconOverrides, state.nameOverrides)}</span>
+                <span>+</span>
+                <span>{elementLabel(recipe.inputB, allElements, state.iconOverrides, state.nameOverrides)}</span>
+                <span>→</span>
+                <span>{elementLabel(recipe.output, allElements, state.iconOverrides, state.nameOverrides)}</span>
+                <span className="master-recipe-attr-tag">
+                  {recipe.outputWorldEffects ? `${Object.keys(recipe.outputWorldEffects).length} attrs` : 'No attrs'}
+                </span>
+                <button
+                  className="master-recipe-remove"
+                  onClick={() => dispatch({ type: 'REMOVE_MASTER_RECIPE', recipeId: recipe.id })}
+                  title="Remove recipe"
+                >
+                  Remove
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </details>
     </section>
   );
 }

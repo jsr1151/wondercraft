@@ -42,6 +42,29 @@
   margin-top: 4px;
 }
 
+.untried-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.untried-tab {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.untried-tab.active {
+  border-color: var(--warning);
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--text-primary);
+}
+
 .untried-list {
   margin-top: 8px;
   max-height: 58vh;
