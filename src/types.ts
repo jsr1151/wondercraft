@@ -52,6 +52,7 @@ export interface GameState {
   selectedSlotA: string | null;
   selectedSlotB: string | null;
   masterRecipes: MasterRecipe[];
+  sharedRecipes: MasterRecipe[];
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -63,6 +64,7 @@ export type GameAction =
   | { type: 'TRY_COMBINE' }
   | { type: 'ADD_MASTER_RECIPE'; recipe: MasterRecipe }
   | { type: 'REMOVE_MASTER_RECIPE'; recipeId: string }
+  | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }

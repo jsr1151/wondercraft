@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
+import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
 import type { MasterRecipe } from '../types';
 import './MasterRecipeLab.css';
 
@@ -31,13 +32,16 @@ export function MasterRecipeLab() {
   const [inputB, setInputB] = useState('');
   const [output, setOutput] = useState('');
   const [status, setStatus] = useState<string | null>(null);
+  const [publishGlobal, setPublishGlobal] = useState(false);
+  const [token, setToken] = useState(() => localStorage.getItem(GLOBAL_RECIPE_TOKEN_KEY) ?? '');
+  const [saving, setSaving] = useState(false);
 
   const sortedRecipes = useMemo(
     () => [...state.masterRecipes].sort((a, b) => b.createdAt - a.createdAt),
     [state.masterRecipes]
   );
 
-  const addMasterRecipe = () => {
+  const addMasterRecipe = async () => {
     const inputAId = lookupElementId(inputA);
     const inputBId = lookupElementId(inputB);
     const outputId = lookupElementId(output);
@@ -56,17 +60,38 @@ export function MasterRecipeLab() {
     };
 
     dispatch({ type: 'ADD_MASTER_RECIPE', recipe });
+
+    if (publishGlobal) {
+      if (!token.trim()) {
+        setStatus('Enter a GitHub token to publish globally. Recipe was still saved locally.');
+      } else {
+        try {
+          setSaving(true);
+          localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
+          await publishGlobalRecipe(recipe, token.trim());
+          const synced = await fetchGlobalRecipes();
+          dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
+          setStatus('Recipe saved locally and published globally.');
+        } catch {
+          setStatus('Local save succeeded, but global publish failed. Check token permissions.');
+        } finally {
+          setSaving(false);
+        }
+      }
+    } else {
+      setStatus('Master recipe saved locally. This pairing now crafts immediately.');
+    }
+
     setInputA('');
     setInputB('');
     setOutput('');
-    setStatus('Master recipe saved. This pairing now crafts immediately.');
   };
 
   return (
     <section className="master-recipe-lab">
       <div className="master-recipe-header">
         <h3>🧪 Master Recipes</h3>
-        <span className="master-recipe-count">{state.masterRecipes.length} custom</span>
+        <span className="master-recipe-count">{state.masterRecipes.length} local / {state.sharedRecipes.length} global</span>
       </div>
 
       <p className="master-recipe-note">
@@ -97,6 +122,25 @@ export function MasterRecipeLab() {
         <button onClick={addMasterRecipe}>Save</button>
       </div>
 
+      <div className="master-recipe-publish">
+        <label>
+          <input
+            type="checkbox"
+            checked={publishGlobal}
+            onChange={(event) => setPublishGlobal(event.target.checked)}
+          />
+          Publish globally (writes to `shared/master-recipes.json`)
+        </label>
+        {publishGlobal && (
+          <input
+            type="password"
+            value={token}
+            onChange={(event) => setToken(event.target.value)}
+            placeholder="GitHub token with Contents: Write"
+          />
+        )}
+      </div>
+
       <datalist id="element-options">
         {ELEMENT_OPTIONS.map((name) => (
           <option key={name} value={name} />
@@ -104,6 +148,7 @@ export function MasterRecipeLab() {
       </datalist>
 
       {status && <p className="master-recipe-status">{status}</p>}
+      {saving && <p className="master-recipe-status">Publishing...</p>}
 
       <div className="master-recipe-list">
         {sortedRecipes.length === 0 ? (

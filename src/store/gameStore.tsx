@@ -6,6 +6,7 @@ import { findRecipe } from '../engine/recipeEngine';
 import { calculateWorldInfluence, DEFAULT_WORLD_INFLUENCE } from '../engine/worldInfluence';
 import { generateHint } from '../engine/hintEngine';
 import { saveGame, loadGame } from './saveLoad';
+import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
 
@@ -21,6 +22,7 @@ function createInitialState(): GameState {
     selectedSlotA: null,
     selectedSlotB: null,
     masterRecipes: [],
+    sharedRecipes: [],
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
   };
@@ -69,7 +71,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, lastCombinationResult: { success: false } };
       }
 
-      const allRecipes = [...state.masterRecipes, ...RECIPES];
+      const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
       const recipe = findRecipe(selectedSlotA, selectedSlotB, allRecipes);
       
       if (!recipe) {
@@ -124,6 +126,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_SHARED_RECIPES': {
+      return {
+        ...state,
+        sharedRecipes: action.recipes,
+      };
+    }
+
     case 'REQUEST_HINT': {
       const hint = generateHint(
         Array.from(state.discoveredElements),
@@ -151,6 +160,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         recentDiscoveries: saved.recentDiscoveries ?? [],
         eventLog: saved.eventLog ?? [],
         masterRecipes: saved.masterRecipes ?? [],
+        sharedRecipes: state.sharedRecipes,
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
         selectedSlotB: null,
@@ -179,6 +189,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       dispatch({ type: 'LOAD_STATE', state: saved });
     }
+  }, []);
+
+  useEffect(() => {
+    fetchGlobalRecipes()
+      .then((recipes) => dispatch({ type: 'SET_SHARED_RECIPES', recipes }))
+      .catch(() => {
+        // Keep the game playable if the global recipe feed is unavailable.
+      });
   }, []);
 
   useEffect(() => {
