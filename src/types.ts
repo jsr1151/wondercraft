@@ -42,6 +42,14 @@ export interface MasterRecipe extends Recipe {
   createdAt: number;
 }
 
+export interface EmojiAtlasEntry {
+  id: string;
+  label: string;
+  value: string;
+  kind: 'emoji' | 'image';
+  createdAt: number;
+}
+
 export interface GameState {
   seed: number;
   bigBangDone: boolean;
