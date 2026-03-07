@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
+import { resolveElementIcon } from '../utils/iconResolver';
 import './UntriedCombosSidebar.css';
 
 const MAX_VISIBLE = 180;
@@ -26,7 +27,7 @@ export function UntriedCombosSidebar() {
         const b = discovered[j];
         const comboKey = keyFor(a.id, b.id);
         if (!state.attemptedCombinations.has(comboKey)) {
-          candidates.push(`${a.emoji ?? '•'} ${a.name} + ${b.emoji ?? '•'} ${b.name}`);
+          candidates.push(`${resolveElementIcon(a, state.iconOverrides)} ${a.name} + ${resolveElementIcon(b, state.iconOverrides)} ${b.name}`);
         }
       }
     }
@@ -35,7 +36,7 @@ export function UntriedCombosSidebar() {
       total: candidates.length,
       visible: candidates.slice(0, MAX_VISIBLE),
     };
-  }, [state.discoveredElements, state.attemptedCombinations]);
+  }, [state.discoveredElements, state.attemptedCombinations, state.iconOverrides]);
 
   return (
     <aside className={`untried-sidebar ${open ? 'open' : 'closed'}`}>

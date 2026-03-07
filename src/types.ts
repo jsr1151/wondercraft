@@ -62,6 +62,7 @@ export interface GameState {
   selectedSlotB: string | null;
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
+  iconOverrides: Record<string, string>;
   attemptedCombinations: Set<string>;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
@@ -75,6 +76,8 @@ export type GameAction =
   | { type: 'ADD_MASTER_RECIPE'; recipe: MasterRecipe }
   | { type: 'REMOVE_MASTER_RECIPE'; recipeId: string }
   | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
+  | { type: 'SET_ICON_OVERRIDE'; elementId: string; icon: string }
+  | { type: 'CLEAR_ICON_OVERRIDE'; elementId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
@@ -88,6 +91,7 @@ export interface SerializableGameState {
   recentDiscoveries: string[];
   eventLog: string[];
   masterRecipes: MasterRecipe[];
+  iconOverrides: Record<string, string>;
   attemptedCombinations: string[];
   hints: string[];
 }

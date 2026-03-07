@@ -3,6 +3,7 @@ import { ELEMENTS } from '../data/elements';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
 import type { MasterRecipe } from '../types';
+import { resolveElementIcon } from '../utils/iconResolver';
 import './MasterRecipeLab.css';
 
 const ELEMENT_OPTIONS = ELEMENTS
@@ -20,10 +21,10 @@ function lookupElementId(value: string): string | null {
   return byId?.id ?? null;
 }
 
-function elementLabel(id: string): string {
+function elementLabel(id: string, iconOverrides: Record<string, string>): string {
   const element = ELEMENTS.find((item) => item.id === id);
   if (!element) return id;
-  return `${element.emoji ?? '•'} ${element.name}`;
+  return `${resolveElementIcon(element, iconOverrides)} ${element.name}`;
 }
 
 export function MasterRecipeLab() {
@@ -187,11 +188,11 @@ export function MasterRecipeLab() {
         ) : (
           sortedRecipes.map((recipe) => (
             <div key={recipe.id} className="master-recipe-item">
-              <span>{elementLabel(recipe.inputA)}</span>
+              <span>{elementLabel(recipe.inputA, state.iconOverrides)}</span>
               <span>+</span>
-              <span>{elementLabel(recipe.inputB)}</span>
+              <span>{elementLabel(recipe.inputB, state.iconOverrides)}</span>
               <span>→</span>
-              <span>{elementLabel(recipe.output)}</span>
+              <span>{elementLabel(recipe.output, state.iconOverrides)}</span>
               <button
                 className="master-recipe-remove"
                 onClick={() => dispatch({ type: 'REMOVE_MASTER_RECIPE', recipeId: recipe.id })}

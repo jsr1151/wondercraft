@@ -11,6 +11,7 @@ function serializeState(state: GameState): SerializableGameState {
     recentDiscoveries: state.recentDiscoveries,
     eventLog: state.eventLog,
     masterRecipes: state.masterRecipes,
+    iconOverrides: state.iconOverrides,
     attemptedCombinations: Array.from(state.attemptedCombinations),
     hints: state.hints,
   };

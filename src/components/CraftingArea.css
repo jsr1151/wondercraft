@@ -170,6 +170,52 @@
   cursor: not-allowed;
 }
 
+.craft-button.icon-editor-toggle {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.icon-editor {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.icon-editor input {
+  background: #0f1530;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+.icon-editor button {
+  border-radius: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.icon-editor .clear-icon {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: transparent;
+}
+
+@media (max-width: 760px) {
+  .icon-editor {
+    grid-template-columns: 1fr;
+  }
+}
+
 .craft-discovery-text {
   background: rgba(108,99,255,0.1);
   border: 1px solid var(--accent);

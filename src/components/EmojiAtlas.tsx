@@ -292,7 +292,7 @@ export function EmojiAtlas() {
           width="100%"
           height={360}
           theme={Theme.DARK}
-          emojiStyle={EmojiStyle.NATIVE}
+          emojiStyle={EmojiStyle.APPLE}
           searchPlaceHolder="Search every available emoji..."
         />
       </div>

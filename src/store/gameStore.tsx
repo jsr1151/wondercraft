@@ -23,6 +23,7 @@ function createInitialState(): GameState {
     selectedSlotB: null,
     masterRecipes: [],
     sharedRecipes: [],
+    iconOverrides: {},
     attemptedCombinations: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
@@ -142,6 +143,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_ICON_OVERRIDE': {
+      return {
+        ...state,
+        iconOverrides: {
+          ...state.iconOverrides,
+          [action.elementId]: action.icon,
+        },
+      };
+    }
+
+    case 'CLEAR_ICON_OVERRIDE': {
+      const next = { ...state.iconOverrides };
+      delete next[action.elementId];
+      return {
+        ...state,
+        iconOverrides: next,
+      };
+    }
+
     case 'REQUEST_HINT': {
       const hint = generateHint(
         Array.from(state.discoveredElements),
@@ -171,6 +191,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         eventLog: saved.eventLog ?? [],
         masterRecipes: saved.masterRecipes ?? [],
         sharedRecipes: state.sharedRecipes,
+        iconOverrides: saved.iconOverrides ?? {},
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,

@@ -1,5 +1,6 @@
 import type { Element } from '../types';
 import { useGame } from '../store/useGame';
+import { resolveElementIcon } from '../utils/iconResolver';
 import './ElementCard.css';
 
 interface ElementCardProps {
@@ -9,7 +10,7 @@ interface ElementCardProps {
 
 export function ElementCard({ element, compact = false }: ElementCardProps) {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB } = state;
+  const { selectedSlotA, selectedSlotB, iconOverrides } = state;
 
   const isSelectedA = selectedSlotA === element.id;
   const isSelectedB = selectedSlotB === element.id;
@@ -54,7 +55,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         onDragStart={handleDragStart}
         title={`${element.name}: ${element.description}`}
       >
-        <span className="element-emoji">{element.emoji}</span>
+        <span className="element-emoji">{resolveElementIcon(element, iconOverrides)}</span>
         <span className="element-name-compact">{element.name}</span>
       </div>
     );
@@ -68,7 +69,7 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
       onDragStart={handleDragStart}
       title={element.description}
     >
-      <span className="element-emoji">{element.emoji}</span>
+      <span className="element-emoji">{resolveElementIcon(element, iconOverrides)}</span>
       <span className="element-name">{element.name}</span>
       <span className="element-category">{element.category}</span>
     </div>
