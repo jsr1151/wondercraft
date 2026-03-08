@@ -16,6 +16,34 @@ function seededRandom(seed: number) {
   };
 }
 
+/** Draw an organic blob shape using bezier curves */
+function drawBlob(
+  ctx: CanvasRenderingContext2D,
+  cx: number, cy: number,
+  rx: number, ry: number,
+  blobSeed: number,
+  lobes: number = 7
+) {
+  const rng = seededRandom(blobSeed);
+  const points: { x: number; y: number }[] = [];
+  for (let i = 0; i < lobes; i++) {
+    const angle = (i / lobes) * Math.PI * 2;
+    const variation = 0.72 + rng() * 0.56;
+    points.push({
+      x: cx + Math.cos(angle) * rx * variation,
+      y: cy + Math.sin(angle) * ry * variation,
+    });
+  }
+  ctx.beginPath();
+  const last = points[lobes - 1];
+  ctx.moveTo((points[0].x + last.x) / 2, (points[0].y + last.y) / 2);
+  for (let i = 0; i < lobes; i++) {
+    const next = points[(i + 1) % lobes];
+    ctx.quadraticCurveTo(points[i].x, points[i].y, (points[i].x + next.x) / 2, (points[i].y + next.y) / 2);
+  }
+  ctx.closePath();
+}
+
 function tracePlanetPath(
   ctx: CanvasRenderingContext2D,
   cx: number,
@@ -41,9 +69,12 @@ function tracePlanetPath(
 }
 
 export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: PlanetCanvasProps) {
-  const has = (id: string) => !!discoveredElements?.has(id);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const wiRef = useRef(wi);
+  const discoveredRef = useRef(discoveredElements);
+  wiRef.current = wi;
+  discoveredRef.current = discoveredElements;
 
   const toLevel = (value: number) => Math.max(0, Math.min(1, value / 32));
   const waterLevel = toLevel(wi.water);
@@ -79,13 +110,14 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
     const r = 220;
 
     const rng = seededRandom(seed);
-    const terrainPatches: { x: number; y: number; radius: number; bias: number }[] = [];
+    const terrainPatches: { x: number; y: number; radius: number; bias: number; blobSeed: number }[] = [];
     for (let i = 0; i < 90; i++) {
       terrainPatches.push({
         x: (rng() * 2 - 1) * r,
         y: (rng() * 2 - 1) * r,
         radius: 6 + rng() * 38,
         bias: rng(),
+        blobSeed: Math.floor(rng() * 100000),
       });
     }
 
@@ -95,12 +127,13 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
     }
 
     // Pre-generate seeded positions for terrain features and landmarks
-    const featurePositions: { angle: number; dist: number; size: number }[] = [];
+    const featurePositions: { angle: number; dist: number; size: number; blobSeed: number }[] = [];
     for (let i = 0; i < 40; i++) {
       featurePositions.push({
         angle: rng() * Math.PI * 2,
         dist: 0.15 + rng() * 0.6,
         size: 0.6 + rng() * 0.8,
+        blobSeed: Math.floor(rng() * 100000),
       });
     }
     const landmarkPositions: { angle: number; dist: number }[] = [];
@@ -114,6 +147,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
     const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
     const draw = (t: number) => {
+      const currentWi = wiRef.current;
+      const has = (id: string) => !!discoveredRef.current?.has(id);
       const phase = t * 0.0003;
       ctx.clearRect(0, 0, W, H);
 
@@ -132,21 +167,21 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
 
       ctx.save();
       ctx.beginPath();
-      tracePlanetPath(ctx, cx, cy, r, earthyLevel, phase);
+      tracePlanetPath(ctx, cx, cy, r, clamp(Math.max(0, currentWi.earthy) / 32, 0, 1), phase);
       ctx.clip();
 
-      const waterLevel = clamp(Math.max(0, wi.water) / 32, 0, 1);
-      const heatLevel = clamp(Math.max(0, wi.heat) / 32, 0, 1);
-      const coldLevel = clamp(Math.max(0, wi.cold) / 32, 0, 1);
-      const vegLevel = clamp(Math.max(0, wi.vegetation) / 32, 0, 1);
-      const pollLevel = clamp(Math.max(0, wi.pollution) / 32, 0, 1);
-      const civLevel = clamp(Math.max(0, wi.civilization) / 32, 0, 1);
-      const magicLevel = clamp(Math.max(0, wi.magic) / 32, 0, 1);
-      const lifeLevel = clamp(Math.max(0, wi.life) / 32, 0, 1);
-      const atmosLevel = clamp(Math.max(0, wi.atmosphere) / 32, 0, 1);
-      const brightnessLevel = clamp(Math.max(0, wi.brightness) / 32, 0, 1);
-      const earthyAmount = clamp(Math.max(0, wi.earthy) / 32, 0, 1);
-      const airAmount = clamp(Math.max(0, wi.air) / 32, 0, 1);
+      const waterLevel = clamp(Math.max(0, currentWi.water) / 32, 0, 1);
+      const heatLevel = clamp(Math.max(0, currentWi.heat) / 32, 0, 1);
+      const coldLevel = clamp(Math.max(0, currentWi.cold) / 32, 0, 1);
+      const vegLevel = clamp(Math.max(0, currentWi.vegetation) / 32, 0, 1);
+      const pollLevel = clamp(Math.max(0, currentWi.pollution) / 32, 0, 1);
+      const civLevel = clamp(Math.max(0, currentWi.civilization) / 32, 0, 1);
+      const magicLevel = clamp(Math.max(0, currentWi.magic) / 32, 0, 1);
+      const lifeLevel = clamp(Math.max(0, currentWi.life) / 32, 0, 1);
+      const atmosLevel = clamp(Math.max(0, currentWi.atmosphere) / 32, 0, 1);
+      const brightnessLevel = clamp(Math.max(0, currentWi.brightness) / 32, 0, 1);
+      const earthyAmount = clamp(Math.max(0, currentWi.earthy) / 32, 0, 1);
+      const airAmount = clamp(Math.max(0, currentWi.air) / 32, 0, 1);
 
       const development = clamp(
         waterLevel * 0.9 + vegLevel * 1.2 + lifeLevel + civLevel * 0.9 + atmosLevel * 0.6,
@@ -189,8 +224,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         }
 
         ctx.fillStyle = patchColor;
-        ctx.beginPath();
-        ctx.ellipse(px, py, patch.radius, patch.radius * 0.65, phase, 0, Math.PI * 2);
+        drawBlob(ctx, px, py, patch.radius, patch.radius * 0.65, patch.blobSeed);
         ctx.fill();
       }
 
@@ -218,11 +252,9 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         const iceSize = coldLevel * 40;
         const iceAlpha = Math.min(0.9, coldLevel * 2);
         ctx.fillStyle = `rgba(220,240,255,${iceAlpha})`;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy - r + iceSize * 0.5, r * 0.8, iceSize, 0, 0, Math.PI * 2);
+        drawBlob(ctx, cx, cy - r + iceSize * 0.5, r * 0.8, iceSize, seed + 9999, 10);
         ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(cx, cy + r - iceSize * 0.5, r * 0.7, iceSize * 0.7, 0, 0, Math.PI * 2);
+        drawBlob(ctx, cx, cy + r - iceSize * 0.5, r * 0.7, iceSize * 0.7, seed + 9998, 10);
         ctx.fill();
       }
 
@@ -233,10 +265,9 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const lx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const ly = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 8 + fp.size * 14;
+          const s = 10 + fp.size * 18;
           ctx.fillStyle = 'rgba(30, 110, 200, 0.55)';
-          ctx.beginPath();
-          ctx.ellipse(lx, ly, s, s * 0.6, fp.angle, 0, Math.PI * 2);
+          drawBlob(ctx, lx, ly, s, s * 0.6, fp.blobSeed, 8);
           ctx.fill();
         }
       }
@@ -250,13 +281,15 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const sy = cy + Math.sin(startAngle) * fp.dist * r * 0.4;
           const ex = cx + Math.cos(startAngle + 0.6) * fp.dist * r * 1.1;
           const ey = cy + Math.sin(startAngle + 0.6) * fp.dist * r * 1.1;
-          const mx = (sx + ex) / 2 + Math.cos(startAngle + 1.2) * 30 * fp.size;
-          const my = (sy + ey) / 2 + Math.sin(startAngle + 1.2) * 30 * fp.size;
+          const mx1 = (sx * 2 + ex) / 3 + Math.cos(startAngle + 1.0) * 25 * fp.size;
+          const my1 = (sy * 2 + ey) / 3 + Math.sin(startAngle + 1.0) * 25 * fp.size;
+          const mx2 = (sx + ex * 2) / 3 + Math.cos(startAngle + 1.8) * 20 * fp.size;
+          const my2 = (sy + ey * 2) / 3 + Math.sin(startAngle + 1.8) * 20 * fp.size;
           ctx.strokeStyle = 'rgba(40, 130, 220, 0.6)';
           ctx.lineWidth = 1.5 + fp.size;
           ctx.beginPath();
           ctx.moveTo(sx, sy);
-          ctx.quadraticCurveTo(mx, my, ex, ey);
+          ctx.bezierCurveTo(mx1, my1, mx2, my2, ex, ey);
           ctx.stroke();
         }
       }
@@ -267,15 +300,13 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const fx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const fy = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 5 + fp.size * 10;
+          const s = 7 + fp.size * 14;
           ctx.fillStyle = 'rgba(20, 100, 30, 0.45)';
-          ctx.beginPath();
-          ctx.arc(fx, fy, s, 0, Math.PI * 2);
+          drawBlob(ctx, fx, fy, s, s * 0.85, fp.blobSeed, 6);
           ctx.fill();
-          // Tree-top highlights
+          // Canopy highlights
           ctx.fillStyle = 'rgba(30, 140, 50, 0.35)';
-          ctx.beginPath();
-          ctx.arc(fx - s * 0.3, fy - s * 0.3, s * 0.6, 0, Math.PI * 2);
+          drawBlob(ctx, fx - s * 0.25, fy - s * 0.25, s * 0.55, s * 0.5, fp.blobSeed + 1, 5);
           ctx.fill();
         }
       }
@@ -286,22 +317,44 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const mx = cx + Math.cos(fp.angle + phase * 0.7) * fp.dist * r;
           const my = cy + Math.sin(fp.angle + phase * 0.7) * fp.dist * r;
-          const s = 10 + fp.size * 14;
-          ctx.fillStyle = 'rgba(100, 80, 60, 0.5)';
+          const s = 14 + fp.size * 18;
+          const mrng = seededRandom(fp.blobSeed);
+          const peakCount = 3 + Math.floor(mrng() * 2);
+          const rangeWidth = s * 2.5;
+          const startX = mx - rangeWidth / 2;
+          // Generate peak data
+          const peaks: { px: number; peakH: number; slopeL: number; slopeR: number }[] = [];
+          for (let p = 0; p < peakCount; p++) {
+            peaks.push({
+              px: startX + (p + 0.5) * (rangeWidth / peakCount),
+              peakH: s * (0.6 + mrng() * 0.5),
+              slopeL: my + s * 0.1 * mrng(),
+              slopeR: my + s * 0.1 * mrng(),
+            });
+          }
+          // Draw mountain body
+          ctx.fillStyle = 'rgba(100, 80, 60, 0.55)';
           ctx.beginPath();
-          ctx.moveTo(mx, my - s);
-          ctx.lineTo(mx + s, my + s * 0.6);
-          ctx.lineTo(mx - s, my + s * 0.6);
+          ctx.moveTo(startX, my + s * 0.5);
+          for (const peak of peaks) {
+            ctx.lineTo(peak.px - s * 0.25, peak.slopeL);
+            ctx.lineTo(peak.px, my - peak.peakH);
+            ctx.lineTo(peak.px + s * 0.25, peak.slopeR);
+          }
+          ctx.lineTo(startX + rangeWidth, my + s * 0.5);
           ctx.closePath();
           ctx.fill();
-          // Snow cap
+          // Snow caps
           ctx.fillStyle = 'rgba(230, 240, 255, 0.6)';
-          ctx.beginPath();
-          ctx.moveTo(mx, my - s);
-          ctx.lineTo(mx + s * 0.3, my - s * 0.3);
-          ctx.lineTo(mx - s * 0.3, my - s * 0.3);
-          ctx.closePath();
-          ctx.fill();
+          for (const peak of peaks) {
+            const capSize = s * 0.25;
+            ctx.beginPath();
+            ctx.moveTo(peak.px, my - peak.peakH);
+            ctx.lineTo(peak.px + capSize * 0.4, my - peak.peakH + capSize);
+            ctx.lineTo(peak.px - capSize * 0.4, my - peak.peakH + capSize);
+            ctx.closePath();
+            ctx.fill();
+          }
         }
       }
 
@@ -311,8 +364,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const vx = cx + Math.cos(fp.angle + phase * 0.7) * fp.dist * r;
           const vy = cy + Math.sin(fp.angle + phase * 0.7) * fp.dist * r;
-          const s = 8 + fp.size * 10;
-          ctx.fillStyle = 'rgba(80, 50, 30, 0.55)';
+          const s = 10 + fp.size * 12;
+          ctx.fillStyle = 'rgba(80, 50, 30, 0.6)';
           ctx.beginPath();
           ctx.moveTo(vx, vy - s);
           ctx.lineTo(vx + s * 0.9, vy + s * 0.5);
@@ -321,9 +374,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           ctx.fill();
           // Lava glow
           const glowPulse = 0.5 + 0.5 * Math.sin(t * 0.003 + fp.angle);
-          ctx.fillStyle = `rgba(255, 80, 20, ${0.35 * glowPulse})`;
-          ctx.beginPath();
-          ctx.arc(vx, vy - s * 0.7, s * 0.35, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 80, 20, ${0.4 * glowPulse})`;
+          drawBlob(ctx, vx, vy - s * 0.65, s * 0.4, s * 0.3, fp.blobSeed, 5);
           ctx.fill();
         }
       }
@@ -334,10 +386,9 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const dx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const dy = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 12 + fp.size * 16;
-          ctx.fillStyle = 'rgba(210, 180, 110, 0.4)';
-          ctx.beginPath();
-          ctx.ellipse(dx, dy, s, s * 0.65, fp.angle * 2, 0, Math.PI * 2);
+          const s = 14 + fp.size * 20;
+          ctx.fillStyle = 'rgba(210, 180, 110, 0.42)';
+          drawBlob(ctx, dx, dy, s, s * 0.6, fp.blobSeed, 8);
           ctx.fill();
         }
       }
@@ -348,10 +399,9 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const sx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const sy = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 10 + fp.size * 12;
-          ctx.fillStyle = 'rgba(225, 240, 255, 0.35)';
-          ctx.beginPath();
-          ctx.ellipse(sx, sy, s, s * 0.7, fp.angle, 0, Math.PI * 2);
+          const s = 12 + fp.size * 14;
+          ctx.fillStyle = 'rgba(225, 240, 255, 0.38)';
+          drawBlob(ctx, sx, sy, s, s * 0.7, fp.blobSeed, 7);
           ctx.fill();
         }
       }
@@ -396,36 +446,32 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
       }
 
       // --- Landmark system (discovery-gated) ---
-      const drawLandmark = (idx: number, draw: (x: number, y: number) => void) => {
+      const drawLandmark = (idx: number, drawFn: (x: number, y: number) => void) => {
         const lp = landmarkPositions[idx % landmarkPositions.length];
         const lx = cx + Math.cos(lp.angle + phase * 0.5) * lp.dist * r;
         const ly = cy + Math.sin(lp.angle + phase * 0.5) * lp.dist * r;
-        draw(lx, ly);
+        drawFn(lx, ly);
       };
 
       // Castle (upgrades: castle → kingdom → empire)
       if (has('castle')) {
         const tier = has('kingdom') ? (has('city') ? 2 : 1) : 0;
         drawLandmark(0, (lx, ly) => {
-          const s = 8 + tier * 4;
-          // Base
-          ctx.fillStyle = 'rgba(160, 140, 100, 0.8)';
+          const s = 14 + tier * 6;
+          ctx.fillStyle = 'rgba(170, 148, 105, 0.9)';
           ctx.fillRect(lx - s, ly - s * 0.5, s * 2, s);
           // Towers
-          ctx.fillRect(lx - s, ly - s * 1.2, s * 0.4, s * 0.8);
-          ctx.fillRect(lx + s * 0.6, ly - s * 1.2, s * 0.4, s * 0.8);
+          ctx.fillRect(lx - s, ly - s * 1.3, s * 0.45, s * 0.9);
+          ctx.fillRect(lx + s * 0.55, ly - s * 1.3, s * 0.45, s * 0.9);
           if (tier >= 1) {
-            // Center tower for kingdom
-            ctx.fillRect(lx - s * 0.2, ly - s * 1.5, s * 0.4, s * 1.0);
-            // Banner
-            ctx.fillStyle = 'rgba(200, 50, 50, 0.7)';
-            ctx.fillRect(lx + s * 0.22, ly - s * 1.5, s * 0.3, s * 0.25);
+            ctx.fillRect(lx - s * 0.22, ly - s * 1.6, s * 0.44, s * 1.1);
+            ctx.fillStyle = 'rgba(210, 50, 50, 0.85)';
+            ctx.fillRect(lx + s * 0.22, ly - s * 1.6, s * 0.35, s * 0.3);
           }
           if (tier >= 2) {
-            // Walls
-            ctx.strokeStyle = 'rgba(130, 110, 80, 0.6)';
-            ctx.lineWidth = 1.5;
-            ctx.strokeRect(lx - s * 1.4, ly - s * 0.3, s * 2.8, s * 1.2);
+            ctx.strokeStyle = 'rgba(140, 118, 85, 0.75)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(lx - s * 1.5, ly - s * 0.35, s * 3, s * 1.3);
           }
         });
       }
@@ -433,8 +479,8 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
       // Pyramid (sphinx & obelisk near it)
       if (has('pyramid')) {
         drawLandmark(1, (lx, ly) => {
-          const s = 14;
-          ctx.fillStyle = 'rgba(210, 190, 120, 0.75)';
+          const s = 22;
+          ctx.fillStyle = 'rgba(215, 195, 125, 0.85)';
           ctx.beginPath();
           ctx.moveTo(lx, ly - s);
           ctx.lineTo(lx + s, ly + s * 0.5);
@@ -442,7 +488,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           ctx.closePath();
           ctx.fill();
           // Smaller pyramid behind
-          ctx.fillStyle = 'rgba(200, 180, 110, 0.5)';
+          ctx.fillStyle = 'rgba(205, 185, 115, 0.65)';
           ctx.beginPath();
           ctx.moveTo(lx + s * 1.2, ly - s * 0.5);
           ctx.lineTo(lx + s * 1.8, ly + s * 0.5);
@@ -453,25 +499,24 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         // Sphinx near pyramid  
         if (has('sphinx')) {
           drawLandmark(2, (lx, ly) => {
-            ctx.fillStyle = 'rgba(195, 170, 100, 0.65)';
-            ctx.beginPath();
-            ctx.ellipse(lx, ly, 8, 4, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(200, 178, 110, 0.8)';
+            drawBlob(ctx, lx, ly, 14, 7, seed + 7777, 6);
             ctx.fill();
             // Head
             ctx.beginPath();
-            ctx.arc(lx - 6, ly - 3, 3, 0, Math.PI * 2);
+            ctx.arc(lx - 10, ly - 5, 5, 0, Math.PI * 2);
             ctx.fill();
           });
         }
         // Obelisk near pyramid
         if (has('obelisk')) {
           drawLandmark(3, (lx, ly) => {
-            ctx.fillStyle = 'rgba(180, 180, 180, 0.7)';
-            ctx.fillRect(lx - 1.5, ly - 12, 3, 12);
+            ctx.fillStyle = 'rgba(190, 190, 190, 0.85)';
+            ctx.fillRect(lx - 2.5, ly - 20, 5, 20);
             ctx.beginPath();
-            ctx.moveTo(lx, ly - 14);
-            ctx.lineTo(lx + 2, ly - 12);
-            ctx.lineTo(lx - 2, ly - 12);
+            ctx.moveTo(lx, ly - 23);
+            ctx.lineTo(lx + 3.5, ly - 20);
+            ctx.lineTo(lx - 3.5, ly - 20);
             ctx.closePath();
             ctx.fill();
           });
@@ -481,42 +526,36 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
       // Airport
       if (has('airplane')) {
         drawLandmark(4, (lx, ly) => {
-          // Runway
-          ctx.fillStyle = 'rgba(80, 80, 90, 0.7)';
-          ctx.fillRect(lx - 18, ly - 2, 36, 4);
-          // Runway markings
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-          ctx.lineWidth = 0.8;
-          ctx.setLineDash([3, 3]);
+          ctx.fillStyle = 'rgba(80, 80, 92, 0.8)';
+          ctx.fillRect(lx - 28, ly - 3, 56, 6);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
           ctx.beginPath();
-          ctx.moveTo(lx - 16, ly);
-          ctx.lineTo(lx + 16, ly);
+          ctx.moveTo(lx - 24, ly);
+          ctx.lineTo(lx + 24, ly);
           ctx.stroke();
           ctx.setLineDash([]);
-          // Terminal
-          ctx.fillStyle = 'rgba(140, 140, 150, 0.6)';
-          ctx.fillRect(lx - 5, ly + 4, 10, 5);
+          ctx.fillStyle = 'rgba(150, 150, 160, 0.7)';
+          ctx.fillRect(lx - 8, ly + 5, 16, 8);
         });
       }
 
       // Space Station / Launch Pad
       if (has('rocket') || has('spaceship')) {
         drawLandmark(5, (lx, ly) => {
-          // Launch pad
-          ctx.fillStyle = 'rgba(100, 100, 110, 0.7)';
+          ctx.fillStyle = 'rgba(105, 105, 115, 0.8)';
           ctx.beginPath();
-          ctx.arc(lx, ly, 7, 0, Math.PI * 2);
+          ctx.arc(lx, ly, 11, 0, Math.PI * 2);
           ctx.fill();
-          // Rocket on pad
-          ctx.fillStyle = 'rgba(200, 200, 210, 0.8)';
-          ctx.fillRect(lx - 1.5, ly - 12, 3, 10);
-          // Flame
+          ctx.fillStyle = 'rgba(210, 210, 220, 0.9)';
+          ctx.fillRect(lx - 2.5, ly - 18, 5, 16);
           const flamePulse = 0.4 + 0.6 * Math.sin(t * 0.005);
-          ctx.fillStyle = `rgba(255, 140, 30, ${0.5 * flamePulse})`;
+          ctx.fillStyle = `rgba(255, 140, 30, ${0.6 * flamePulse})`;
           ctx.beginPath();
-          ctx.moveTo(lx - 2.5, ly - 2);
-          ctx.lineTo(lx + 2.5, ly - 2);
-          ctx.lineTo(lx, ly + 4);
+          ctx.moveTo(lx - 4, ly - 2);
+          ctx.lineTo(lx + 4, ly - 2);
+          ctx.lineTo(lx, ly + 6);
           ctx.closePath();
           ctx.fill();
         });
@@ -578,7 +617,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
       rimGrad.addColorStop(1, 'rgba(0,0,0,0.5)');
       ctx.save();
       ctx.beginPath();
-      tracePlanetPath(ctx, cx, cy, r, earthyLevel, phase);
+      tracePlanetPath(ctx, cx, cy, r, earthyAmount, phase);
       ctx.clip();
       ctx.fillStyle = rimGrad;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
@@ -589,7 +628,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
 
     animRef.current = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animRef.current);
-  }, [wi, seed, discoveredElements]);
+  }, [seed]);
 
   return (
     <div className="planet-container">
