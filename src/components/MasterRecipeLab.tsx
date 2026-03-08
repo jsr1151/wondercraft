@@ -361,6 +361,11 @@ export function MasterRecipeLab() {
       return;
     }
 
+    if (!publishGlobal) {
+      setStatus('Enable Publish globally first, then publish all local recipes.');
+      return;
+    }
+
     if (!token.trim()) {
       setStatus('Enter a GitHub token before publishing local recipes globally.');
       return;
@@ -521,16 +526,15 @@ export function MasterRecipeLab() {
             Once entered here, it stays saved in this browser.
           </p>
         )}
-        {publishGlobal && (
-          <button
-            type="button"
-            className="master-recipe-publish-all"
-            onClick={publishAllLocalRecipes}
-            disabled={saving || state.masterRecipes.length === 0}
-          >
-            Publish all local recipes ({state.masterRecipes.length})
-          </button>
-        )}
+        <button
+          type="button"
+          className="master-recipe-publish-all"
+          onClick={publishAllLocalRecipes}
+          disabled={saving || state.masterRecipes.length === 0}
+          title={publishGlobal ? 'Push all local recipes to the shared global file.' : 'Enable Publish globally first.'}
+        >
+          Publish all local recipes ({state.masterRecipes.length})
+        </button>
       </div>
 
       <datalist id="element-options">
