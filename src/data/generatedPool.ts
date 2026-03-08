@@ -9,17 +9,6 @@ interface GeneratedRule {
   nameFor: (anchor: Element) => string;
 }
 
-const BLOCKED_NAME_PREFIXES = [
-  'Heated ',
-  'Industrial ',
-  'Refined ',
-  'Living ',
-  'Charred ',
-  'Charged ',
-  'Molten ',
-  'Vaporized ',
-] as const;
-
 const GENERATED_ANCHOR_IDS = [
   'fire', 'water', 'earth', 'air', 'mud', 'steam', 'lava', 'rain', 'plant', 'tree',
   'forest', 'grass', 'seed', 'flower', 'ocean', 'cloud', 'river', 'lake', 'desert', 'mountain',
@@ -36,7 +25,8 @@ const GENERATED_ANCHOR_IDS = [
 const hasTag = (anchor: Element, tag: string) => anchor.tags.includes(tag);
 const hasAnyTag = (anchor: Element, tags: string[]) => tags.some((tag) => hasTag(anchor, tag));
 const isCategory = (anchor: Element, category: Element['category']) => anchor.category === category;
-const hasBlockedPrefix = (name: string) => BLOCKED_NAME_PREFIXES.some((prefix) => name.startsWith(prefix));
+const isPrefixedVariantName = (generatedName: string, anchorName: string) =>
+  generatedName !== anchorName && generatedName.endsWith(` ${anchorName}`);
 
 const GENERATED_RULES: GeneratedRule[] = [
   {
@@ -137,7 +127,7 @@ export function createGeneratedElements(coreElements: Element[]): Element[] {
       if (!rule.applies(anchor)) continue;
 
       const generatedName = rule.nameFor(anchor);
-      if (hasBlockedPrefix(generatedName)) continue;
+      if (isPrefixedVariantName(generatedName, anchor.name)) continue;
 
       generated.push({
         id: buildGeneratedId(anchor.id, rule.id),
@@ -166,7 +156,7 @@ export function createGeneratedRecipes(coreElements: Element[]): Recipe[] {
 
     for (const rule of GENERATED_RULES) {
       if (!rule.applies(anchor)) continue;
-      if (hasBlockedPrefix(rule.nameFor(anchor))) continue;
+      if (isPrefixedVariantName(rule.nameFor(anchor), anchor.name)) continue;
 
       generated.push({
         id: `g${idx++}`,
