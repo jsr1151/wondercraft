@@ -1,6 +1,13 @@
 {
-  "updatedAt": 1772982816844,
+  "updatedAt": 1772982977912,
   "recipes": [
+    {
+      "id": "m_1772982977729_w23oln",
+      "inputA": "custom_bucket",
+      "inputB": "forest",
+      "output": "custom_maple_syrup",
+      "createdAt": 1772982977729
+    },
     {
       "id": "m_1772904730102_grijo6",
       "inputA": "animal",
