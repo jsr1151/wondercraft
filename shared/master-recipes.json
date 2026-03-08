@@ -1,6 +1,16 @@
 {
-  "updatedAt": 1772983079116,
+  "updatedAt": 1772983132380,
   "recipes": [
+    {
+      "id": "m_1772983132197_s0rnqk",
+      "inputA": "custom_flood",
+      "inputB": "custom_pump",
+      "output": "custom_drain",
+      "createdAt": 1772983132197,
+      "outputWorldEffects": {
+        "water": -5
+      }
+    },
     {
       "id": "m_1772983078934_ssiq5y",
       "inputA": "custom_drill",
