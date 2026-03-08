@@ -15,8 +15,11 @@ function serializeState(state: GameState): SerializableGameState {
     iconOverrides: state.iconOverrides,
     nameOverrides: state.nameOverrides,
     descriptionOverrides: state.descriptionOverrides,
+    categoryOverrides: state.categoryOverrides,
+    actsAsOverrides: state.actsAsOverrides,
     effectOverrides: state.effectOverrides,
     attemptedCombinations: Array.from(state.attemptedCombinations),
+    favoriteElementIds: Array.from(state.favoriteElementIds),
     hints: state.hints,
   };
 }

@@ -2,7 +2,9 @@ import { useMemo, useState } from 'react';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
+import { resolveActsAsElementId } from '../engine/actingAs';
 import { useGame } from '../store/useGame';
+import { getAvailableElements } from '../utils/elementAvailability';
 import { resolveElementIcon } from '../utils/iconResolver';
 import { resolveElementName } from '../utils/nameResolver';
 import './UntriedCombosSidebar.css';
@@ -26,8 +28,8 @@ export function UntriedCombosSidebar() {
   const { state } = useGame();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'untried' | 'no-output'>('untried');
-  const allElements = [...ELEMENTS, ...state.customElements];
   const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
+  const allElements = getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes);
 
   const { untriedTotal, untriedVisible, noOutputTotal, noOutputVisible } = useMemo(() => {
     const discovered = allElements
@@ -36,16 +38,35 @@ export function UntriedCombosSidebar() {
 
     const untriedCandidates: string[] = [];
     const noOutputCandidates: string[] = [];
+    const canonicalSeen = new Set<string>();
+    const attemptedCanonical = new Set(
+      Array.from(state.attemptedCombinations).map((existingKey) => {
+        const [left, right] = existingKey.split('|');
+        const resolvedLeft = resolveActsAsElementId(left, state.actsAsOverrides);
+        const resolvedRight = resolveActsAsElementId(right, state.actsAsOverrides);
+        return keyFor(resolvedLeft, resolvedRight);
+      })
+    );
 
     for (let i = 0; i < discovered.length; i++) {
       for (let j = i; j < discovered.length; j++) {
         const a = discovered[i];
         const b = discovered[j];
-        const comboKey = keyFor(a.id, b.id);
-        const label = `${resolveElementIcon(a, state.iconOverrides)} ${resolveElementName(a, state.nameOverrides)} + ${resolveElementIcon(b, state.iconOverrides)} ${resolveElementName(b, state.nameOverrides)}`;
-        const hasAnyOutput = !!findRecipe(a.id, b.id, allRecipes) || !!findRecipe(b.id, a.id, allRecipes);
+        const canonicalKey = keyFor(
+          resolveActsAsElementId(a.id, state.actsAsOverrides),
+          resolveActsAsElementId(b.id, state.actsAsOverrides)
+        );
+        if (canonicalSeen.has(canonicalKey)) {
+          continue;
+        }
+        canonicalSeen.add(canonicalKey);
 
-        if (hasAnyOutput && !state.attemptedCombinations.has(comboKey)) {
+        const label = `${resolveElementIcon(a, state.iconOverrides)} ${resolveElementName(a, state.nameOverrides)} + ${resolveElementIcon(b, state.iconOverrides)} ${resolveElementName(b, state.nameOverrides)}`;
+        const hasAnyOutput =
+          !!findRecipe(a.id, b.id, allRecipes, state.actsAsOverrides) ||
+          !!findRecipe(b.id, a.id, allRecipes, state.actsAsOverrides);
+
+        if (hasAnyOutput && !attemptedCanonical.has(canonicalKey)) {
           untriedCandidates.push(label);
         }
 
@@ -70,6 +91,7 @@ export function UntriedCombosSidebar() {
     state.attemptedCombinations,
     state.iconOverrides,
     state.nameOverrides,
+    state.actsAsOverrides,
   ]);
 
   const showingUntried = mode === 'untried';

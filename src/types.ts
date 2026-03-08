@@ -1,7 +1,17 @@
-export type ElementCategory = 
-  | 'Primordial' | 'Nature' | 'Materials' | 'Weather' 
-  | 'Life' | 'Civilization' | 'Technology' | 'Abstract' 
-  | 'Cosmic' | 'Weird';
+export const DEFAULT_ELEMENT_CATEGORIES = [
+  'Primordial',
+  'Nature',
+  'Materials',
+  'Weather',
+  'Life',
+  'Civilization',
+  'Technology',
+  'Abstract',
+  'Cosmic',
+  'Weird',
+] as const;
+
+export type ElementCategory = string;
 
 export interface WorldInfluence {
   water: number;
@@ -72,8 +82,11 @@ export interface GameState {
   iconOverrides: Record<string, string>;
   nameOverrides: Record<string, string>;
   descriptionOverrides: Record<string, string>;
+  categoryOverrides: Record<string, ElementCategory>;
+  actsAsOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: Set<string>;
+  favoriteElementIds: Set<string>;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -93,8 +106,14 @@ export type GameAction =
   | { type: 'CLEAR_NAME_OVERRIDE'; elementId: string }
   | { type: 'SET_DESCRIPTION_OVERRIDE'; elementId: string; description: string }
   | { type: 'CLEAR_DESCRIPTION_OVERRIDE'; elementId: string }
+  | { type: 'SET_CATEGORY_OVERRIDE'; elementId: string; category: ElementCategory }
+  | { type: 'CLEAR_CATEGORY_OVERRIDE'; elementId: string }
+  | { type: 'SET_ACTS_AS_OVERRIDE'; elementId: string; actsAsElementId: string }
+  | { type: 'CLEAR_ACTS_AS_OVERRIDE'; elementId: string }
   | { type: 'SET_EFFECT_OVERRIDE'; elementId: string; worldEffects: WorldEffectMap }
   | { type: 'CLEAR_EFFECT_OVERRIDE'; elementId: string }
+  | { type: 'DELETE_ELEMENT'; elementId: string }
+  | { type: 'TOGGLE_FAVORITE'; elementId: string }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
@@ -112,7 +131,10 @@ export interface SerializableGameState {
   iconOverrides: Record<string, string>;
   nameOverrides: Record<string, string>;
   descriptionOverrides: Record<string, string>;
+  categoryOverrides: Record<string, ElementCategory>;
+  actsAsOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: string[];
+  favoriteElementIds: string[];
   hints: string[];
 }

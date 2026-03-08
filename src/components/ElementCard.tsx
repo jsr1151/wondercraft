@@ -1,17 +1,28 @@
 import type { Element } from '../types';
 import { useGame } from '../store/useGame';
 import { ElementIcon } from './ElementIcon';
+import { resolveElementCategory } from '../utils/categoryResolver';
 import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './ElementCard.css';
 
 interface ElementCardProps {
   element: Element;
   compact?: boolean;
+  onDelete?: (elementId: string) => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: (elementId: string) => void;
 }
 
-export function ElementCard({ element, compact = false }: ElementCardProps) {
+export function ElementCard({
+  element,
+  compact = false,
+  onDelete,
+  isFavorite = false,
+  onToggleFavorite,
+}: ElementCardProps) {
   const { state, dispatch } = useGame();
   const { selectedSlotA, selectedSlotB, iconOverrides, nameOverrides } = state;
+  const category = resolveElementCategory(element, state.categoryOverrides);
 
   const isSelectedA = selectedSlotA === element.id;
   const isSelectedB = selectedSlotB === element.id;
@@ -82,7 +93,33 @@ export function ElementCard({ element, compact = false }: ElementCardProps) {
         imageClassName="element-emoji-image"
       />
       <span className="element-name">{resolveElementName(element, nameOverrides)}</span>
-      <span className="element-category">{element.category}</span>
+      <span className="element-category">{category}</span>
+      {onToggleFavorite && (
+        <button
+          type="button"
+          className={`element-favorite ${isFavorite ? 'active' : ''}`}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleFavorite(element.id);
+          }}
+          title={isFavorite ? 'Unfavorite element' : 'Favorite element'}
+        >
+          {isFavorite ? 'Starred' : 'Star'}
+        </button>
+      )}
+      {onDelete && (
+        <button
+          type="button"
+          className="element-delete"
+          onClick={(event) => {
+            event.stopPropagation();
+            onDelete(element.id);
+          }}
+          title="Delete element from discovered collection"
+        >
+          Delete
+        </button>
+      )}
     </div>
   );
 }

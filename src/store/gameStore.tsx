@@ -1,17 +1,23 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction, WorldEffectMap } from '../types';
+import type { GameState, GameAction, Recipe, WorldEffectMap } from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
 import { calculateWorldInfluence, DEFAULT_WORLD_INFLUENCE } from '../engine/worldInfluence';
 import { generateHint } from '../engine/hintEngine';
+import { resolveActsAsElementId } from '../engine/actingAs';
+import { getAvailableElementIdSet, getAvailableElements } from '../utils/elementAvailability';
 import { saveGame, loadGame } from './saveLoad';
 import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
 
-function allElements(state: Pick<GameState, 'customElements'>) {
-  return [...ELEMENTS, ...state.customElements];
+function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): Recipe[] {
+  return [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
+}
+
+function allElements(state: Pick<GameState, 'customElements' | 'masterRecipes' | 'sharedRecipes'>) {
+  return getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes(state));
 }
 
 function createInitialState(): GameState {
@@ -31,8 +37,11 @@ function createInitialState(): GameState {
     iconOverrides: {},
     nameOverrides: {},
     descriptionOverrides: {},
+    categoryOverrides: {},
+    actsAsOverrides: {},
     effectOverrides: {},
     attemptedCombinations: new Set<string>(),
+    favoriteElementIds: new Set<string>(),
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
   };
@@ -40,6 +49,181 @@ function createInitialState(): GameState {
 
 function comboKey(a: string, b: string): string {
   return [a, b].sort().join('|');
+}
+
+function removeElementIdsFromState(state: GameState, removedIds: Set<string>): GameState {
+  if (removedIds.size === 0) return state;
+
+  const discoveredElements = new Set(
+    Array.from(state.discoveredElements).filter((id) => !removedIds.has(id))
+  );
+
+  const attemptedCombinations = new Set(
+    Array.from(state.attemptedCombinations).filter((key) => {
+      const [a, b] = key.split('|');
+      return !removedIds.has(a) && !removedIds.has(b);
+    })
+  );
+
+  return {
+    ...state,
+    discoveredElements,
+    favoriteElementIds: new Set(
+      Array.from(state.favoriteElementIds).filter((id) => !removedIds.has(id))
+    ),
+    attemptedCombinations,
+    recentDiscoveries: state.recentDiscoveries.filter((id) => !removedIds.has(id)),
+    selectedSlotA: state.selectedSlotA && removedIds.has(state.selectedSlotA) ? null : state.selectedSlotA,
+    selectedSlotB: state.selectedSlotB && removedIds.has(state.selectedSlotB) ? null : state.selectedSlotB,
+    lastCombinationResult:
+      state.lastCombinationResult?.elementId && removedIds.has(state.lastCombinationResult.elementId)
+        ? null
+        : state.lastCombinationResult,
+    worldInfluence: calculateWorldInfluence(Array.from(discoveredElements), allElements(state), state.effectOverrides),
+  };
+}
+
+function withAvailableElementPool(state: GameState, recipes: Recipe[]): GameState {
+  const availableIds = getAvailableElementIdSet(recipes);
+  const knownIds = new Set<string>([
+    ...ELEMENTS.map((element) => element.id),
+    ...state.customElements.map((element) => element.id),
+  ]);
+  const removedIds = new Set(Array.from(knownIds).filter((id) => !availableIds.has(id)));
+  if (removedIds.size === 0) return state;
+
+  const next = removeElementIdsFromState(state, removedIds);
+  return {
+    ...next,
+    customElements: next.customElements.filter((element) => availableIds.has(element.id)),
+    worldInfluence: calculateWorldInfluence(Array.from(next.discoveredElements), allElements(next), next.effectOverrides),
+  };
+}
+
+function migrateLegacyOceanPuddleState(state: GameState): GameState {
+  const OCEAN_ID = 'ocean';
+  const oceanNameOverride = state.nameOverrides[OCEAN_ID]?.trim();
+  const oceanDescOverride = state.descriptionOverrides[OCEAN_ID]?.trim();
+  const oceanCategoryOverride = state.categoryOverrides[OCEAN_ID]?.trim();
+  const oceanIconOverride = state.iconOverrides[OCEAN_ID]?.trim();
+  const oceanEffectsOverride = state.effectOverrides[OCEAN_ID];
+  const oceanActsAsOverride = state.actsAsOverrides[OCEAN_ID]?.trim();
+
+  const hasAnyOceanOverride =
+    !!oceanNameOverride ||
+    !!oceanDescOverride ||
+    !!oceanCategoryOverride ||
+    !!oceanIconOverride ||
+    !!oceanActsAsOverride ||
+    !!(oceanEffectsOverride && Object.keys(oceanEffectsOverride).length > 0);
+
+  if (!hasAnyOceanOverride) {
+    return state;
+  }
+
+  const oceanCore = ELEMENTS.find((element) => element.id === OCEAN_ID);
+  if (!oceanCore) {
+    return state;
+  }
+
+  const overrideName = oceanNameOverride?.toLowerCase();
+  const overrideDesc = oceanDescOverride?.toLowerCase();
+  const looksLikePuddle =
+    overrideName === 'puddle' ||
+    overrideName === 'water puddle' ||
+    !!overrideDesc?.includes('puddle');
+
+  const existingPuddle = state.customElements.find(
+    (element) => element.id === 'custom_puddle' || element.name.trim().toLowerCase() === 'puddle'
+  );
+
+  let puddleId = existingPuddle?.id ?? 'custom_puddle';
+  if (!existingPuddle) {
+    const usedIds = new Set(state.customElements.map((element) => element.id));
+    let idx = 2;
+    while (usedIds.has(puddleId)) {
+      puddleId = `custom_puddle_${idx++}`;
+    }
+  }
+
+  const hasRecipeForPuddle = state.masterRecipes.some((recipe) => recipe.output === OCEAN_ID);
+  const nextCustomElements = existingPuddle
+    ? [...state.customElements]
+    : [
+        ...state.customElements,
+        {
+          ...oceanCore,
+          id: puddleId,
+          name: looksLikePuddle ? 'Puddle' : (oceanNameOverride ?? 'Puddle'),
+          category: oceanCategoryOverride ?? oceanCore.category,
+          description: oceanDescOverride ?? oceanCore.description,
+          emoji: oceanIconOverride ?? oceanCore.emoji,
+          worldEffects: oceanEffectsOverride ?? oceanCore.worldEffects,
+          tags: [...oceanCore.tags, 'legacy-split'],
+          discovered: false,
+        },
+      ];
+
+  const remappedMasterRecipes = looksLikePuddle
+    ? state.masterRecipes.map((recipe) =>
+        recipe.output === OCEAN_ID ? { ...recipe, output: puddleId } : recipe
+      )
+    : state.masterRecipes;
+
+  const nextNameOverrides = { ...state.nameOverrides };
+  if (!nextNameOverrides[puddleId]) {
+    nextNameOverrides[puddleId] = oceanNameOverride ?? 'Puddle';
+  }
+  delete nextNameOverrides[OCEAN_ID];
+
+  const nextDescriptionOverrides = { ...state.descriptionOverrides };
+  if (oceanDescOverride && !nextDescriptionOverrides[puddleId]) {
+    nextDescriptionOverrides[puddleId] = oceanDescOverride;
+  }
+  delete nextDescriptionOverrides[OCEAN_ID];
+
+  const nextCategoryOverrides = { ...state.categoryOverrides };
+  if (oceanCategoryOverride && !nextCategoryOverrides[puddleId]) {
+    nextCategoryOverrides[puddleId] = oceanCategoryOverride;
+  }
+  delete nextCategoryOverrides[OCEAN_ID];
+
+  const nextIconOverrides = { ...state.iconOverrides };
+  if (oceanIconOverride && !nextIconOverrides[puddleId]) {
+    nextIconOverrides[puddleId] = oceanIconOverride;
+  }
+  delete nextIconOverrides[OCEAN_ID];
+
+  const nextEffectOverrides = { ...state.effectOverrides };
+  if (oceanEffectsOverride && !nextEffectOverrides[puddleId]) {
+    nextEffectOverrides[puddleId] = oceanEffectsOverride;
+  }
+  delete nextEffectOverrides[OCEAN_ID];
+
+  const nextActsAsOverrides = { ...state.actsAsOverrides };
+  if (oceanActsAsOverride && !nextActsAsOverrides[puddleId]) {
+    nextActsAsOverrides[puddleId] = oceanActsAsOverride;
+  }
+  delete nextActsAsOverrides[OCEAN_ID];
+
+  const discoveredElements = new Set(state.discoveredElements);
+  if ((hasRecipeForPuddle || looksLikePuddle) && discoveredElements.has(OCEAN_ID)) {
+    discoveredElements.add(puddleId);
+  }
+
+  return {
+    ...state,
+    customElements: nextCustomElements,
+    masterRecipes: remappedMasterRecipes,
+    discoveredElements,
+    nameOverrides: nextNameOverrides,
+    descriptionOverrides: nextDescriptionOverrides,
+    categoryOverrides: nextCategoryOverrides,
+    iconOverrides: nextIconOverrides,
+    effectOverrides: nextEffectOverrides,
+    actsAsOverrides: nextActsAsOverrides,
+    eventLog: [...state.eventLog, '🧩 Migrated legacy Ocean/Puddle state into separate elements.'],
+  };
 }
 
 const MAJOR_ELEMENT_EVENTS: Record<string, string> = {
@@ -85,11 +269,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, lastCombinationResult: { success: false } };
       }
 
+      const canonicalA = resolveActsAsElementId(selectedSlotA, state.actsAsOverrides);
+      const canonicalB = resolveActsAsElementId(selectedSlotB, state.actsAsOverrides);
       const attemptedCombinations = new Set(state.attemptedCombinations);
-      attemptedCombinations.add(comboKey(selectedSlotA, selectedSlotB));
+      attemptedCombinations.add(comboKey(canonicalA, canonicalB));
 
-      const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
-      const recipe = findRecipe(selectedSlotA, selectedSlotB, allRecipes);
+      const recipes = allRecipes(state);
+      const recipe = findRecipe(selectedSlotA, selectedSlotB, recipes, state.actsAsOverrides);
       
       if (!recipe) {
         return { ...state, attemptedCombinations, lastCombinationResult: { success: false } };
@@ -124,7 +310,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         newEventLog.push(MAJOR_ELEMENT_EVENTS[outputId]);
       }
 
-      return {
+      const nextState: GameState = {
         ...state,
         discoveredElements: newDiscovered,
         worldInfluence,
@@ -136,6 +322,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         selectedSlotB: null,
         lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
       };
+      return withAvailableElementPool(nextState, recipes);
     }
 
     case 'ADD_MASTER_RECIPE': {
@@ -143,25 +330,28 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const incoming = normalizePair(action.recipe.inputA, action.recipe.inputB);
       const filtered = state.masterRecipes.filter((recipe) => normalizePair(recipe.inputA, recipe.inputB) !== incoming);
 
-      return {
+      const nextState: GameState = {
         ...state,
         masterRecipes: [action.recipe, ...filtered].slice(0, 300),
         eventLog: [...state.eventLog, `🧪 Master recipe added: ${action.recipe.inputA} + ${action.recipe.inputB} -> ${action.recipe.output}`],
       };
+      return withAvailableElementPool(nextState, allRecipes(nextState));
     }
 
     case 'REMOVE_MASTER_RECIPE': {
-      return {
+      const nextState: GameState = {
         ...state,
         masterRecipes: state.masterRecipes.filter((recipe) => recipe.id !== action.recipeId),
       };
+      return withAvailableElementPool(nextState, allRecipes(nextState));
     }
 
     case 'SET_SHARED_RECIPES': {
-      return {
+      const nextState: GameState = {
         ...state,
         sharedRecipes: action.recipes,
       };
+      return withAvailableElementPool(nextState, allRecipes(nextState));
     }
 
     case 'UPSERT_CUSTOM_ELEMENT': {
@@ -237,6 +427,44 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case 'SET_CATEGORY_OVERRIDE': {
+      return {
+        ...state,
+        categoryOverrides: {
+          ...state.categoryOverrides,
+          [action.elementId]: action.category,
+        },
+      };
+    }
+
+    case 'CLEAR_CATEGORY_OVERRIDE': {
+      const next = { ...state.categoryOverrides };
+      delete next[action.elementId];
+      return {
+        ...state,
+        categoryOverrides: next,
+      };
+    }
+
+    case 'SET_ACTS_AS_OVERRIDE': {
+      return {
+        ...state,
+        actsAsOverrides: {
+          ...state.actsAsOverrides,
+          [action.elementId]: action.actsAsElementId,
+        },
+      };
+    }
+
+    case 'CLEAR_ACTS_AS_OVERRIDE': {
+      const next = { ...state.actsAsOverrides };
+      delete next[action.elementId];
+      return {
+        ...state,
+        actsAsOverrides: next,
+      };
+    }
+
     case 'SET_EFFECT_OVERRIDE': {
       const nextOverrides: Record<string, WorldEffectMap> = {
         ...state.effectOverrides,
@@ -257,6 +485,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         effectOverrides: nextOverrides,
         worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), allElements(state), nextOverrides),
       };
+    }
+
+    case 'DELETE_ELEMENT': {
+      return removeElementIdsFromState(state, new Set([action.elementId]));
+    }
+
+    case 'TOGGLE_FAVORITE': {
+      const next = new Set(state.favoriteElementIds);
+      if (next.has(action.elementId)) next.delete(action.elementId);
+      else next.add(action.elementId);
+      return { ...state, favoriteElementIds: next };
     }
 
     case 'REQUEST_HINT': {
@@ -280,7 +519,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const loadedOverrides = saved.effectOverrides ?? {};
       const computedInfluence = calculateWorldInfluence(Array.from(discovered), [...ELEMENTS, ...customElements], loadedOverrides);
       const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
-      return {
+      const nextState: GameState = {
         ...state,
         seed: saved.seed ?? state.seed,
         bigBangDone: saved.bigBangDone ?? false,
@@ -294,13 +533,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         iconOverrides: saved.iconOverrides ?? {},
         nameOverrides: saved.nameOverrides ?? {},
         descriptionOverrides: saved.descriptionOverrides ?? {},
+        categoryOverrides: saved.categoryOverrides ?? {},
+        actsAsOverrides: saved.actsAsOverrides ?? {},
         effectOverrides: loadedOverrides,
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
+        favoriteElementIds: new Set(saved.favoriteElementIds ?? []),
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
         selectedSlotB: null,
         lastCombinationResult: null,
       };
+      const migrated = migrateLegacyOceanPuddleState(nextState);
+      const stabilized = {
+        ...migrated,
+        worldInfluence: calculateWorldInfluence(Array.from(migrated.discoveredElements), allElements(migrated), migrated.effectOverrides),
+      };
+      return withAvailableElementPool(stabilized, allRecipes(stabilized));
     }
 
     default:

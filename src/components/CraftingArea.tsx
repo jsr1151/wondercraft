@@ -1,8 +1,11 @@
 import { useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
+import { RECIPES } from '../data/recipes';
+import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
 import { resolveElementIconRaw } from '../utils/iconResolver';
-import type { WorldEffectMap } from '../types';
+import { DEFAULT_ELEMENT_CATEGORIES, type WorldEffectMap } from '../types';
+import { getAvailableElements } from '../utils/elementAvailability';
 import { ElementIcon } from './ElementIcon';
 import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './CraftingArea.css';
@@ -38,12 +41,20 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 
 export function CraftingArea() {
   const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides } = state;
-  const allElements = [...ELEMENTS, ...state.customElements];
+  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides, categoryOverrides, actsAsOverrides } = state;
+  const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
+  const allElements = getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes);
+  const categoryOptions = Array.from(new Set([
+    ...(DEFAULT_ELEMENT_CATEGORIES as readonly string[]),
+    ...allElements.flatMap((element) => parseElementCategories(resolveElementCategory(element, categoryOverrides))),
+  ])).sort((a, b) => a.localeCompare(b));
   const [dragTarget, setDragTarget] = useState<'A' | 'B' | null>(null);
   const [showIconEditor, setShowIconEditor] = useState(false);
   const [iconTarget, setIconTarget] = useState('');
   const [iconValue, setIconValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
+  const [actsAsValue, setActsAsValue] = useState('');
   const [iconStatus, setIconStatus] = useState<string | null>(null);
   const [showAttrEditor, setShowAttrEditor] = useState(false);
   const [attrTarget, setAttrTarget] = useState('');
@@ -91,6 +102,50 @@ export function CraftingArea() {
     dispatch({ type: 'SET_ICON_OVERRIDE', elementId: target.id, icon: iconValue.trim() });
   };
 
+  const applyDescriptionOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target || !descriptionValue.trim()) return;
+    dispatch({ type: 'SET_DESCRIPTION_OVERRIDE', elementId: target.id, description: descriptionValue.trim() });
+  };
+
+  const clearDescriptionOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target) return;
+    dispatch({ type: 'CLEAR_DESCRIPTION_OVERRIDE', elementId: target.id });
+    setDescriptionValue(target.description);
+  };
+
+  const applyCategoryOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target || !categoryValue.trim()) return;
+    dispatch({ type: 'SET_CATEGORY_OVERRIDE', elementId: target.id, category: categoryValue.trim() });
+  };
+
+  const clearCategoryOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target) return;
+    dispatch({ type: 'CLEAR_CATEGORY_OVERRIDE', elementId: target.id });
+    setCategoryValue(target.category);
+  };
+
+  const applyActsAsOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target) return;
+    const actsAsTarget = findElementByNameOrId(actsAsValue, allElements, nameOverrides);
+    if (actsAsTarget && actsAsTarget.id !== target.id) {
+      dispatch({ type: 'SET_ACTS_AS_OVERRIDE', elementId: target.id, actsAsElementId: actsAsTarget.id });
+      return;
+    }
+    dispatch({ type: 'CLEAR_ACTS_AS_OVERRIDE', elementId: target.id });
+  };
+
+  const clearActsAsOverride = () => {
+    const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
+    if (!target) return;
+    dispatch({ type: 'CLEAR_ACTS_AS_OVERRIDE', elementId: target.id });
+    setActsAsValue('');
+  };
+
   const clearIconOverride = () => {
     const target = findElementByNameOrId(iconTarget, allElements, nameOverrides);
     if (!target) return;
@@ -103,8 +158,14 @@ export function CraftingArea() {
     if (!elementId) return;
     const element = allElements.find((entry) => entry.id === elementId);
     if (!element) return;
-    setIconTarget(resolveElementName(element, nameOverrides));
+    const label = resolveElementName(element, nameOverrides);
+    setIconTarget(label);
     setIconValue(resolveElementIconRaw(element, iconOverrides));
+    setDescriptionValue(resolveElementDescription(element, descriptionOverrides));
+    setCategoryValue(resolveElementCategory(element, categoryOverrides));
+    const actsAsId = actsAsOverrides[element.id];
+    const actsAsElement = actsAsId ? allElements.find((entry) => entry.id === actsAsId) : null;
+    setActsAsValue(actsAsElement ? resolveElementName(actsAsElement, nameOverrides) : '');
   };
 
   const importIconImage = async (file: File) => {
@@ -290,6 +351,11 @@ export function CraftingArea() {
           if (prefill) {
             setIconTarget(resolveElementName(prefill, nameOverrides));
             setIconValue(resolveElementIconRaw(prefill, iconOverrides));
+            setDescriptionValue(resolveElementDescription(prefill, descriptionOverrides));
+            setCategoryValue(resolveElementCategory(prefill, categoryOverrides));
+            const actsAsId = actsAsOverrides[prefill.id];
+            const actsAsElement = actsAsId ? allElements.find((entry) => entry.id === actsAsId) : null;
+            setActsAsValue(actsAsElement ? resolveElementName(actsAsElement, nameOverrides) : '');
           }
           setShowIconEditor((v) => !v);
         }}
@@ -317,7 +383,18 @@ export function CraftingArea() {
           <input
             list="craft-icon-targets"
             value={iconTarget}
-            onChange={(event) => setIconTarget(event.target.value)}
+            onChange={(event) => {
+              const next = event.target.value;
+              setIconTarget(next);
+              const target = findElementByNameOrId(next, allElements, nameOverrides);
+              if (!target) return;
+              setIconValue(resolveElementIconRaw(target, iconOverrides));
+              setDescriptionValue(resolveElementDescription(target, descriptionOverrides));
+              setCategoryValue(resolveElementCategory(target, categoryOverrides));
+              const actsAsId = actsAsOverrides[target.id];
+              const actsAsElement = actsAsId ? allElements.find((entry) => entry.id === actsAsId) : null;
+              setActsAsValue(actsAsElement ? resolveElementName(actsAsElement, nameOverrides) : '');
+            }}
             onDragOver={(event) => event.preventDefault()}
             onDrop={onIconTargetDrop}
             placeholder="Drop element or type name"
@@ -329,8 +406,48 @@ export function CraftingArea() {
             placeholder="Paste Apple emoji, image URL, or image from clipboard"
           />
           <input type="file" accept="image/*" onChange={(event) => void onIconUpload(event)} />
-          <button onClick={applyIconOverride}>Apply</button>
-          <button className="clear-icon" onClick={clearIconOverride}>Reset</button>
+          <div className="icon-editor-actions">
+            <button onClick={applyIconOverride}>Apply Icon</button>
+            <button className="clear-icon" onClick={clearIconOverride}>Reset Icon</button>
+          </div>
+
+          <input
+            value={descriptionValue}
+            onChange={(event) => setDescriptionValue(event.target.value)}
+            placeholder="Description override"
+          />
+          <div className="icon-editor-actions">
+            <button onClick={applyDescriptionOverride}>Apply Description</button>
+            <button className="clear-icon" onClick={clearDescriptionOverride}>Reset Description</button>
+          </div>
+
+          <input
+            list="craft-category-options"
+            value={categoryValue}
+            onChange={(event) => setCategoryValue(event.target.value)}
+            placeholder="Category override (example: Mythic, Arcane)"
+          />
+          <div className="icon-editor-actions">
+            <button onClick={applyCategoryOverride}>Apply Category</button>
+            <button className="clear-icon" onClick={clearCategoryOverride}>Reset Category</button>
+          </div>
+
+          <input
+            list="craft-icon-targets"
+            value={actsAsValue}
+            onChange={(event) => setActsAsValue(event.target.value)}
+            placeholder="Acts as element (recipe skin target)"
+          />
+          <div className="icon-editor-actions">
+            <button onClick={applyActsAsOverride}>Apply Acts As</button>
+            <button className="clear-icon" onClick={clearActsAsOverride}>Reset Acts As</button>
+          </div>
+
+          <datalist id="craft-category-options">
+            {categoryOptions.map((category) => (
+              <option key={category} value={category} />
+            ))}
+          </datalist>
 
           <datalist id="craft-icon-targets">
             {allElements.map((element) => (
