@@ -143,13 +143,22 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         dist: 0.2 + rng() * 0.5,
       });
     }
+    const cloudPositions: { angle: number; dist: number; size: number; blobSeed: number }[] = [];
+    for (let i = 0; i < 12; i++) {
+      cloudPositions.push({
+        angle: rng() * Math.PI * 2,
+        dist: 0.08 + rng() * 0.7,
+        size: 0.4 + rng() * 1.1,
+        blobSeed: Math.floor(rng() * 100000),
+      });
+    }
 
     const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
     const draw = (t: number) => {
       const currentWi = wiRef.current;
       const has = (id: string) => !!discoveredRef.current?.has(id);
-      const phase = t * 0.0003;
+      const phase = t * 0.001;
       ctx.clearRect(0, 0, W, H);
 
       ctx.fillStyle = '#050510';
@@ -202,6 +211,17 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
       }
 
+      // Spherical lighting – gives 3D depth
+      const sphereLight = ctx.createRadialGradient(
+        cx - r * 0.35, cy - r * 0.35, r * 0.08,
+        cx + r * 0.12, cy + r * 0.12, r * 1.05
+      );
+      sphereLight.addColorStop(0, `rgba(255, 255, 240, ${0.06 + brightnessLevel * 0.14})`);
+      sphereLight.addColorStop(0.45, 'rgba(0, 0, 0, 0)');
+      sphereLight.addColorStop(1, `rgba(0, 0, 20, ${0.18 + (1 - brightnessLevel) * 0.15})`);
+      ctx.fillStyle = sphereLight;
+      ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
       const patchCount = Math.floor(2 + development * 72 + waterLevel * 16 + vegLevel * 16 + earthyAmount * 24);
       for (let i = 0; i < patchCount; i++) {
         const patch = terrainPatches[i];
@@ -214,13 +234,14 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         const dryBias = heatLevel * 0.6 + (1 - waterLevel) * 0.2;
 
         if (patch.bias < wetBias) {
-          patchColor = `rgba(24, 98, ${Math.round(166 + waterLevel * 82)}, ${0.4 + waterLevel * 0.38})`;
+          patchColor = `rgba(16, 65, ${Math.round(130 + waterLevel * 50)}, ${0.28 + waterLevel * 0.22})`;
         } else if (patch.bias < wetBias + greenBias) {
-          patchColor = `rgba(18, ${Math.round(122 + lifeLevel * 86)}, 42, ${0.42 + vegLevel * 0.35})`;
+          const g = Math.round(70 + lifeLevel * 50 + patch.radius * 0.6);
+          patchColor = `rgba(${Math.round(12 + patch.radius * 0.25)}, ${g}, ${Math.round(18 + patch.radius * 0.3)}, ${0.25 + vegLevel * 0.22})`;
         } else if (patch.bias < wetBias + greenBias + dryBias) {
-          patchColor = `rgba(${Math.round(146 + heatLevel * 58)}, ${Math.round(108 - waterLevel * 22)}, 68, 0.38)`;
+          patchColor = `rgba(${Math.round(125 + heatLevel * 35)}, ${Math.round(92 - waterLevel * 12)}, 52, 0.24)`;
         } else {
-          patchColor = 'rgba(98, 90, 82, 0.32)';
+          patchColor = 'rgba(78, 72, 65, 0.2)';
         }
 
         ctx.fillStyle = patchColor;
@@ -265,9 +286,25 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const lx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const ly = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 10 + fp.size * 18;
-          ctx.fillStyle = 'rgba(30, 110, 200, 0.55)';
-          drawBlob(ctx, lx, ly, s, s * 0.6, fp.blobSeed, 8);
+          const s = 14 + fp.size * 24;
+          // Deep water gradient
+          const wg = ctx.createRadialGradient(lx - s * 0.12, ly - s * 0.1, s * 0.08, lx, ly, s * 0.85);
+          wg.addColorStop(0, 'rgba(10, 45, 140, 0.72)');
+          wg.addColorStop(0.45, 'rgba(20, 80, 175, 0.55)');
+          wg.addColorStop(1, 'rgba(45, 120, 200, 0.12)');
+          ctx.fillStyle = wg;
+          drawBlob(ctx, lx, ly, s, s * 0.6, fp.blobSeed, 9);
+          ctx.fill();
+          // Specular highlight
+          ctx.fillStyle = 'rgba(155, 210, 255, 0.22)';
+          ctx.beginPath();
+          ctx.ellipse(lx - s * 0.18, ly - s * 0.14, s * 0.2, s * 0.07, -0.4, 0, Math.PI * 2);
+          ctx.fill();
+          // Subtle wave shimmer
+          const shimmer = 0.08 + 0.08 * Math.sin(t * 0.002 + fp.angle * 3);
+          ctx.fillStyle = `rgba(120, 190, 255, ${shimmer})`;
+          ctx.beginPath();
+          ctx.ellipse(lx + s * 0.1, ly + s * 0.05, s * 0.3, s * 0.04, fp.angle + phase * 2, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -285,7 +322,15 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const my1 = (sy * 2 + ey) / 3 + Math.sin(startAngle + 1.0) * 25 * fp.size;
           const mx2 = (sx + ex * 2) / 3 + Math.cos(startAngle + 1.8) * 20 * fp.size;
           const my2 = (sy + ey * 2) / 3 + Math.sin(startAngle + 1.8) * 20 * fp.size;
-          ctx.strokeStyle = 'rgba(40, 130, 220, 0.6)';
+          // River glow
+          ctx.strokeStyle = 'rgba(30, 100, 200, 0.2)';
+          ctx.lineWidth = 4 + fp.size * 2;
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          ctx.bezierCurveTo(mx1, my1, mx2, my2, ex, ey);
+          ctx.stroke();
+          // River core
+          ctx.strokeStyle = 'rgba(35, 120, 215, 0.6)';
           ctx.lineWidth = 1.5 + fp.size;
           ctx.beginPath();
           ctx.moveTo(sx, sy);
@@ -300,13 +345,27 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           const fp = featurePositions[i];
           const fx = cx + Math.cos(fp.angle + phase) * fp.dist * r;
           const fy = cy + Math.sin(fp.angle + phase) * fp.dist * r;
-          const s = 7 + fp.size * 14;
-          ctx.fillStyle = 'rgba(20, 100, 30, 0.45)';
-          drawBlob(ctx, fx, fy, s, s * 0.85, fp.blobSeed, 6);
+          const s = 10 + fp.size * 18;
+          // Dark understory shadow
+          ctx.fillStyle = 'rgba(8, 45, 12, 0.45)';
+          drawBlob(ctx, fx, fy, s * 1.05, s * 0.85, fp.blobSeed, 7);
           ctx.fill();
-          // Canopy highlights
-          ctx.fillStyle = 'rgba(30, 140, 50, 0.35)';
-          drawBlob(ctx, fx - s * 0.25, fy - s * 0.25, s * 0.55, s * 0.5, fp.blobSeed + 1, 5);
+          // Tree canopy clusters
+          const tRng = seededRandom(fp.blobSeed + 200);
+          const count = 6 + Math.floor(fp.size * 10);
+          for (let j = 0; j < count; j++) {
+            const ox = (tRng() - 0.5) * s * 1.5;
+            const oy = (tRng() - 0.5) * s * 1.1;
+            const tr = 2.5 + tRng() * 5;
+            const green = Math.floor(55 + tRng() * 95);
+            ctx.fillStyle = `rgba(${Math.floor(6 + tRng() * 22)}, ${green}, ${Math.floor(10 + tRng() * 20)}, ${0.3 + tRng() * 0.3})`;
+            ctx.beginPath();
+            ctx.arc(fx + ox, fy + oy, tr, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // Sunlit canopy highlights
+          ctx.fillStyle = 'rgba(50, 160, 60, 0.18)';
+          drawBlob(ctx, fx - s * 0.2, fy - s * 0.2, s * 0.5, s * 0.4, fp.blobSeed + 1, 5);
           ctx.fill();
         }
       }
@@ -419,6 +478,27 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         }
       }
 
+      // Clouds
+      if (atmosLevel > 0.01 || waterLevel > 0.08) {
+        const cloudPhase = phase * 1.12;
+        const cloudAlpha = clamp(0.05 + atmosLevel * 0.24 + waterLevel * 0.04, 0, 0.3);
+        const numClouds = Math.floor(2 + atmosLevel * 8 + waterLevel * 3);
+        for (let i = 0; i < numClouds && i < cloudPositions.length; i++) {
+          const cp = cloudPositions[i];
+          const ca = cp.angle + cloudPhase;
+          const ccx = cx + Math.cos(ca) * cp.dist * r;
+          const ccy = cy + Math.sin(ca) * cp.dist * r;
+          const cs = 18 + cp.size * 30;
+          ctx.fillStyle = `rgba(255, 255, 255, ${cloudAlpha})`;
+          drawBlob(ctx, ccx, ccy, cs, cs * 0.28, cp.blobSeed, 6);
+          ctx.fill();
+          // Wisp extension
+          ctx.fillStyle = `rgba(255, 255, 255, ${cloudAlpha * 0.55})`;
+          drawBlob(ctx, ccx + cs * 0.5, ccy + cs * 0.04, cs * 0.5, cs * 0.18, cp.blobSeed + 1, 5);
+          ctx.fill();
+        }
+      }
+
       if (pollLevel > 0.05) {
         ctx.fillStyle = `rgba(66, 58, 44, ${pollLevel * 0.62})`;
         ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
@@ -432,15 +512,25 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
 
       if (civLevel > 0.05) {
         const rng2 = seededRandom(seed + 42);
-        const numCities = Math.floor(6 + civLevel * 36);
+        const numCities = Math.floor(4 + civLevel * 24);
         for (let i = 0; i < numCities; i++) {
           const angle = rng2() * Math.PI * 2 + phase;
-          const dist = rng2() * r * 0.8;
+          const dist = rng2() * r * 0.78;
           const lx = cx + Math.cos(angle) * dist;
           const ly = cy + Math.sin(angle) * dist;
-          ctx.fillStyle = `rgba(255,240,120,${0.4 + rng2() * 0.5})`;
+          const citySize = 1.5 + rng2() * 2.5 * civLevel;
+          // Warm glow
+          const glow = ctx.createRadialGradient(lx, ly, 0, lx, ly, citySize * 3);
+          glow.addColorStop(0, `rgba(255, 240, 140, ${0.4 + rng2() * 0.35})`);
+          glow.addColorStop(1, 'rgba(255, 200, 80, 0)');
+          ctx.fillStyle = glow;
           ctx.beginPath();
-          ctx.arc(lx, ly, 1 + rng2() * 1.5, 0, Math.PI * 2);
+          ctx.arc(lx, ly, citySize * 3, 0, Math.PI * 2);
+          ctx.fill();
+          // Bright core
+          ctx.fillStyle = `rgba(255, 245, 180, ${0.55 + rng2() * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(lx, ly, citySize * 0.5, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -558,6 +648,66 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           ctx.lineTo(lx, ly + 6);
           ctx.closePath();
           ctx.fill();
+        });
+      }
+
+      // House / Village
+      if (has('house') || has('cottage') || has('hut') || has('village')) {
+        drawLandmark(6, (lx, ly) => {
+          const s = 12;
+          ctx.fillStyle = 'rgba(185, 155, 115, 0.9)';
+          ctx.fillRect(lx - s * 0.6, ly - s * 0.15, s * 1.2, s * 0.7);
+          ctx.fillStyle = 'rgba(165, 55, 35, 0.85)';
+          ctx.beginPath();
+          ctx.moveTo(lx, ly - s * 0.7);
+          ctx.lineTo(lx + s * 0.8, ly - s * 0.15);
+          ctx.lineTo(lx - s * 0.8, ly - s * 0.15);
+          ctx.closePath();
+          ctx.fill();
+        });
+      }
+
+      // City skyline
+      if (has('city') || has('skyscraper')) {
+        drawLandmark(7, (lx, ly) => {
+          const s = 16;
+          ctx.fillStyle = 'rgba(110, 120, 135, 0.85)';
+          ctx.fillRect(lx - s, ly - s * 1.2, s * 0.35, s * 1.5);
+          ctx.fillRect(lx - s * 0.35, ly - s * 0.8, s * 0.3, s * 1.1);
+          ctx.fillRect(lx + s * 0.1, ly - s * 1.6, s * 0.28, s * 1.9);
+          ctx.fillRect(lx + s * 0.5, ly - s * 0.6, s * 0.4, s * 0.9);
+          ctx.fillStyle = 'rgba(255, 235, 110, 0.6)';
+          const wRng = seededRandom(seed + 888);
+          for (let w = 0; w < 10; w++) {
+            ctx.fillRect(lx - s + wRng() * s * 1.8, ly - s * 1.4 + wRng() * s * 1.6, 1.5, 1.5);
+          }
+        });
+      }
+
+      // Lighthouse
+      if (has('lighthouse')) {
+        drawLandmark(8, (lx, ly) => {
+          ctx.fillStyle = 'rgba(220, 220, 210, 0.9)';
+          ctx.fillRect(lx - 3, ly - 20, 6, 20);
+          ctx.fillStyle = 'rgba(200, 50, 40, 0.8)';
+          ctx.fillRect(lx - 3, ly - 16, 6, 4);
+          ctx.fillRect(lx - 3, ly - 8, 6, 4);
+          const beamPulse = 0.3 + 0.7 * Math.sin(t * 0.004);
+          ctx.fillStyle = `rgba(255, 250, 150, ${0.7 * beamPulse})`;
+          ctx.beginPath();
+          ctx.arc(lx, ly - 22, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // Dam / Bridge
+      if (has('dam') || has('bridge')) {
+        drawLandmark(9, (lx, ly) => {
+          ctx.fillStyle = 'rgba(160, 160, 155, 0.85)';
+          ctx.fillRect(lx - 20, ly - 2, 40, 5);
+          ctx.fillRect(lx - 18, ly - 8, 4, 8);
+          ctx.fillRect(lx + 14, ly - 8, 4, 8);
+          ctx.fillRect(lx - 2, ly - 6, 4, 6);
         });
       }
 
