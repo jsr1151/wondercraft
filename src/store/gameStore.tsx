@@ -51,6 +51,10 @@ function comboKey(a: string, b: string): string {
   return [a, b].sort().join('|');
 }
 
+function recipePairKey(inputA: string, inputB: string): string {
+  return [inputA, inputB].sort().join('|');
+}
+
 function removeElementIdsFromState(state: GameState, removedIds: Set<string>): GameState {
   if (removedIds.size === 0) return state;
 
@@ -326,9 +330,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'ADD_MASTER_RECIPE': {
-      const normalizePair = (a: string, b: string) => [a, b].sort().join('|');
-      const incoming = normalizePair(action.recipe.inputA, action.recipe.inputB);
-      const filtered = state.masterRecipes.filter((recipe) => normalizePair(recipe.inputA, recipe.inputB) !== incoming);
+      const incoming = recipePairKey(action.recipe.inputA, action.recipe.inputB);
+      const filtered = state.masterRecipes.filter((recipe) => recipePairKey(recipe.inputA, recipe.inputB) !== incoming);
 
       const nextState: GameState = {
         ...state,
@@ -342,6 +345,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const nextState: GameState = {
         ...state,
         masterRecipes: state.masterRecipes.filter((recipe) => recipe.id !== action.recipeId),
+      };
+      return withAvailableElementPool(nextState, allRecipes(nextState));
+    }
+
+    case 'REMOVE_LOCAL_RECIPES_BY_PAIR': {
+      const pairSet = new Set(action.pairs);
+      if (pairSet.size === 0) return state;
+
+      const keptLocal = state.masterRecipes.filter((recipe) => !pairSet.has(recipePairKey(recipe.inputA, recipe.inputB)));
+      const removedCount = state.masterRecipes.length - keptLocal.length;
+      if (removedCount === 0) return state;
+
+      const nextState: GameState = {
+        ...state,
+        masterRecipes: keptLocal,
+        eventLog: [...state.eventLog, `☁️ Synced ${removedCount} local recipes to global and removed local duplicates.`],
       };
       return withAvailableElementPool(nextState, allRecipes(nextState));
     }

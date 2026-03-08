@@ -16,6 +16,10 @@ function errorMessage(error: unknown): string {
     : 'Unknown error';
 }
 
+function recipePairKey(inputA: string, inputB: string): string {
+  return [inputA, inputB].sort().join('|');
+}
+
 const DEFAULT_ATTR_KEYS = [
   'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
   'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
@@ -336,8 +340,15 @@ export function MasterRecipeLab() {
           localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
           await publishGlobalRecipe(recipe, token.trim());
           const synced = await fetchGlobalRecipes();
+          const sharedPairs = new Set(synced.map((entry) => recipePairKey(entry.inputA, entry.inputB)));
+          const publishedPair = recipePairKey(recipe.inputA, recipe.inputB);
           dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
-          setStatus('Recipe saved locally and published globally.');
+          if (sharedPairs.has(publishedPair)) {
+            dispatch({ type: 'REMOVE_LOCAL_RECIPES_BY_PAIR', pairs: [publishedPair] });
+            setStatus('Recipe published globally and removed from local duplicates.');
+          } else {
+            setStatus('Recipe saved locally and published globally.');
+          }
         } catch (error) {
           setStatus(`Local save succeeded, but global publish failed: ${errorMessage(error)}.`);
         } finally {
@@ -380,10 +391,23 @@ export function MasterRecipeLab() {
     try {
       setSaving(true);
       localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
+      const localRecipes = [...state.masterRecipes];
       await publishGlobalRecipes(state.masterRecipes, token.trim());
       const synced = await fetchGlobalRecipes();
+      const sharedPairs = new Set(synced.map((recipe) => recipePairKey(recipe.inputA, recipe.inputB)));
+      const publishedPairs = Array.from(new Set(localRecipes
+        .map((recipe) => recipePairKey(recipe.inputA, recipe.inputB))
+        .filter((pair) => sharedPairs.has(pair))));
       dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
-      setStatus(`Published ${state.masterRecipes.length} local recipes globally.`);
+      if (publishedPairs.length > 0) {
+        dispatch({ type: 'REMOVE_LOCAL_RECIPES_BY_PAIR', pairs: publishedPairs });
+      }
+      const unpublishedCount = localRecipes.length - publishedPairs.length;
+      setStatus(
+        unpublishedCount > 0
+          ? `Published ${publishedPairs.length} local recipes globally. Kept ${unpublishedCount} local recipes that were not confirmed in global.`
+          : `Published ${publishedPairs.length} local recipes globally and cleared local duplicates.`
+      );
     } catch (error) {
       setStatus(`Bulk global publish failed: ${errorMessage(error)}.`);
     } finally {

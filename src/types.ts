@@ -98,6 +98,7 @@ export type GameAction =
   | { type: 'TRY_COMBINE' }
   | { type: 'ADD_MASTER_RECIPE'; recipe: MasterRecipe }
   | { type: 'REMOVE_MASTER_RECIPE'; recipeId: string }
+  | { type: 'REMOVE_LOCAL_RECIPES_BY_PAIR'; pairs: string[] }
   | { type: 'SET_SHARED_RECIPES'; recipes: MasterRecipe[] }
   | { type: 'UPSERT_CUSTOM_ELEMENT'; element: Element }
   | { type: 'SET_ICON_OVERRIDE'; elementId: string; icon: string }
