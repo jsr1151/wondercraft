@@ -10,6 +10,12 @@ import { isImageIcon, resolveElementIcon, resolveElementIconRaw } from '../utils
 import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
 import './MasterRecipeLab.css';
 
+function errorMessage(error: unknown): string {
+  return error instanceof Error && error.message.trim().length > 0
+    ? error.message
+    : 'Unknown error';
+}
+
 const DEFAULT_ATTR_KEYS = [
   'water', 'brightness', 'earthy', 'air', 'vegetation', 'heat', 'cold', 'atmosphere',
   'pollution', 'civilization', 'technology', 'magic', 'ruin', 'life',
@@ -332,8 +338,8 @@ export function MasterRecipeLab() {
           const synced = await fetchGlobalRecipes();
           dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
           setStatus('Recipe saved locally and published globally.');
-        } catch {
-          setStatus('Local save succeeded, but global publish failed. Check token permissions.');
+        } catch (error) {
+          setStatus(`Local save succeeded, but global publish failed: ${errorMessage(error)}.`);
         } finally {
           setSaving(false);
         }
@@ -378,8 +384,8 @@ export function MasterRecipeLab() {
       const synced = await fetchGlobalRecipes();
       dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
       setStatus(`Published ${state.masterRecipes.length} local recipes globally.`);
-    } catch {
-      setStatus('Bulk global publish failed. Check token permissions and try again.');
+    } catch (error) {
+      setStatus(`Bulk global publish failed: ${errorMessage(error)}.`);
     } finally {
       setSaving(false);
     }

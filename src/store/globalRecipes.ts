@@ -21,6 +21,12 @@ interface GitHubContentResponse {
   encoding: 'base64' | string;
 }
 
+interface GitHubErrorResponse {
+  message?: string;
+  documentation_url?: string;
+  errors?: Array<{ message?: string }>;
+}
+
 function normalizePair(a: string, b: string): string {
   return [a, b].sort().join('|');
 }
@@ -49,6 +55,24 @@ function parseDocument(raw: string): GlobalRecipeDoc {
   }
 }
 
+async function buildGitHubError(response: Response, action: 'read' | 'write'): Promise<Error> {
+  const fallback = `GitHub ${action} failed (${response.status})`;
+
+  try {
+    const payload = (await response.json()) as GitHubErrorResponse;
+    const details = [payload.message, payload.errors?.[0]?.message]
+      .filter((part): part is string => !!part && part.trim().length > 0)
+      .join(' - ');
+    if (details) {
+      return new Error(`${fallback}: ${details}`);
+    }
+  } catch {
+    // Ignore parse failures and return a generic error.
+  }
+
+  return new Error(fallback);
+}
+
 export async function fetchGlobalRecipes(): Promise<MasterRecipe[]> {
   const url = `${RAW_URL}?t=${Date.now()}`;
   const response = await fetch(url, { cache: 'no-store' });
@@ -72,7 +96,7 @@ async function getRemoteDoc(token: string): Promise<{ doc: GlobalRecipeDoc; sha?
   }
 
   if (!response.ok) {
-    throw new Error(`GitHub read failed (${response.status})`);
+    throw await buildGitHubError(response, 'read');
   }
 
   const payload = (await response.json()) as GitHubContentResponse;
@@ -98,7 +122,7 @@ async function writeRemoteDoc(doc: GlobalRecipeDoc, token: string, message: stri
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub write failed (${response.status})`);
+    throw await buildGitHubError(response, 'write');
   }
 }
 
