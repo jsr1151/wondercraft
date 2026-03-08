@@ -2,7 +2,7 @@ import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler,
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { useGame } from '../store/useGame';
-import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe } from '../store/globalRecipes';
+import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe, publishGlobalRecipes } from '../store/globalRecipes';
 import { DEFAULT_ELEMENT_CATEGORIES, type Element, type MasterRecipe, type WorldEffectMap } from '../types';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
 import { getAvailableElements } from '../utils/elementAvailability';
@@ -355,6 +355,31 @@ export function MasterRecipeLab() {
     setAttrDraft(buildAttrDraft());
   };
 
+  const publishAllLocalRecipes = async () => {
+    if (!state.masterRecipes.length) {
+      setStatus('No local recipes to publish.');
+      return;
+    }
+
+    if (!token.trim()) {
+      setStatus('Enter a GitHub token before publishing local recipes globally.');
+      return;
+    }
+
+    try {
+      setSaving(true);
+      localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
+      await publishGlobalRecipes(state.masterRecipes, token.trim());
+      const synced = await fetchGlobalRecipes();
+      dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
+      setStatus(`Published ${state.masterRecipes.length} local recipes globally.`);
+    } catch {
+      setStatus('Bulk global publish failed. Check token permissions and try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <section className="master-recipe-lab">
       <div className="master-recipe-header">
@@ -495,6 +520,16 @@ export function MasterRecipeLab() {
             One-time setup: create a classic token at `github.com/settings/tokens` with `repo` scope.
             Once entered here, it stays saved in this browser.
           </p>
+        )}
+        {publishGlobal && (
+          <button
+            type="button"
+            className="master-recipe-publish-all"
+            onClick={publishAllLocalRecipes}
+            disabled={saving || state.masterRecipes.length === 0}
+          >
+            Publish all local recipes ({state.masterRecipes.length})
+          </button>
         )}
       </div>
 

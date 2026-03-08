@@ -31,6 +31,10 @@ function mergeRecipe(recipes: MasterRecipe[], incoming: MasterRecipe): MasterRec
   return [incoming, ...withoutOld].slice(0, 1200);
 }
 
+function mergeRecipes(recipes: MasterRecipe[], incomingRecipes: MasterRecipe[]): MasterRecipe[] {
+  return incomingRecipes.reduce((nextRecipes, recipe) => mergeRecipe(nextRecipes, recipe), recipes);
+}
+
 function parseDocument(raw: string): GlobalRecipeDoc {
   const fallback: GlobalRecipeDoc = { updatedAt: Date.now(), recipes: [] };
   try {
@@ -76,15 +80,8 @@ async function getRemoteDoc(token: string): Promise<{ doc: GlobalRecipeDoc; sha?
   return { doc: parseDocument(decoded), sha: payload.sha };
 }
 
-export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): Promise<MasterRecipe[]> {
-  const { doc, sha } = await getRemoteDoc(token);
-  const nextRecipes = mergeRecipe(doc.recipes, recipe);
-  const nextDoc: GlobalRecipeDoc = {
-    updatedAt: Date.now(),
-    recipes: nextRecipes,
-  };
-
-  const content = btoa(JSON.stringify(nextDoc, null, 2));
+async function writeRemoteDoc(doc: GlobalRecipeDoc, token: string, message: string, sha?: string): Promise<void> {
+  const content = btoa(JSON.stringify(doc, null, 2));
   const response = await fetch(CONTENTS_API, {
     method: 'PUT',
     headers: {
@@ -93,7 +90,7 @@ export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): 
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      message: `chore: update global master recipes (${recipe.inputA}+${recipe.inputB})`,
+      message,
       content,
       sha,
       branch: BRANCH,
@@ -103,6 +100,31 @@ export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): 
   if (!response.ok) {
     throw new Error(`GitHub write failed (${response.status})`);
   }
+}
+
+export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): Promise<MasterRecipe[]> {
+  const { doc, sha } = await getRemoteDoc(token);
+  const nextRecipes = mergeRecipe(doc.recipes, recipe);
+  const nextDoc: GlobalRecipeDoc = {
+    updatedAt: Date.now(),
+    recipes: nextRecipes,
+  };
+
+  await writeRemoteDoc(nextDoc, token, `chore: update global master recipes (${recipe.inputA}+${recipe.inputB})`, sha);
+
+  return nextRecipes;
+}
+
+export async function publishGlobalRecipes(recipes: MasterRecipe[], token: string): Promise<MasterRecipe[]> {
+  const incoming = recipes.slice(0, 1200);
+  const { doc, sha } = await getRemoteDoc(token);
+  const nextRecipes = mergeRecipes(doc.recipes, incoming).slice(0, 1200);
+  const nextDoc: GlobalRecipeDoc = {
+    updatedAt: Date.now(),
+    recipes: nextRecipes,
+  };
+
+  await writeRemoteDoc(nextDoc, token, `chore: bulk update global master recipes (${incoming.length})`, sha);
 
   return nextRecipes;
 }
