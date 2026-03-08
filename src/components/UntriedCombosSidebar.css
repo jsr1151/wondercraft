@@ -6,14 +6,21 @@
   display: flex;
   align-items: flex-start;
   transition: transform 0.2s ease;
+  width: fit-content;
+  pointer-events: auto;
 }
 
 .untried-sidebar.closed {
   transform: translateX(calc(100% - 72px));
+  pointer-events: none;
 }
 
 .untried-sidebar.open {
   transform: translateX(0);
+}
+
+.untried-sidebar.closed .untried-toggle {
+  pointer-events: auto;
 }
 
 .untried-toggle {
@@ -23,6 +30,7 @@
   border-radius: 8px 0 0 8px;
   padding: 8px 10px;
   border: 1px solid rgba(245, 158, 11, 0.6);
+  pointer-events: auto;
 }
 
 .untried-content {
@@ -34,6 +42,7 @@
   border-right: none;
   border-radius: 8px 0 0 8px;
   padding: 10px;
+  pointer-events: auto;
 }
 
 .untried-meta {
