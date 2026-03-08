@@ -1,11 +1,21 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction, Recipe, WorldEffectMap } from '../types';
+import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType } from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
 import { calculateWorldInfluence, DEFAULT_WORLD_INFLUENCE } from '../engine/worldInfluence';
 import { generateHint } from '../engine/hintEngine';
 import { resolveActsAsElementId } from '../engine/actingAs';
+import {
+  EMPTY_INSIGHT,
+  INSIGHT_LABELS,
+  calculateInsightGainPerSecond,
+  applyInsightTick,
+  countDiscoveredByInsightType,
+  getElementInsightType,
+  getHintInsightCost,
+  getRandomDiscoveryInsightCost,
+} from '../engine/insightEngine';
 import { getAvailableElementIdSet, getAvailableElements } from '../utils/elementAvailability';
 import { saveGame, loadGame } from './saveLoad';
 import { fetchGlobalRecipes } from './globalRecipes';
@@ -42,6 +52,7 @@ function createInitialState(): GameState {
     effectOverrides: {},
     attemptedCombinations: new Set<string>(),
     favoriteElementIds: new Set<string>(),
+    insight: { ...EMPTY_INSIGHT },
     hints: ['Click the cosmic orb to begin...'],
     lastCombinationResult: null,
   };
@@ -53,6 +64,133 @@ function comboKey(a: string, b: string): string {
 
 function recipePairKey(inputA: string, inputB: string): string {
   return [inputA, inputB].sort().join('|');
+}
+
+function getUndiscoveredElementsByInsightType(state: GameState, insightType: InsightType): Element[] {
+  return allElements(state).filter((element) => {
+    if (state.discoveredElements.has(element.id)) return false;
+    return getElementInsightType(element, state.categoryOverrides) === insightType;
+  });
+}
+
+function discoverElementInState(state: GameState, elementId: string): GameState {
+  if (state.discoveredElements.has(elementId)) return state;
+  const discoveredElements = new Set(state.discoveredElements);
+  discoveredElements.add(elementId);
+
+  const worldInfluence = calculateWorldInfluence(
+    Array.from(discoveredElements),
+    allElements(state),
+    state.effectOverrides
+  );
+
+  const eventLog = [...state.eventLog];
+  if (MAJOR_ELEMENT_EVENTS[elementId]) {
+    eventLog.push(MAJOR_ELEMENT_EVENTS[elementId]);
+  }
+
+  return {
+    ...state,
+    discoveredElements,
+    worldInfluence,
+    recentDiscoveries: [elementId, ...state.recentDiscoveries].slice(0, 10),
+    eventLog,
+  };
+}
+
+function spendInsight(
+  insight: GameState['insight'],
+  insightType: InsightType,
+  amount: number
+): GameState['insight'] {
+  return {
+    ...insight,
+    [insightType]: Math.max(0, insight[insightType] - amount),
+  };
+}
+
+function buildCategoryHintText(
+  state: GameState,
+  insightType: InsightType,
+  target: Element,
+  recipes: Recipe[]
+): string {
+  const discovered = state.discoveredElements;
+  const elementMap = new Map(allElements(state).map((element) => [element.id, element]));
+  const targetRecipes = recipes.filter((recipe) => recipe.output === target.id);
+
+  if (targetRecipes.length === 0) {
+    return `${INSIGHT_LABELS[insightType]} insight points toward ${target.name}, but no recipe hint is available yet.`;
+  }
+
+  const chosen = targetRecipes[Math.floor(Math.random() * targetRecipes.length)];
+  const a = elementMap.get(chosen.inputA);
+  const b = elementMap.get(chosen.inputB);
+  const aKnown = discovered.has(chosen.inputA);
+  const bKnown = discovered.has(chosen.inputB);
+
+  if (a && b && aKnown && !bKnown) {
+    const bType = getElementInsightType(b, state.categoryOverrides);
+    return `Insight hint: try combining ${a.name} with something from ${bType ? INSIGHT_LABELS[bType] : b.category}.`;
+  }
+
+  if (a && b && bKnown && !aKnown) {
+    const aType = getElementInsightType(a, state.categoryOverrides);
+    return `Insight hint: try combining ${b.name} with something from ${aType ? INSIGHT_LABELS[aType] : a.category}.`;
+  }
+
+  if (a && b && aKnown && bKnown) {
+    const reveal = Math.random() < 0.5 ? a.name : b.name;
+    return `Insight hint: this ${INSIGHT_LABELS[insightType]} discovery involves ${reveal}.`;
+  }
+
+  if (a && b) {
+    const aType = getElementInsightType(a, state.categoryOverrides);
+    const bType = getElementInsightType(b, state.categoryOverrides);
+    return `Insight hint: experiment where ${aType ? INSIGHT_LABELS[aType] : a.category} meets ${bType ? INSIGHT_LABELS[bType] : b.category}.`;
+  }
+
+  return `Insight hint: ${target.name} can be reached from known combinations in ${INSIGHT_LABELS[insightType]}.`;
+}
+
+function requestInsightHintForType(state: GameState, insightType: InsightType): GameState {
+  const candidates = getUndiscoveredElementsByInsightType(state, insightType);
+  if (candidates.length === 0) {
+    return {
+      ...state,
+      hints: [`No undiscovered ${INSIGHT_LABELS[insightType]} elements remain.`, ...state.hints].slice(0, 5),
+    };
+  }
+
+  const discoveredCounts = countDiscoveredByInsightType(
+    state.discoveredElements,
+    allElements(state),
+    state.categoryOverrides
+  );
+  const cost = getHintInsightCost(discoveredCounts[insightType]);
+  if (state.insight[insightType] < cost) {
+    return {
+      ...state,
+      hints: [
+        `Need ${cost.toFixed(1)} ${INSIGHT_LABELS[insightType]} Insight for a hint.`,
+        ...state.hints,
+      ].slice(0, 5),
+    };
+  }
+
+  const target = candidates[Math.floor(Math.random() * candidates.length)];
+  const recipes = allRecipes(state);
+  const hint = buildCategoryHintText(state, insightType, target, recipes);
+
+  return {
+    ...state,
+    insight: spendInsight(state.insight, insightType, cost),
+    hints: [hint, ...state.hints].slice(0, 5),
+    eventLog: [
+      ...state.eventLog,
+      `💡 Spent ${cost.toFixed(1)} ${INSIGHT_LABELS[insightType]} Insight for a hint.`,
+    ],
+  };
 }
 
 function removeElementIdsFromState(state: GameState, removedIds: Set<string>): GameState {
@@ -517,6 +655,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, favoriteElementIds: next };
     }
 
+    case 'TICK_INSIGHT': {
+      if (!state.bigBangDone) return state;
+      const gains = calculateInsightGainPerSecond(
+        state.discoveredElements,
+        allElements(state),
+        state.categoryOverrides
+      );
+      return {
+        ...state,
+        insight: applyInsightTick(state.insight, gains),
+      };
+    }
+
     case 'REQUEST_HINT': {
       const hint = generateHint(
         Array.from(state.discoveredElements),
@@ -524,6 +675,74 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         allElements(state)
       );
       return { ...state, hints: [hint, ...state.hints].slice(0, 5) };
+    }
+
+    case 'REQUEST_INSIGHT_HINT': {
+      return requestInsightHintForType(state, action.insightType);
+    }
+
+    case 'REQUEST_INSIGHT_HINT_AUTO': {
+      const discoveredCounts = countDiscoveredByInsightType(
+        state.discoveredElements,
+        allElements(state),
+        state.categoryOverrides
+      );
+
+      const preferredType = (Object.keys(state.insight) as InsightType[])
+        .filter((type) => getUndiscoveredElementsByInsightType(state, type).length > 0)
+        .filter((type) => state.insight[type] >= getHintInsightCost(discoveredCounts[type]))
+        .sort((a, b) => state.insight[b] - state.insight[a])[0];
+
+      if (!preferredType) {
+        return {
+          ...state,
+          hints: ['Not enough Insight to buy a hint yet. Keep building your world.'].concat(state.hints).slice(0, 5),
+        };
+      }
+
+      return requestInsightHintForType(state, preferredType);
+    }
+
+    case 'REQUEST_RANDOM_DISCOVERY': {
+      const candidates = getUndiscoveredElementsByInsightType(state, action.insightType);
+      if (candidates.length === 0) {
+        return {
+          ...state,
+          eventLog: [...state.eventLog, `🧭 No ${INSIGHT_LABELS[action.insightType]} discoveries remain to unlock.`],
+        };
+      }
+
+      const discoveredCounts = countDiscoveredByInsightType(
+        state.discoveredElements,
+        allElements(state),
+        state.categoryOverrides
+      );
+      const cost = getRandomDiscoveryInsightCost(discoveredCounts[action.insightType]);
+      if (state.insight[action.insightType] < cost) {
+        return {
+          ...state,
+          eventLog: [
+            ...state.eventLog,
+            `🧠 Need ${cost.toFixed(1)} ${INSIGHT_LABELS[action.insightType]} Insight for a random unlock.`,
+          ],
+        };
+      }
+
+      const picked = candidates[Math.floor(Math.random() * candidates.length)];
+      const discoveredState = discoverElementInState(state, picked.id);
+      return {
+        ...discoveredState,
+        insight: spendInsight(discoveredState.insight, action.insightType, cost),
+        eventLog: [
+          ...discoveredState.eventLog,
+          `🧬 Spent ${cost.toFixed(1)} ${INSIGHT_LABELS[action.insightType]} Insight to discover ${picked.name}.`,
+        ],
+        hints: [`Insight revealed a new ${INSIGHT_LABELS[action.insightType]} element: ${picked.name}.`, ...discoveredState.hints].slice(0, 5),
+      };
+    }
+
+    case 'DISCOVER_ELEMENT': {
+      return discoverElementInState(state, action.elementId);
     }
 
     case 'RESET_WORLD': {
@@ -557,6 +776,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         effectOverrides: loadedOverrides,
         attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
         favoriteElementIds: new Set(saved.favoriteElementIds ?? []),
+        insight: saved.insight ?? { ...EMPTY_INSIGHT },
         hints: saved.hints ?? ['Welcome back!'],
         selectedSlotA: null,
         selectedSlotB: null,
@@ -606,6 +826,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       saveGame(state);
     }
   }, [state]);
+
+  useEffect(() => {
+    if (!state.bigBangDone) return;
+    const timer = setInterval(() => {
+      dispatch({ type: 'TICK_INSIGHT' });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [state.bigBangDone]);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

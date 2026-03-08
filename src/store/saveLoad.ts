@@ -20,6 +20,7 @@ function serializeState(state: GameState): SerializableGameState {
     effectOverrides: state.effectOverrides,
     attemptedCombinations: Array.from(state.attemptedCombinations),
     favoriteElementIds: Array.from(state.favoriteElementIds),
+    insight: state.insight,
     hints: state.hints,
   };
 }

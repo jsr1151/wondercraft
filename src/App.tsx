@@ -1,3 +1,4 @@
+import type { InsightType } from './types';
 import { GameProvider } from './store/gameStore';
 import { useGame } from './store/useGame';
 import { BigBang } from './components/BigBang';
@@ -7,6 +8,7 @@ import { ElementCollection } from './components/ElementCollection';
 import { RecentDiscoveries } from './components/RecentDiscoveries';
 import { EventLog } from './components/EventLog';
 import { HintPanel } from './components/HintPanel';
+import { InsightPanel } from './components/InsightPanel';
 import { MasterRecipeLab } from './components/MasterRecipeLab';
 import { EmojiAtlas } from './components/EmojiAtlas';
 import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
@@ -36,7 +38,11 @@ function GameApp() {
       dispatch({ type: 'RESET_WORLD' });
     }
   };
-  const handleHint = () => dispatch({ type: 'REQUEST_HINT' });
+  const handleHint = () => dispatch({ type: 'REQUEST_INSIGHT_HINT_AUTO' });
+  const handleInsightHint = (insightType: InsightType) =>
+    dispatch({ type: 'REQUEST_INSIGHT_HINT', insightType });
+  const handleInsightRandomUnlock = (insightType: InsightType) =>
+    dispatch({ type: 'REQUEST_RANDOM_DISCOVERY', insightType });
 
   if (!state.bigBangDone) {
     return <BigBang onBigBang={handleBigBang} />;
@@ -53,7 +59,7 @@ function GameApp() {
           <span className="app-subtitle">Elements Discovered: {discoveredCount}</span>
         </div>
         <div className="app-controls">
-          <button className="btn-hint" onClick={handleHint}>💡 Hint</button>
+          <button className="btn-hint" onClick={handleHint}>💡 Insight Hint</button>
           <button className="btn-reset" onClick={handleReset}>🔄 Reset</button>
         </div>
       </header>
@@ -66,6 +72,13 @@ function GameApp() {
           />
           <CollapsiblePanel title="Hints" defaultOpen>
             <HintPanel hints={state.hints} />
+          </CollapsiblePanel>
+          <CollapsiblePanel title="Insight" defaultOpen>
+            <InsightPanel
+              insight={state.insight}
+              onRequestHint={handleInsightHint}
+              onRequestRandomDiscovery={handleInsightRandomUnlock}
+            />
           </CollapsiblePanel>
         </div>
         <div className="app-right">

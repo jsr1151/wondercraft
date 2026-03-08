@@ -13,6 +13,18 @@ export const DEFAULT_ELEMENT_CATEGORIES = [
 
 export type ElementCategory = string;
 
+export type InsightType =
+  | 'nature'
+  | 'life'
+  | 'civilization'
+  | 'technology'
+  | 'cosmic'
+  | 'materials'
+  | 'weird'
+  | 'warfare';
+
+export type InsightCurrency = Record<InsightType, number>;
+
 export interface WorldInfluence {
   water: number;
   brightness: number;
@@ -87,6 +99,7 @@ export interface GameState {
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: Set<string>;
   favoriteElementIds: Set<string>;
+  insight: InsightCurrency;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -115,6 +128,10 @@ export type GameAction =
   | { type: 'CLEAR_EFFECT_OVERRIDE'; elementId: string }
   | { type: 'DELETE_ELEMENT'; elementId: string }
   | { type: 'TOGGLE_FAVORITE'; elementId: string }
+  | { type: 'TICK_INSIGHT' }
+  | { type: 'REQUEST_INSIGHT_HINT'; insightType: InsightType }
+  | { type: 'REQUEST_INSIGHT_HINT_AUTO' }
+  | { type: 'REQUEST_RANDOM_DISCOVERY'; insightType: InsightType }
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
@@ -137,5 +154,6 @@ export interface SerializableGameState {
   effectOverrides: Record<string, WorldEffectMap>;
   attemptedCombinations: string[];
   favoriteElementIds: string[];
+  insight: InsightCurrency;
   hints: string[];
 }
