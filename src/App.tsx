@@ -69,6 +69,7 @@ function GameApp() {
           <PlanetCanvas
             worldInfluence={state.worldInfluence}
             seed={state.seed}
+            discoveredElements={state.discoveredElements}
           />
           <CollapsiblePanel title="Hints" defaultOpen>
             <HintPanel hints={state.hints} />
