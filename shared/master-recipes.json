@@ -1,6 +1,13 @@
 {
-  "updatedAt": 1772983132380,
+  "updatedAt": 1772983268767,
   "recipes": [
+    {
+      "id": "m_1772983268573_vtjo5v",
+      "inputA": "internet",
+      "inputB": "custom_oven",
+      "output": "custom_cookie",
+      "createdAt": 1772983268573
+    },
     {
       "id": "m_1772983132197_s0rnqk",
       "inputA": "custom_flood",
