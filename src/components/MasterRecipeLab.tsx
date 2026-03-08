@@ -389,7 +389,18 @@ export function MasterRecipeLab() {
     <section className="master-recipe-lab">
       <div className="master-recipe-header">
         <h3>🧪 Master Recipes</h3>
-        <span className="master-recipe-count">{state.masterRecipes.length} local / {state.sharedRecipes.length} global</span>
+        <div className="master-recipe-header-actions">
+          <span className="master-recipe-count">{state.masterRecipes.length} local / {state.sharedRecipes.length} global</span>
+          <button
+            type="button"
+            className="master-recipe-publish-all"
+            onClick={publishAllLocalRecipes}
+            disabled={saving || state.masterRecipes.length === 0}
+            title={publishGlobal ? 'Push all local recipes to the shared global file.' : 'Enable Publish globally first.'}
+          >
+            Publish all local recipes ({state.masterRecipes.length})
+          </button>
+        </div>
       </div>
 
       <p className="master-recipe-note">
@@ -526,15 +537,6 @@ export function MasterRecipeLab() {
             Once entered here, it stays saved in this browser.
           </p>
         )}
-        <button
-          type="button"
-          className="master-recipe-publish-all"
-          onClick={publishAllLocalRecipes}
-          disabled={saving || state.masterRecipes.length === 0}
-          title={publishGlobal ? 'Push all local recipes to the shared global file.' : 'Enable Publish globally first.'}
-        >
-          Publish all local recipes ({state.masterRecipes.length})
-        </button>
       </div>
 
       <datalist id="element-options">

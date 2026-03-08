@@ -12,6 +12,12 @@
   margin-bottom: 6px;
 }
 
+.master-recipe-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .master-recipe-count {
   color: var(--text-secondary);
   font-size: 0.8rem;
@@ -276,6 +282,16 @@
 }
 
 @media (max-width: 900px) {
+  .master-recipe-header {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .master-recipe-header-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   .master-recipe-form,
   .master-recipe-item {
     grid-template-columns: 1fr;
