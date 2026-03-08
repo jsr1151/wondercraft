@@ -6,6 +6,7 @@ interface PlanetCanvasProps {
   worldInfluence: WorldInfluence;
   seed: number;
   discoveredElements?: Set<string>;
+  emojiMap?: Record<string, string>;
 }
 
 interface SurfacePoint {
@@ -93,13 +94,42 @@ function strokeSphereBlob(
   ctx.stroke();
 }
 
-export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: PlanetCanvasProps) {
+/** Draw an emoji glyph on the sphere surface with shadow + depth fade */
+function drawEmoji(
+  ctx: CanvasRenderingContext2D,
+  emoji: string,
+  p: SurfacePoint,
+  baseSize: number,
+) {
+  if (!p.visible) return;
+  const size = baseSize * p.scale;
+  ctx.save();
+  ctx.globalAlpha = p.alpha;
+  // Drop shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 4 * p.scale;
+  ctx.shadowOffsetX = 1.5 * p.scale;
+  ctx.shadowOffsetY = 1.5 * p.scale;
+  ctx.font = `${size}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, p.x, p.y);
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.restore();
+}
+
+export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emojiMap }: PlanetCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const wiRef = useRef(wi);
   const discoveredRef = useRef(discoveredElements);
+  const emojiMapRef = useRef(emojiMap);
   wiRef.current = wi;
   discoveredRef.current = discoveredElements;
+  emojiMapRef.current = emojiMap;
 
   const waterLevel = toLevel(wi.water);
   const vegetationLevel = toLevel(wi.vegetation);
@@ -202,6 +232,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
     }));
 
     const has = (id: string) => !!discoveredRef.current?.has(id);
+    const emoji = (id: string) => emojiMapRef.current?.[id] ?? '';
 
     // ---------- DRAW LOOP ----------
     const draw = (t: number) => {
@@ -392,8 +423,9 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         }
       }
 
-      // Forest clusters — individual tree crowns
+      // Forest clusters — emoji trees or fallback crowns
       if (has('forest')) {
+        const treeEmoji = emoji('forest') || emoji('tree');
         for (let i = 7; i < 15; i++) {
           const fp = featurePositions[i];
           const p = projectToSphere(cx, cy, r * 0.97, fp.lon, fp.lat, phase);
@@ -402,99 +434,128 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
           // Dark understory blob
           ctx.fillStyle = `rgba(6, 38, 10, ${0.4 * p.alpha})`;
           fillSphereBlob(ctx, p, 12 + fp.size * 16, (12 + fp.size * 16) * 0.8, fp.blobSeed, 7);
-          // Individual tree crowns
-          const tRng = seededRandom(fp.blobSeed + 200);
-          const treeCount = 8 + Math.floor(fp.size * 12);
-          for (let j = 0; j < treeCount; j++) {
-            const ox = (tRng() - 0.5) * s * 1.4;
-            const oy = (tRng() - 0.5) * s;
-            const tr = (2 + tRng() * 4.5) * p.scale;
-            const g = 50 + Math.floor(tRng() * 100);
-            ctx.fillStyle = `rgba(${5 + Math.floor(tRng() * 20)}, ${g}, ${8 + Math.floor(tRng() * 18)}, ${(0.35 + tRng() * 0.3) * p.alpha})`;
-            ctx.beginPath();
-            ctx.arc(p.x + ox, p.y + oy, tr, 0, Math.PI * 2);
-            ctx.fill();
+          if (treeEmoji) {
+            // Scatter emoji trees across the cluster
+            const tRng = seededRandom(fp.blobSeed + 200);
+            const treeCount = 3 + Math.floor(fp.size * 5);
+            for (let j = 0; j < treeCount; j++) {
+              const ox = (tRng() - 0.5) * s * 1.2;
+              const oy = (tRng() - 0.5) * s * 0.8;
+              const tp: SurfacePoint = { ...p, x: p.x + ox, y: p.y + oy };
+              drawEmoji(ctx, treeEmoji, tp, 10 + fp.size * 6);
+            }
+          } else {
+            const tRng = seededRandom(fp.blobSeed + 200);
+            const treeCount = 8 + Math.floor(fp.size * 12);
+            for (let j = 0; j < treeCount; j++) {
+              const ox = (tRng() - 0.5) * s * 1.4;
+              const oy = (tRng() - 0.5) * s;
+              const tr = (2 + tRng() * 4.5) * p.scale;
+              const g = 50 + Math.floor(tRng() * 100);
+              ctx.fillStyle = `rgba(${5 + Math.floor(tRng() * 20)}, ${g}, ${8 + Math.floor(tRng() * 18)}, ${(0.35 + tRng() * 0.3) * p.alpha})`;
+              ctx.beginPath();
+              ctx.arc(p.x + ox, p.y + oy, tr, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.fillStyle = `rgba(60, 170, 70, ${0.12 * p.alpha})`;
+            const hp: SurfacePoint = { ...p, x: p.x - s * 0.2, y: p.y - s * 0.15 };
+            fillSphereBlob(ctx, hp, (12 + fp.size * 16) * 0.4, (12 + fp.size * 16) * 0.3, fp.blobSeed + 1, 5);
           }
-          // Highlight blob
-          ctx.fillStyle = `rgba(60, 170, 70, ${0.12 * p.alpha})`;
-          const hp: SurfacePoint = { ...p, x: p.x - s * 0.2, y: p.y - s * 0.15 };
-          fillSphereBlob(ctx, hp, (12 + fp.size * 16) * 0.4, (12 + fp.size * 16) * 0.3, fp.blobSeed + 1, 5);
         }
       }
 
-      // Mountain ranges with peaks and snow caps
+      // Mountain ranges — emoji or geometric peaks
       if (has('mountain')) {
+        const mtEmoji = emoji('mountain');
         for (let i = 15; i < 20; i++) {
           const fp = featurePositions[i];
           const p = projectToSphere(cx, cy, r * 0.97, fp.lon, fp.lat, phase);
           if (!p.visible) continue;
-          const s = (14 + fp.size * 16) * p.scale;
-          const mrng = seededRandom(fp.blobSeed);
-          const peakCount = 3 + Math.floor(mrng() * 2);
-          const rangeWidth = s * 2.5;
-          const startX = p.x - rangeWidth / 2;
-          // Mountain body
-          ctx.fillStyle = `rgba(95, 78, 55, ${0.55 * p.alpha})`;
-          ctx.beginPath();
-          ctx.moveTo(startX, p.y + s * 0.5);
-          for (let pk = 0; pk < peakCount; pk++) {
-            const px = startX + (pk + 0.5) * (rangeWidth / peakCount);
-            const peakH = s * (0.6 + mrng() * 0.5);
-            ctx.lineTo(px - s * 0.2, p.y + s * 0.1 * mrng());
-            ctx.lineTo(px, p.y - peakH);
-            ctx.lineTo(px + s * 0.2, p.y + s * 0.1 * mrng());
-          }
-          ctx.lineTo(startX + rangeWidth, p.y + s * 0.5);
-          ctx.closePath();
-          ctx.fill();
-          // Snow caps
-          ctx.fillStyle = `rgba(235, 245, 255, ${0.6 * p.alpha})`;
-          const mrng2 = seededRandom(fp.blobSeed);
-          for (let pk = 0; pk < peakCount; pk++) {
-            const px = startX + (pk + 0.5) * (rangeWidth / peakCount);
-            const peakH = s * (0.6 + mrng2() * 0.5);
-            mrng2(); mrng2();
-            const cap = s * 0.22;
+          if (mtEmoji) {
+            drawEmoji(ctx, mtEmoji, p, 22 + fp.size * 14);
+          } else {
+            const s = (14 + fp.size * 16) * p.scale;
+            const mrng = seededRandom(fp.blobSeed);
+            const peakCount = 3 + Math.floor(mrng() * 2);
+            const rangeWidth = s * 2.5;
+            const startX = p.x - rangeWidth / 2;
+            ctx.fillStyle = `rgba(95, 78, 55, ${0.55 * p.alpha})`;
             ctx.beginPath();
-            ctx.moveTo(px, p.y - peakH);
-            ctx.lineTo(px + cap * 0.35, p.y - peakH + cap);
-            ctx.lineTo(px - cap * 0.35, p.y - peakH + cap);
+            ctx.moveTo(startX, p.y + s * 0.5);
+            for (let pk = 0; pk < peakCount; pk++) {
+              const px = startX + (pk + 0.5) * (rangeWidth / peakCount);
+              const peakH = s * (0.6 + mrng() * 0.5);
+              ctx.lineTo(px - s * 0.2, p.y + s * 0.1 * mrng());
+              ctx.lineTo(px, p.y - peakH);
+              ctx.lineTo(px + s * 0.2, p.y + s * 0.1 * mrng());
+            }
+            ctx.lineTo(startX + rangeWidth, p.y + s * 0.5);
             ctx.closePath();
             ctx.fill();
+            ctx.fillStyle = `rgba(235, 245, 255, ${0.6 * p.alpha})`;
+            const mrng2 = seededRandom(fp.blobSeed);
+            for (let pk = 0; pk < peakCount; pk++) {
+              const px = startX + (pk + 0.5) * (rangeWidth / peakCount);
+              const peakH = s * (0.6 + mrng2() * 0.5);
+              mrng2(); mrng2();
+              const cap = s * 0.22;
+              ctx.beginPath();
+              ctx.moveTo(px, p.y - peakH);
+              ctx.lineTo(px + cap * 0.35, p.y - peakH + cap);
+              ctx.lineTo(px - cap * 0.35, p.y - peakH + cap);
+              ctx.closePath();
+              ctx.fill();
+            }
           }
         }
       }
 
-      // Volcanoes with animated lava
+      // Volcanoes — emoji or geometric with animated lava
       if (has('volcano')) {
+        const volEmoji = emoji('volcano');
         for (let i = 20; i < 23; i++) {
           const fp = featurePositions[i];
           const p = projectToSphere(cx, cy, r * 0.97, fp.lon, fp.lat, phase);
           if (!p.visible) continue;
-          const s = (10 + fp.size * 12) * p.scale;
-          ctx.fillStyle = `rgba(70, 45, 25, ${0.6 * p.alpha})`;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y - s);
-          ctx.lineTo(p.x + s * 0.9, p.y + s * 0.5);
-          ctx.lineTo(p.x - s * 0.9, p.y + s * 0.5);
-          ctx.closePath();
-          ctx.fill();
-          // Animated lava glow
-          const pulse = 0.4 + 0.6 * Math.sin(t * 0.003 + fp.lon);
-          ctx.fillStyle = `rgba(255, 70, 15, ${0.45 * pulse * p.alpha})`;
-          const lp: SurfacePoint = { ...p, y: p.y - s * 0.6 };
-          fillSphereBlob(ctx, lp, 10 + fp.size * 12, (10 + fp.size * 12) * 0.6, fp.blobSeed, 5);
+          if (volEmoji) {
+            // Lava glow behind emoji
+            const pulse = 0.4 + 0.6 * Math.sin(t * 0.003 + fp.lon);
+            const glowR = (16 + fp.size * 10) * p.scale;
+            const glow = ctx.createRadialGradient(p.x, p.y - glowR * 0.3, 0, p.x, p.y, glowR);
+            glow.addColorStop(0, `rgba(255, 80, 20, ${0.35 * pulse * p.alpha})`);
+            glow.addColorStop(1, 'rgba(255, 40, 0, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath(); ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2); ctx.fill();
+            drawEmoji(ctx, volEmoji, p, 22 + fp.size * 12);
+          } else {
+            const s = (10 + fp.size * 12) * p.scale;
+            ctx.fillStyle = `rgba(70, 45, 25, ${0.6 * p.alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y - s);
+            ctx.lineTo(p.x + s * 0.9, p.y + s * 0.5);
+            ctx.lineTo(p.x - s * 0.9, p.y + s * 0.5);
+            ctx.closePath();
+            ctx.fill();
+            const pulse = 0.4 + 0.6 * Math.sin(t * 0.003 + fp.lon);
+            ctx.fillStyle = `rgba(255, 70, 15, ${0.45 * pulse * p.alpha})`;
+            const lp: SurfacePoint = { ...p, y: p.y - s * 0.6 };
+            fillSphereBlob(ctx, lp, 10 + fp.size * 12, (10 + fp.size * 12) * 0.6, fp.blobSeed, 5);
+          }
         }
       }
 
-      // Deserts
+      // Deserts — blob base + optional emoji cactus
       if (has('desert')) {
+        const desertEmoji = emoji('desert');
         for (let i = 23; i < 27; i++) {
           const fp = featurePositions[i];
           const p = projectToSphere(cx, cy, r * 0.97, fp.lon, fp.lat, phase);
           if (!p.visible) continue;
           ctx.fillStyle = `rgba(215, 185, 115, ${0.4 * p.alpha})`;
           fillSphereBlob(ctx, p, 14 + fp.size * 18, (14 + fp.size * 18) * 0.55, fp.blobSeed, 8);
+          if (desertEmoji) {
+            drawEmoji(ctx, desertEmoji, p, 16 + fp.size * 8);
+          }
         }
       }
 
@@ -568,122 +629,35 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements }: P
         }
       }
 
-      // === LANDMARKS ===
-      const drawLandmark = (idx: number, drawFn: (x: number, y: number, s: number, a: number) => void) => {
+      // === LANDMARKS (emoji-based with glow effects) ===
+      const drawLandmarkEmoji = (idx: number, elementId: string, fallbackEmoji: string, baseSize: number, glowRgb?: string) => {
         const lp = landmarkPositions[idx % landmarkPositions.length];
         const p = projectToSphere(cx, cy, r * 0.96, lp.lon, lp.lat, phase);
         if (!p.visible) return;
-        drawFn(p.x, p.y, p.scale, p.alpha);
+        const e = emoji(elementId) || fallbackEmoji;
+        if (glowRgb) {
+          const gr = baseSize * 0.6 * p.scale;
+          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, gr);
+          glow.addColorStop(0, `rgba(${glowRgb}, ${0.3 * p.alpha})`);
+          glow.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath(); ctx.arc(p.x, p.y, gr, 0, Math.PI * 2); ctx.fill();
+        }
+        drawEmoji(ctx, e, p, baseSize);
       };
 
-      // Castle
-      if (has('castle')) {
-        const tier = has('kingdom') ? (has('city') ? 2 : 1) : 0;
-        drawLandmark(0, (lx, ly, sc, al) => {
-          const s = (14 + tier * 6) * sc;
-          ctx.fillStyle = `rgba(175, 152, 110, ${0.95 * al})`;
-          ctx.fillRect(lx - s, ly - s * 0.5, s * 2, s);
-          ctx.fillRect(lx - s, ly - s * 1.3, s * 0.45, s * 0.9);
-          ctx.fillRect(lx + s * 0.55, ly - s * 1.3, s * 0.45, s * 0.9);
-          if (tier >= 1) {
-            ctx.fillRect(lx - s * 0.22, ly - s * 1.6, s * 0.44, s * 1.1);
-            ctx.fillStyle = `rgba(210, 50, 50, ${0.9 * al})`;
-            ctx.fillRect(lx + s * 0.22, ly - s * 1.6, s * 0.35, s * 0.3);
-          }
-          if (tier >= 2) {
-            ctx.strokeStyle = `rgba(145, 122, 88, ${0.8 * al})`;
-            ctx.lineWidth = 2 * sc;
-            ctx.strokeRect(lx - s * 1.5, ly - s * 0.35, s * 3, s * 1.3);
-          }
-        });
-      }
-
-      // Pyramid
-      if (has('pyramid')) {
-        drawLandmark(1, (lx, ly, sc, al) => {
-          const s = 22 * sc;
-          ctx.fillStyle = `rgba(218, 198, 130, ${0.9 * al})`;
-          ctx.beginPath(); ctx.moveTo(lx, ly - s); ctx.lineTo(lx + s, ly + s * 0.5); ctx.lineTo(lx - s, ly + s * 0.5); ctx.closePath(); ctx.fill();
-          ctx.fillStyle = `rgba(205, 185, 115, ${0.7 * al})`;
-          ctx.beginPath(); ctx.moveTo(lx + s * 1.2, ly - s * 0.5); ctx.lineTo(lx + s * 1.8, ly + s * 0.5); ctx.lineTo(lx + s * 0.6, ly + s * 0.5); ctx.closePath(); ctx.fill();
-        });
-      }
-
-      // Airport
-      if (has('airplane')) {
-        drawLandmark(4, (lx, ly, sc, al) => {
-          const s = sc;
-          ctx.fillStyle = `rgba(75, 75, 88, ${0.85 * al})`;
-          ctx.fillRect(lx - 28 * s, ly - 3 * s, 56 * s, 6 * s);
-          ctx.strokeStyle = `rgba(255, 255, 255, ${0.55 * al})`;
-          ctx.lineWidth = 1 * s;
-          ctx.setLineDash([4 * s, 4 * s]);
-          ctx.beginPath(); ctx.moveTo(lx - 24 * s, ly); ctx.lineTo(lx + 24 * s, ly); ctx.stroke();
-          ctx.setLineDash([]);
-          ctx.fillStyle = `rgba(155, 155, 165, ${0.7 * al})`;
-          ctx.fillRect(lx - 8 * s, ly + 5 * s, 16 * s, 8 * s);
-        });
-      }
-
-      // Rocket
-      if (has('rocket')) {
-        drawLandmark(5, (lx, ly, sc, al) => {
-          const s = sc;
-          ctx.fillStyle = `rgba(100, 100, 112, ${0.85 * al})`;
-          ctx.beginPath(); ctx.arc(lx, ly, 11 * s, 0, Math.PI * 2); ctx.fill();
-          ctx.fillStyle = `rgba(215, 215, 225, ${0.95 * al})`;
-          ctx.fillRect(lx - 2.5 * s, ly - 18 * s, 5 * s, 16 * s);
-          const fp = 0.4 + 0.6 * Math.sin(t * 0.005);
-          ctx.fillStyle = `rgba(255, 140, 30, ${0.6 * fp * al})`;
-          ctx.beginPath(); ctx.moveTo(lx - 4 * s, ly - 2 * s); ctx.lineTo(lx + 4 * s, ly - 2 * s); ctx.lineTo(lx, ly + 6 * s); ctx.closePath(); ctx.fill();
-        });
-      }
-
-      // Village
-      if (has('village')) {
-        drawLandmark(6, (lx, ly, sc, al) => {
-          const s = 12 * sc;
-          ctx.fillStyle = `rgba(190, 160, 118, ${0.95 * al})`;
-          ctx.fillRect(lx - s * 0.6, ly - s * 0.15, s * 1.2, s * 0.7);
-          ctx.fillStyle = `rgba(170, 55, 35, ${0.9 * al})`;
-          ctx.beginPath(); ctx.moveTo(lx, ly - s * 0.7); ctx.lineTo(lx + s * 0.8, ly - s * 0.15); ctx.lineTo(lx - s * 0.8, ly - s * 0.15); ctx.closePath(); ctx.fill();
-        });
-      }
-
-      // City skyline
-      if (has('city')) {
-        drawLandmark(7, (lx, ly, sc, al) => {
-          const s = 16 * sc;
-          ctx.fillStyle = `rgba(105, 115, 132, ${0.9 * al})`;
-          ctx.fillRect(lx - s, ly - s * 1.2, s * 0.35, s * 1.5);
-          ctx.fillRect(lx - s * 0.35, ly - s * 0.8, s * 0.3, s * 1.1);
-          ctx.fillRect(lx + s * 0.1, ly - s * 1.6, s * 0.28, s * 1.9);
-          ctx.fillRect(lx + s * 0.5, ly - s * 0.6, s * 0.4, s * 0.9);
-          // Windows
-          ctx.fillStyle = `rgba(255, 240, 120, ${0.65 * al})`;
-          const wr = seededRandom(seed + 888);
-          for (let ww = 0; ww < 12; ww++) {
-            ctx.fillRect(lx - s + wr() * s * 1.8, ly - s * 1.4 + wr() * s * 1.6, 1.5 * sc, 1.5 * sc);
-          }
-        });
-      }
-
-      // Bridge
-      if (has('bridge')) {
-        drawLandmark(9, (lx, ly, sc, al) => {
-          const s = sc;
-          ctx.fillStyle = `rgba(155, 155, 150, ${0.9 * al})`;
-          ctx.fillRect(lx - 22 * s, ly - 2 * s, 44 * s, 5 * s);
-          ctx.fillRect(lx - 20 * s, ly - 9 * s, 4 * s, 9 * s);
-          ctx.fillRect(lx + 16 * s, ly - 9 * s, 4 * s, 9 * s);
-          ctx.fillRect(lx - 2 * s, ly - 7 * s, 4 * s, 7 * s);
-          ctx.strokeStyle = `rgba(130, 130, 125, ${0.6 * al})`;
-          ctx.lineWidth = 0.8 * s;
-          ctx.beginPath();
-          ctx.moveTo(lx - 18 * s, ly - 9 * s); ctx.quadraticCurveTo(lx, ly - 3 * s, lx + 18 * s, ly - 9 * s);
-          ctx.stroke();
-        });
-      }
+      if (has('castle'))   drawLandmarkEmoji(0, 'castle', '🏰', 28, '175,152,110');
+      if (has('pyramid'))  drawLandmarkEmoji(1, 'pyramid', '🔺', 26, '218,198,130');
+      if (has('airplane')) drawLandmarkEmoji(4, 'airplane', '✈️', 22, '120,130,150');
+      if (has('rocket'))   drawLandmarkEmoji(5, 'rocket', '🚀', 24, '255,140,30');
+      if (has('village'))  drawLandmarkEmoji(6, 'village', '🏘️', 24, '190,160,118');
+      if (has('city'))     drawLandmarkEmoji(7, 'city', '🏙️', 28, '105,115,132');
+      if (has('bridge'))   drawLandmarkEmoji(9, 'bridge', '🌉', 24, '155,155,150');
+      if (has('lighthouse')) drawLandmarkEmoji(2, 'lighthouse', '🗼', 22, '255,240,140');
+      if (has('hospital'))   drawLandmarkEmoji(3, 'hospital', '🏥', 22, '255,100,100');
+      if (has('school'))     drawLandmarkEmoji(8, 'school', '🏫', 22, '150,120,90');
+      if (has('factory'))    drawLandmarkEmoji(10, 'factory', '🏭', 24, '100,100,110');
+      if (has('windmill'))   drawLandmarkEmoji(11, 'windmill', '🌬️', 22, '150,200,255');
 
       // === DAY/NIGHT TERMINATOR ===
       const terminator = phase + Math.PI * 0.72;

@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import type { InsightType } from './types';
 import { GameProvider } from './store/gameStore';
 import { useGame } from './store/useGame';
 import { BigBang } from './components/BigBang';
 import { PlanetCanvas } from './components/PlanetCanvas';
+import { ELEMENTS } from './data/elements';
 import { CraftingArea } from './components/CraftingArea';
 import { ElementCollection } from './components/ElementCollection';
 import { RecentDiscoveries } from './components/RecentDiscoveries';
@@ -44,6 +46,24 @@ function GameApp() {
   const handleInsightRandomUnlock = (insightType: InsightType) =>
     dispatch({ type: 'REQUEST_RANDOM_DISCOVERY', insightType });
 
+  // Build element-id → emoji lookup for planet rendering
+  const emojiMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const el of ELEMENTS) {
+      if (el.emoji) map[el.id] = el.emoji;
+    }
+    for (const el of state.customElements) {
+      if (el.emoji) map[el.id] = el.emoji;
+    }
+    // Icon overrides win (skip image data URIs)
+    for (const [id, icon] of Object.entries(state.iconOverrides)) {
+      if (icon && !icon.startsWith('data:') && !icon.startsWith('http')) {
+        map[id] = icon;
+      }
+    }
+    return map;
+  }, [state.customElements, state.iconOverrides]);
+
   if (!state.bigBangDone) {
     return <BigBang onBigBang={handleBigBang} />;
   }
@@ -70,6 +90,7 @@ function GameApp() {
             worldInfluence={state.worldInfluence}
             seed={state.seed}
             discoveredElements={state.discoveredElements}
+            emojiMap={emojiMap}
           />
           <CollapsiblePanel title="Hints" defaultOpen>
             <HintPanel hints={state.hints} />
