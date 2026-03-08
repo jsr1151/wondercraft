@@ -10,6 +10,31 @@
   pointer-events: auto;
 }
 
+.element-export-sidebar {
+  position: fixed;
+  top: 134px;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  transition: transform 0.2s ease;
+  width: fit-content;
+  pointer-events: auto;
+}
+
+.element-export-sidebar.closed {
+  transform: translateX(calc(100% - 82px));
+  pointer-events: none;
+}
+
+.element-export-sidebar.open {
+  transform: translateX(0);
+}
+
+.element-export-sidebar.closed .element-export-toggle {
+  pointer-events: auto;
+}
+
 .untried-sidebar.closed {
   transform: translateX(calc(100% - 72px));
   pointer-events: none;
@@ -33,6 +58,16 @@
   pointer-events: auto;
 }
 
+.element-export-toggle {
+  background: #61b0ff;
+  color: #101828;
+  font-weight: 700;
+  border-radius: 8px 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(97, 176, 255, 0.7);
+  pointer-events: auto;
+}
+
 .untried-content {
   width: min(340px, 82vw);
   max-height: 72vh;
@@ -43,6 +78,56 @@
   border-radius: 8px 0 0 8px;
   padding: 10px;
   pointer-events: auto;
+}
+
+.element-export-content {
+  width: min(360px, 84vw);
+  max-height: 72vh;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  padding: 10px;
+  pointer-events: auto;
+}
+
+.element-export-download {
+  margin-top: 6px;
+  border: 1px solid #61b0ff;
+  background: rgba(97, 176, 255, 0.2);
+  color: var(--text-primary);
+  border-radius: 7px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 6px 10px;
+}
+
+.element-export-list {
+  margin-top: 8px;
+  max-height: 56vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.element-export-item {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 7px;
+  font-size: 0.76rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.element-export-id {
+  color: var(--text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.72rem;
 }
 
 .untried-meta {
