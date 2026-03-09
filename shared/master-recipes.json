@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1773081927020,
+  "updatedAt": 1773081106590,
   "recipes": [
     {
       "id": "m_1773076094646_kgltpw",
@@ -89,6 +89,17 @@
       "createdAt": 1773076200598,
       "outputWorldEffects": {
         "water": 2
+      }
+    },
+    {
+      "id": "m_1773076375208_ihcvwl",
+      "inputA": "air",
+      "inputB": "air",
+      "output": "atmosphere",
+      "createdAt": 1773076375208,
+      "outputWorldEffects": {
+        "atmosphere": 3,
+        "life": 1
       }
     },
     {
@@ -759,6 +770,16 @@
       }
     },
     {
+      "id": "m_1772921279500_ujjv9m",
+      "inputA": "plant",
+      "inputB": "earth",
+      "output": "tree",
+      "createdAt": 1772921279500,
+      "outputWorldEffects": {
+        "vegetation": 3
+      }
+    },
+    {
       "id": "m_1772921378105_crphg0",
       "inputA": "tree",
       "inputB": "tool",
@@ -793,11 +814,28 @@
       }
     },
     {
+      "id": "m_1772921743099_fdyclw",
+      "inputA": "fire",
+      "inputB": "stone",
+      "output": "lava",
+      "createdAt": 1772921743099,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
       "id": "m_1772921922883_oi6pyn",
       "inputA": "mountain",
       "inputB": "tool",
       "output": "custom_ore",
       "createdAt": 1772921922883
+    },
+    {
+      "id": "m_1772922050222_4yybgj",
+      "inputA": "earth",
+      "inputB": "fire_pit",
+      "output": "custom_kiln",
+      "createdAt": 1772922050222
     },
     {
       "id": "m_1772922105524_kaedz5",
@@ -1006,6 +1044,23 @@
       "createdAt": 1772929256662
     },
     {
+      "id": "m_1772929319328_6mldbn",
+      "inputA": "tree",
+      "inputB": "fire",
+      "output": "custom_charcoal",
+      "createdAt": 1772929319328
+    },
+    {
+      "id": "m_1772929398026_y6vwbw",
+      "inputA": "human",
+      "inputB": "internet",
+      "output": "custom_social_media",
+      "createdAt": 1772929398026,
+      "outputWorldEffects": {
+        "ruin": 3
+      }
+    },
+    {
       "id": "m_1772929588046_3a0io0",
       "inputA": "custom_wood",
       "inputB": "tool",
@@ -1039,6 +1094,13 @@
       "inputB": "human",
       "output": "knowledge",
       "createdAt": 1772930307904
+    },
+    {
+      "id": "m_1772930388990_nervga",
+      "inputA": "human",
+      "inputB": "knowledge",
+      "output": "custom_scientist",
+      "createdAt": 1772930388990
     },
     {
       "id": "m_1772930433129_8bco27",
@@ -1103,6 +1165,13 @@
       "createdAt": 1772931334614
     },
     {
+      "id": "m_1772931411750_wvld0g",
+      "inputA": "life",
+      "inputB": "medicine",
+      "output": "custom_health",
+      "createdAt": 1772931411750
+    },
+    {
       "id": "m_1772931427279_wjm9w9",
       "inputA": "life",
       "inputB": "metal",
@@ -1129,6 +1198,23 @@
       "inputB": "obsidian",
       "output": "custom_dragon_egg",
       "createdAt": 1772931656383
+    },
+    {
+      "id": "m_1772931687831_tqlz8m",
+      "inputA": "life",
+      "inputB": "plant",
+      "output": "flower",
+      "createdAt": 1772931687831,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772931699874_00tt96",
+      "inputA": "life",
+      "inputB": "ocean",
+      "output": "custom_frog",
+      "createdAt": 1772931699874
     },
     {
       "id": "m_1772931716542_vo0m27",
@@ -1241,6 +1327,16 @@
       "createdAt": 1772932327117
     },
     {
+      "id": "m_1772932365072_ipt58n",
+      "inputA": "life",
+      "inputB": "water",
+      "output": "fish",
+      "createdAt": 1772932365072,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
       "id": "m_1772932439530_j1nw6z",
       "inputA": "life",
       "inputB": "wheel",
@@ -1286,11 +1382,28 @@
       "createdAt": 1772933350874
     },
     {
+      "id": "m_1772933441594_j4gkj0",
+      "inputA": "flower",
+      "inputB": "plant",
+      "output": "custom_garden",
+      "createdAt": 1772933441594,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
       "id": "m_1772933482546_sdopas",
       "inputA": "flower",
       "inputB": "tool",
       "output": "custom_bouquet",
       "createdAt": 1772933482546
+    },
+    {
+      "id": "m_1772934024383_6cezat",
+      "inputA": "fish",
+      "inputB": "earth",
+      "output": "custom_fossil",
+      "createdAt": 1772934024384
     },
     {
       "id": "m_1772934039381_dfk98t",
@@ -1309,6 +1422,13 @@
       "inputB": "fire",
       "output": "custom_cooked_fish",
       "createdAt": 1772934168764
+    },
+    {
+      "id": "m_1772934226207_w5ukfc",
+      "inputA": "fish",
+      "inputB": "ocean",
+      "output": "custom_goldfish",
+      "createdAt": 1772934226207
     },
     {
       "id": "m_1772934269216_mjk0d8",
@@ -1364,11 +1484,25 @@
       "createdAt": 1772935238259
     },
     {
+      "id": "m_1772935319303_g8d361",
+      "inputA": "metal",
+      "inputB": "metal",
+      "output": "custom_alloy",
+      "createdAt": 1772935319303
+    },
+    {
       "id": "m_1772935386965_yo1kws",
       "inputA": "metal",
       "inputB": "tool",
       "output": "custom_weapon",
       "createdAt": 1772935386965
+    },
+    {
+      "id": "m_1772935447538_25odf9",
+      "inputA": "metal",
+      "inputB": "wheel",
+      "output": "custom_car",
+      "createdAt": 1772935447538
     },
     {
       "id": "m_1772935520168_nf0ucn",
@@ -1379,6 +1513,16 @@
       "outputWorldEffects": {
         "water": 2,
         "life": 1
+      }
+    },
+    {
+      "id": "m_1772935601540_3qpja7",
+      "inputA": "mud",
+      "inputB": "steam",
+      "output": "clay",
+      "createdAt": 1772935601540,
+      "outputWorldEffects": {
+        "earthy": 1
       }
     },
     {
@@ -1458,11 +1602,39 @@
       "createdAt": 1772935980139
     },
     {
+      "id": "m_1772936040016_dszak7",
+      "inputA": "clay",
+      "inputB": "stone",
+      "output": "custom_statue",
+      "createdAt": 1772936040016
+    },
+    {
       "id": "m_1772936096286_yurva8",
       "inputA": "clay",
       "inputB": "tool",
       "output": "custom_pottery",
       "createdAt": 1772936096286
+    },
+    {
+      "id": "m_1772936217038_fbcwwx",
+      "inputA": "plant",
+      "inputB": "plant",
+      "output": "custom_garden",
+      "createdAt": 1772936217038,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772936259330_hnjeuq",
+      "inputA": "plant",
+      "inputB": "ocean",
+      "output": "custom_lily_pad",
+      "createdAt": 1772936259330,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
     },
     {
       "id": "m_1772936293486_263vas",
@@ -1472,6 +1644,17 @@
       "createdAt": 1772936293486,
       "outputWorldEffects": {
         "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772936375099_vzjn3u",
+      "inputA": "plant",
+      "inputB": "water",
+      "output": "custom_algae",
+      "createdAt": 1772936375099,
+      "outputWorldEffects": {
+        "water": 2,
+        "vegetation": 2
       }
     },
     {
@@ -1551,11 +1734,38 @@
       }
     },
     {
+      "id": "m_1772936946843_vm4qde",
+      "inputA": "forest",
+      "inputB": "rain",
+      "output": "custom_rainforest",
+      "createdAt": 1772936946843,
+      "outputWorldEffects": {
+        "water": 1
+      }
+    },
+    {
       "id": "m_1772936998579_dceuy3",
       "inputA": "forest",
       "inputB": "tool",
       "output": "custom_chainsaw",
       "createdAt": 1772936998579
+    },
+    {
+      "id": "m_1772937234053_2n1o34",
+      "inputA": "ocean",
+      "inputB": "storm",
+      "output": "custom_flood",
+      "createdAt": 1772937234053
+    },
+    {
+      "id": "m_1772937300892_vtxgz8",
+      "inputA": "ocean",
+      "inputB": "sun",
+      "output": "rainbow",
+      "createdAt": 1772937300892,
+      "outputWorldEffects": {
+        "magic": 1
+      }
     },
     {
       "id": "m_1772937351518_ly4ddb",
@@ -1572,6 +1782,16 @@
       "createdAt": 1772937363518,
       "outputWorldEffects": {
         "water": 2
+      }
+    },
+    {
+      "id": "m_1772937454482_cvv3c5",
+      "inputA": "rain",
+      "inputB": "seed",
+      "output": "plant",
+      "createdAt": 1772937454482,
+      "outputWorldEffects": {
+        "vegetation": 2
       }
     },
     {
@@ -1607,6 +1827,13 @@
       "outputWorldEffects": {
         "civilization": 1
       }
+    },
+    {
+      "id": "m_1772937621851_kxseol",
+      "inputA": "river",
+      "inputB": "water",
+      "output": "custom_flood",
+      "createdAt": 1772937621851
     },
     {
       "id": "m_1772937735814_nriehx",
@@ -1714,6 +1941,13 @@
       }
     },
     {
+      "id": "m_1772940185630_tdpagd",
+      "inputA": "water",
+      "inputB": "water",
+      "output": "custom_puddle",
+      "createdAt": 1772940185630
+    },
+    {
       "id": "m_1772940241498_4l3bf4",
       "inputA": "desert",
       "inputB": "electricity",
@@ -1736,6 +1970,17 @@
       }
     },
     {
+      "id": "m_1772940335991_q55pma",
+      "inputA": "desert",
+      "inputB": "rain",
+      "output": "custom_oasis",
+      "createdAt": 1772940335991,
+      "outputWorldEffects": {
+        "water": 2,
+        "heat": 2
+      }
+    },
+    {
       "id": "m_1772940443923_jtj9v1",
       "inputA": "desert",
       "inputB": "tool",
@@ -1751,6 +1996,13 @@
       "outputWorldEffects": {
         "life": 1
       }
+    },
+    {
+      "id": "m_1772940891995_nb1u09",
+      "inputA": "air",
+      "inputB": "engine",
+      "output": "custom_propeller",
+      "createdAt": 1772940891995
     },
     {
       "id": "m_1772940971579_23aahr",
@@ -1852,6 +2104,17 @@
       "inputB": "engine",
       "output": "custom_machine",
       "createdAt": 1772941545761
+    },
+    {
+      "id": "m_1772941611343_sycp7m",
+      "inputA": "engine",
+      "inputB": "fire",
+      "output": "custom_explosion",
+      "createdAt": 1772941611343,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      }
     },
     {
       "id": "m_1772941663154_ze9e3a",
@@ -2191,6 +2454,16 @@
       "createdAt": 1772943468541
     },
     {
+      "id": "m_1772943651772_ftxmcj",
+      "inputA": "computer",
+      "inputB": "rocket",
+      "output": "custom_space_ship",
+      "createdAt": 1772943651772,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
       "id": "m_1772943698271_jjkbsy",
       "inputA": "electricity",
       "inputB": "rocket",
@@ -2243,6 +2516,13 @@
       "inputB": "life",
       "output": "custom_worker",
       "createdAt": 1772944330359
+    },
+    {
+      "id": "m_1772944354088_f8fc79",
+      "inputA": "factory",
+      "inputB": "robot",
+      "output": "custom_machine",
+      "createdAt": 1772944354088
     },
     {
       "id": "m_1772944364296_qx5wtd",
@@ -2315,6 +2595,13 @@
       }
     },
     {
+      "id": "m_1772944987613_tfwykx",
+      "inputA": "stone",
+      "inputB": "stone",
+      "output": "custom_boulder",
+      "createdAt": 1772944987613
+    },
+    {
       "id": "m_1772944999226_s9w0z1",
       "inputA": "stone",
       "inputB": "tool",
@@ -2322,11 +2609,31 @@
       "createdAt": 1772944999226
     },
     {
+      "id": "m_1772945008344_4hme2g",
+      "inputA": "stone",
+      "inputB": "water",
+      "output": "sand",
+      "createdAt": 1772945008344,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
       "id": "m_1772945022672_lvfp4p",
       "inputA": "storm",
       "inputB": "tool",
       "output": "custom_tesla_coil",
       "createdAt": 1772945022672
+    },
+    {
+      "id": "m_1772945030074_cv7189",
+      "inputA": "sun",
+      "inputB": "water",
+      "output": "rainbow",
+      "createdAt": 1772945030074,
+      "outputWorldEffects": {
+        "magic": 1
+      }
     },
     {
       "id": "m_1772945080405_ggl4m1",
@@ -2557,6 +2864,13 @@
       }
     },
     {
+      "id": "m_1772904972912_oltbw6",
+      "inputA": "animal",
+      "inputB": "rain",
+      "output": "custom_frog",
+      "createdAt": 1772904972912
+    },
+    {
       "id": "m_1772905049785_wbytih",
       "inputA": "animal",
       "inputB": "tool",
@@ -2566,6 +2880,24 @@
         "civilization": 2,
         "life": 2
       }
+    },
+    {
+      "id": "m_1772905170337_8l9kkm",
+      "inputA": "human",
+      "inputB": "earth",
+      "output": "custom_farmer",
+      "createdAt": 1772905170337,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772905248698_m04d5v",
+      "inputA": "human",
+      "inputB": "electricity",
+      "output": "energy",
+      "createdAt": 1772905248698
     },
     {
       "id": "m_1772905322590_t448wo",
@@ -2778,11 +3110,25 @@
       }
     },
     {
+      "id": "m_1772913017508_9chgsz",
+      "inputA": "computer",
+      "inputB": "human",
+      "output": "custom_nerd",
+      "createdAt": 1772913017508
+    },
+    {
       "id": "m_1772913107245_mfgf50",
       "inputA": "computer",
       "inputB": "life",
       "output": "custom_cyborg",
       "createdAt": 1772913107245
+    },
+    {
+      "id": "m_1772913194420_dbu5k7",
+      "inputA": "computer",
+      "inputB": "robot",
+      "output": "custom_artificial_intelligence",
+      "createdAt": 1772913194420
     },
     {
       "id": "m_1772915704126_f0kuxu",
@@ -2817,6 +3163,17 @@
       "createdAt": 1772915835951,
       "outputWorldEffects": {
         "technology": 1
+      }
+    },
+    {
+      "id": "m_1772916110846_liif7l",
+      "inputA": "fire",
+      "inputB": "human",
+      "output": "custom_firefighter",
+      "createdAt": 1772916110846,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
       }
     },
     {
@@ -2908,11 +3265,39 @@
       "createdAt": 1772916864130
     },
     {
+      "id": "m_1772918500242_d6lhto",
+      "inputA": "human",
+      "inputB": "plant",
+      "output": "custom_gardener",
+      "createdAt": 1772918500242
+    },
+    {
+      "id": "m_1772918563819_rc531i",
+      "inputA": "human",
+      "inputB": "stone",
+      "output": "tool",
+      "createdAt": 1772918563819
+    },
+    {
+      "id": "m_1772918580387_84h1ev",
+      "inputA": "human",
+      "inputB": "tool",
+      "output": "wheel",
+      "createdAt": 1772918580387
+    },
+    {
       "id": "m_1772918693372_iegaxt",
       "inputA": "fire",
       "inputB": "wheel",
       "output": "custom_hotwheels",
       "createdAt": 1772918693372
+    },
+    {
+      "id": "m_1772918788662_93dwqp",
+      "inputA": "human",
+      "inputB": "water",
+      "output": "custom_swimmer",
+      "createdAt": 1772918788662
     },
     {
       "id": "m_1772918927308_cfmlqc",
@@ -2947,6 +3332,13 @@
       "outputWorldEffects": {
         "life": 5
       }
+    },
+    {
+      "id": "m_1772920842401_insvvc",
+      "inputA": "boat",
+      "inputB": "stone",
+      "output": "custom_titanic",
+      "createdAt": 1772920842401
     },
     {
       "id": "m_1772920985127_cmy1e3",
