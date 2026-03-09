@@ -155,7 +155,18 @@ export function MasterRecipeLab() {
   const setOutputAndDraft = (value: string) => {
     setOutput(value);
     const outputId = lookupElementId(value);
-    if (!outputId) return;
+    if (!outputId) {
+      // Clear auto-populated fields so stale values from a previous partial
+      // match (e.g. "Mountain") don't persist when the user keeps typing
+      // (e.g. "Mountain Range").
+      setOutputIcon('');
+      setOutputName('');
+      setOutputDescription('');
+      setOutputCategory('');
+      setOutputActsAs('');
+      setAttrDraft(buildAttrDraft());
+      return;
+    }
     const baseElement = allElements.find((element) => element.id === outputId);
     if (!baseElement) return;
     setOutputIcon(resolveElementIconRaw(baseElement, state.iconOverrides));
@@ -295,6 +306,19 @@ export function MasterRecipeLab() {
       // explicitly types its base name, treat it as a request for a distinct new element.
       if (typedOutput === baseName && hasConflictingNameOverride) {
         outputId = undefined;
+      }
+    }
+
+    // Safeguard: prevent creating a new element with a name identical to an existing one.
+    if (!outputId) {
+      const duplicateName = outputDisplayName.trim().toLowerCase();
+      const existingWithSameName = allElements.find((element) => {
+        const displayName = resolveElementName(element, state.nameOverrides).trim().toLowerCase();
+        return element.name.trim().toLowerCase() === duplicateName || displayName === duplicateName;
+      });
+      if (existingWithSameName) {
+        setStatus(`An element named "${outputDisplayName}" already exists. Use its exact name to reference it, or choose a different name.`);
+        return;
       }
     }
 

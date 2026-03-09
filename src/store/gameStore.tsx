@@ -908,45 +908,12 @@ function recoverLostElements(state: GameState): GameState {
   }
 
   const nextCustom = [...state.customElements, ...newCustom];
-  const allEls = [...ELEMENTS, ...nextCustom];
-
-  // Recover discoveries across ALL planets
-  const nextPlanets = state.planets.map((planet) => {
-    if (!planet.bigBangDone) return planet;
-
-    const discovered = new Set(planet.discoveredElements);
-    for (const pid of PRIMORDIAL_ELEMENTS) discovered.add(pid);
-
-    // Transitive pass: discover all outputs whose inputs are both discovered
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const r of allRec) {
-        if (discovered.has(r.output)) continue;
-        if (discovered.has(r.inputA) && discovered.has(r.inputB)) {
-          discovered.add(r.output);
-          changed = true;
-        }
-      }
-    }
-
-    // Only modify planet if something was actually recovered
-    if (discovered.size === planet.discoveredElements.size && newCustom.length === 0) return planet;
-
-    return {
-      ...planet,
-      discoveredElements: discovered,
-      worldInfluence: calculateWorldInfluence(Array.from(discovered), allEls, state.effectOverrides),
-      eventLog: [...planet.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
-    };
-  });
 
   // Skip state update if nothing changed
-  if (newCustom.length === 0 && nextPlanets === state.planets) return state;
+  if (newCustom.length === 0) return state;
 
   const nextState = withActivePlanetFields({
     ...state,
-    planets: nextPlanets,
     customElements: nextCustom,
   });
 
@@ -1560,6 +1527,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return checkAndCompleteQuests(updateActivePlanet(nextState, {
         eventLog: [...planet.eventLog, `💥 Planet "${target.name}" has been destroyed!`],
       }));
+    }
+
+    case 'REMOVE_DESTROYED_PLANET': {
+      if (action.index < 0 || action.index >= state.planets.length) return state;
+      const target = state.planets[action.index];
+      if (!target.destroyed) return state;
+
+      const planets = state.planets.filter((_, i) => i !== action.index);
+      if (planets.length === 0) return createInitialState();
+
+      let newIndex = state.activePlanetIndex;
+      if (action.index < newIndex) newIndex--;
+      else if (action.index === newIndex) newIndex = planets.findIndex((p) => !p.destroyed);
+      if (newIndex < 0 || newIndex >= planets.length) newIndex = 0;
+
+      return withActivePlanetFields({ ...state, planets, activePlanetIndex: newIndex });
     }
 
     case 'GAIN_XP': {

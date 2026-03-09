@@ -196,6 +196,7 @@ export type GameAction =
   | { type: 'SWITCH_PLANET'; index: number }
   | { type: 'RENAME_PLANET'; index: number; name: string }
   | { type: 'DESTROY_PLANET'; index: number }
+  | { type: 'REMOVE_DESTROYED_PLANET'; index: number }
   | { type: 'GAIN_XP'; amount: number; reason: string }
   | { type: 'START_QUEST'; questId: string }
   | { type: 'CHECK_QUESTS' };

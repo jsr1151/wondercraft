@@ -22,6 +22,7 @@ export function SolarSystemView() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
   const [confirmDestroyIndex, setConfirmDestroyIndex] = useState<number | null>(null);
+  const [confirmRemoveIndex, setConfirmRemoveIndex] = useState<number | null>(null);
 
   const livePlanets = state.planets.filter((planet) => !planet.destroyed);
   const hasSolarSystemView = livePlanets.length >= 2;
@@ -113,6 +114,13 @@ export function SolarSystemView() {
                     <span className="solar-planet-name destroyed-name">{planet.name}</span>
                     <span className="solar-planet-elements">💀 Destroyed</span>
                   </div>
+                  <button
+                    className="solar-planet-destroy-btn"
+                    title="Remove destroyed planet"
+                    onClick={(e) => { e.stopPropagation(); setConfirmRemoveIndex(index); }}
+                  >
+                    🗑️
+                  </button>
                 </div>
               );
             }
@@ -182,6 +190,18 @@ export function SolarSystemView() {
               Destroy
             </button>
             <button className="solar-create-cancel" onClick={() => setConfirmDestroyIndex(null)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {confirmRemoveIndex !== null && (
+        <div className="solar-destroy-confirm">
+          <p>🗑️ Remove <strong>{state.planets[confirmRemoveIndex]?.name}</strong> from the list?</p>
+          <div className="solar-create-actions">
+            <button className="solar-destroy-yes" onClick={() => { dispatch({ type: 'REMOVE_DESTROYED_PLANET', index: confirmRemoveIndex }); setConfirmRemoveIndex(null); }}>
+              Remove
+            </button>
+            <button className="solar-create-cancel" onClick={() => setConfirmRemoveIndex(null)}>Cancel</button>
           </div>
         </div>
       )}
