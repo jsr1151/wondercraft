@@ -1,5 +1,4 @@
 import type { Element } from '../types';
-import { createGeneratedElements } from './generatedPool';
 
 export const CORE_ELEMENTS: Element[] = [
   // PRIMORDIAL (unlocked after Big Bang)
@@ -159,5 +158,4 @@ export const CORE_ELEMENTS: Element[] = [
 
 export const ELEMENTS: Element[] = [
   ...CORE_ELEMENTS,
-  ...createGeneratedElements(CORE_ELEMENTS),
 ];

@@ -1,6 +1,4 @@
 import type { Recipe } from '../types';
-import { createGeneratedRecipes } from './generatedPool';
-import { CORE_ELEMENTS } from './elements';
 
 const CORE_RECIPES: Recipe[] = [
   // PRIMORDIAL BASICS
@@ -210,5 +208,4 @@ const CORE_RECIPES: Recipe[] = [
 
 export const RECIPES: Recipe[] = [
   ...CORE_RECIPES,
-  ...createGeneratedRecipes(CORE_ELEMENTS),
 ];

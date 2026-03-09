@@ -310,7 +310,11 @@ export function PlanetCanvas({ worldInfluence: wi, seed, profileLevel = 1, disco
     const emoji = (id: string) => emojiMapRef.current?.[id] ?? '';
 
     // ---------- DRAW LOOP ----------
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // cap at 30 fps
     const draw = (t: number) => {
+      if (t - lastFrame < FRAME_INTERVAL) { animRef.current = requestAnimationFrame(draw); return; }
+      lastFrame = t;
       const w = wiRef.current;
       const water = toLevel(w.water);
       const heat = toLevel(w.heat);
