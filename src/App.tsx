@@ -108,7 +108,6 @@ function GameApp() {
           </CollapsiblePanel>
           <CollapsiblePanel title="Insight" defaultOpen>
             <InsightPanel
-              insight={state.insight}
               onRequestHint={handleInsightHint}
               onRequestRandomDiscovery={handleInsightRandomUnlock}
             />

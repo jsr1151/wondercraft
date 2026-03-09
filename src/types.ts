@@ -144,6 +144,7 @@ export interface GameState {
   effectOverrides: Record<string, WorldEffectMap>;
   profile: ProfileState;
   insight: InsightCurrency;
+  insightLastTickAt: number;
   // Convenience accessors (derived from active planet)
   seed: number;
   bigBangDone: boolean;

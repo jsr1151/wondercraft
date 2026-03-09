@@ -23,7 +23,6 @@ import {
   EMPTY_INSIGHT,
   INSIGHT_LABELS,
   calculateInsightGainPerSecond,
-  applyInsightTick,
   countDiscoveredByInsightType,
   getElementInsightType,
   getHintInsightCost,
@@ -443,6 +442,7 @@ function createInitialState(): GameState {
     effectOverrides: {},
     profile: { ...DEFAULT_PROFILE },
     insight: { ...EMPTY_INSIGHT },
+    insightLastTickAt: Date.now(),
     // These will be filled by withActivePlanetFields
     seed: planet.seed,
     bigBangDone: false,
@@ -566,6 +566,39 @@ function spendInsight(
   };
 }
 
+/** Compute insight accumulated since last flush without touching state. */
+function computeAccumulatedInsight(state: GameState): InsightCurrency {
+  const elapsed = (Date.now() - state.insightLastTickAt) / 1000;
+  if (elapsed <= 0) return state.insight;
+  const livePlanets = state.planets.filter((p) => p.bigBangDone && !p.destroyed);
+  if (livePlanets.length === 0) return state.insight;
+  const elems = allElements(state);
+  const gains = livePlanets.reduce(
+    (sum, planet) =>
+      addInsight(sum, calculateInsightGainPerSecond(planet.discoveredElements, elems, state.categoryOverrides)),
+    { ...EMPTY_INSIGHT },
+  );
+  return {
+    nature: state.insight.nature + gains.nature * elapsed,
+    life: state.insight.life + gains.life * elapsed,
+    civilization: state.insight.civilization + gains.civilization * elapsed,
+    technology: state.insight.technology + gains.technology * elapsed,
+    cosmic: state.insight.cosmic + gains.cosmic * elapsed,
+    materials: state.insight.materials + gains.materials * elapsed,
+    weird: state.insight.weird + gains.weird * elapsed,
+    warfare: state.insight.warfare + gains.warfare * elapsed,
+  };
+}
+
+/** Flush accumulated insight into state (call before spending). */
+function flushInsight(state: GameState): GameState {
+  return {
+    ...state,
+    insight: computeAccumulatedInsight(state),
+    insightLastTickAt: Date.now(),
+  };
+}
+
 function buildCategoryHintText(
   state: GameState,
   insightType: InsightType,
@@ -627,6 +660,7 @@ function buildCategoryHintText(
 }
 
 function requestInsightHintForType(state: GameState, insightType: InsightType): GameState {
+  state = flushInsight(state);
   const planet = activePlanet(state);
   const candidates = getUndiscoveredElementsByInsightType(state, insightType);
   if (candidates.length === 0) {
@@ -1258,36 +1292,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'TICK_INSIGHT': {
-      const livePlanets = state.planets.filter((planet) => planet.bigBangDone && !planet.destroyed);
-      if (livePlanets.length === 0) return state;
-      const elems = allElements(state);
-      const gains = livePlanets.reduce(
-        (sum, planet) =>
-          addInsight(
-            sum,
-            calculateInsightGainPerSecond(
-              planet.discoveredElements,
-              elems,
-              state.categoryOverrides
-            )
-          ),
-        { ...EMPTY_INSIGHT }
-      );
-      // Scale gains by tick interval (5 seconds)
-      const scaledGains: InsightCurrency = {
-        nature: gains.nature * 5,
-        life: gains.life * 5,
-        civilization: gains.civilization * 5,
-        technology: gains.technology * 5,
-        cosmic: gains.cosmic * 5,
-        materials: gains.materials * 5,
-        weird: gains.weird * 5,
-        warfare: gains.warfare * 5,
-      };
-      return {
-        ...state,
-        insight: applyInsightTick(state.insight, scaledGains),
-      };
+      // Insight is now computed lazily — no state change needed.
+      return state;
     }
 
     case 'REQUEST_HINT': {
@@ -1305,6 +1311,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'REQUEST_INSIGHT_HINT_AUTO': {
+      state = flushInsight(state);
       const planet = activePlanet(state);
       const discoveredCounts = countDiscoveredByInsightType(
         planet.discoveredElements,
@@ -1312,7 +1319,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         state.categoryOverrides
       );
 
-      const preferredType = (Object.keys(planet.insight) as InsightType[])
+      const preferredType = (Object.keys(EMPTY_INSIGHT) as InsightType[])
         .filter((type) => getUndiscoveredElementsByInsightType(state, type).length > 0)
         .filter((type) => state.insight[type] >= getHintInsightCost(discoveredCounts[type]))
         .sort((a, b) => state.insight[b] - state.insight[a])[0];
@@ -1327,6 +1334,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'REQUEST_RANDOM_DISCOVERY': {
+      state = flushInsight(state);
       const planet = activePlanet(state);
       const candidates = getUndiscoveredElementsByInsightType(state, action.insightType);
       if (candidates.length === 0) {
@@ -1453,6 +1461,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         planets,
         activePlanetIndex,
         ...globalFields,
+        insightLastTickAt: Date.now(),
       });
 
       const migrated = migrateLegacyOceanPuddleState(nextState);
@@ -1467,6 +1476,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case 'CREATE_PLANET': {
       if (!isMultiPlanetUnlocked(state)) return state;
+      state = flushInsight(state);
       const livePlanetCount = state.planets.filter((planet) => !planet.destroyed).length;
       const creationCost = getPlanetCreationInsightCost(livePlanetCount);
       if (state.insight[PLANET_CREATION_INSIGHT_TYPE] < creationCost) {
@@ -1589,6 +1599,7 @@ interface GameContextType {
 // eslint-disable-next-line react-refresh/only-export-components
 export { isMultiPlanetUnlocked, getProfileLevel, getProfileTitle, QUESTS, DESTRUCTIVE_ELEMENT_IDS };
 export { getPlanetCreationInsightCost, PLANET_CREATION_INSIGHT_TYPE, MULTI_PLANET_TECH_THRESHOLD };
+export { computeAccumulatedInsight };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const GameContext = createContext<GameContextType | null>(null);
@@ -1611,23 +1622,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       });
   }, []);
 
-  // Debounce saves so TICK_INSIGHT (every 1s) doesn't serialize the full state each tick
+  // Debounce saves — flush accumulated insight before serializing
   const saveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (state.bigBangDone) {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-      saveTimerRef.current = setTimeout(() => saveGame(state), 2000);
+      saveTimerRef.current = setTimeout(() => saveGame(flushInsight(state)), 2000);
     }
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [state]);
 
-  useEffect(() => {
-    if (!state.bigBangDone) return;
-    const timer = setInterval(() => {
-      dispatch({ type: 'TICK_INSIGHT' });
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [state.bigBangDone]);
+  // Insight accumulates lazily — no timer dispatch needed.
+  // Flush happens on-demand when insight is spent.
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
