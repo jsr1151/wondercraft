@@ -227,17 +227,19 @@ function removeElementIdsFromState(state: GameState, removedIds: Set<string>): G
 
 function withAvailableElementPool(state: GameState, recipes: Recipe[]): GameState {
   const availableIds = getAvailableElementIdSet(recipes);
-  const knownIds = new Set<string>([
-    ...ELEMENTS.map((element) => element.id),
-    ...state.customElements.map((element) => element.id),
-  ]);
-  const removedIds = new Set(Array.from(knownIds).filter((id) => !availableIds.has(id)));
-  if (removedIds.size === 0) return state;
 
+  // Only prune custom elements that have no recipe producing them.
+  // Never remove core elements or discovered elements — the availability set
+  // can be temporarily incomplete (e.g. sharedRecipes not yet fetched) and
+  // pruning discoveredElements would cause permanent data loss once saved.
+  const orphanCustom = state.customElements.filter((el) => !availableIds.has(el.id));
+  if (orphanCustom.length === 0) return state;
+
+  const removedIds = new Set(orphanCustom.map((el) => el.id));
   const next = removeElementIdsFromState(state, removedIds);
   return {
     ...next,
-    customElements: next.customElements.filter((element) => availableIds.has(element.id)),
+    customElements: next.customElements.filter((el) => !removedIds.has(el.id)),
     worldInfluence: calculateWorldInfluence(Array.from(next.discoveredElements), allElements(next), next.effectOverrides),
   };
 }
