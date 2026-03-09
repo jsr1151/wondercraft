@@ -257,6 +257,25 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
       angle: rng() * Math.PI,
     }));
 
+    // --- Ambient entity data ---
+    // Each entity gets a home position, speed, wander radius, and phase offset
+    const mkEntities = (count: number, latRange: number) =>
+      Array.from({ length: count }, () => ({
+        lon: rng() * Math.PI * 2,
+        lat: (rng() - 0.5) * latRange,
+        speed: 0.15 + rng() * 0.35,
+        wanderR: 0.08 + rng() * 0.18,
+        phase: rng() * Math.PI * 2,
+        seed: rng() * 1000,
+      }));
+
+    const humanEntities  = mkEntities(24, 1.2);
+    const animalEntities = mkEntities(18, 1.5);
+    const birdEntities   = mkEntities(14, 1.6);
+    const fishEntities   = mkEntities(16, 1.4);
+    const insectEntities = mkEntities(20, 1.3);
+    const boatEntities   = mkEntities(8, 1.0);
+
     const has = (id: string) => !!discoveredRef.current?.has(id);
     const emoji = (id: string) => emojiMapRef.current?.[id] ?? '';
 
@@ -684,6 +703,95 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
       if (has('school'))     drawLandmarkEmoji(8, 'school', '🏫', 22, '150,120,90');
       if (has('factory'))    drawLandmarkEmoji(10, 'factory', '🏭', 24, '100,100,110');
       if (has('windmill'))   drawLandmarkEmoji(11, 'windmill', '🌬️', 22, '150,200,255');
+
+      // === AMBIENT ENTITIES (living dots) ===
+      const ts = t * 0.001; // time in seconds for smooth motion
+
+      const drawDot = (
+        lon: number, lat: number, radius: number,
+        r2: number, g: number, b: number, a: number,
+      ) => {
+        const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
+        if (!p.visible) return;
+        ctx.fillStyle = `rgba(${r2},${g},${b},${a * p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius * p.scale, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      // Humans — small warm dots that wander near cities
+      if (has('human')) {
+        for (const e of humanEntities) {
+          const wobble = ts * e.speed + e.phase;
+          const lon = e.lon + Math.sin(wobble) * e.wanderR;
+          const lat = e.lat + Math.cos(wobble * 0.7 + e.seed) * e.wanderR * 0.6;
+          drawDot(lon, lat, 1.6, 230, 195, 150, 0.7);
+        }
+      }
+
+      // Animals / mammals — earthy dots that roam freely
+      if (has('animal') || has('mammal')) {
+        for (const e of animalEntities) {
+          const wobble = ts * e.speed * 0.7 + e.phase;
+          const lon = e.lon + Math.sin(wobble * 0.8) * e.wanderR * 1.3;
+          const lat = e.lat + Math.cos(wobble * 0.5 + e.seed) * e.wanderR;
+          drawDot(lon, lat, 1.8, 140, 110, 65, 0.65);
+        }
+      }
+
+      // Birds — dots that trace arc paths above surface
+      if (has('bird')) {
+        for (const e of birdEntities) {
+          const wobble = ts * e.speed * 1.2 + e.phase;
+          const lon = e.lon + wobble * 0.3; // steady drift
+          const lat = e.lat + Math.sin(wobble * 2.5) * 0.12;
+          const p = projectToSphere(cx, cy, r * 1.01, lon, lat, phase);
+          if (!p.visible) continue;
+          // Slight vertical bob
+          const bob = Math.sin(wobble * 4) * 2 * p.scale;
+          ctx.fillStyle = `rgba(60,60,70,${0.6 * p.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y + bob, 1.2 * p.scale, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Fish — blue dots that swim in water areas
+      if (has('fish') || has('whale')) {
+        for (const e of fishEntities) {
+          const wobble = ts * e.speed * 0.5 + e.phase;
+          const lon = e.lon + Math.sin(wobble * 0.6 + e.seed) * e.wanderR * 1.5;
+          const lat = e.lat + Math.cos(wobble * 0.4) * e.wanderR * 0.8;
+          const p = projectToSphere(cx, cy, r * 0.96, lon, lat, phase);
+          if (!p.visible) continue;
+          const sz = has('whale') ? 2.2 : 1.4;
+          ctx.fillStyle = `rgba(30,90,180,${0.55 * p.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, sz * p.scale, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Insects — tiny flickering specks near vegetation
+      if (has('insect')) {
+        for (const e of insectEntities) {
+          const wobble = ts * e.speed * 2.5 + e.phase;
+          const lon = e.lon + Math.sin(wobble * 3) * 0.04;
+          const lat = e.lat + Math.cos(wobble * 4 + e.seed) * 0.03;
+          const flicker = 0.3 + 0.5 * Math.abs(Math.sin(wobble * 6));
+          drawDot(lon, lat, 0.9, 180, 200, 60, flicker);
+        }
+      }
+
+      // Boats — dots that trace slow arcs on the water
+      if (has('boat')) {
+        for (const e of boatEntities) {
+          const wobble = ts * e.speed * 0.25 + e.phase;
+          const lon = e.lon + wobble * 0.15;
+          const lat = e.lat + Math.sin(wobble * 0.4) * 0.15;
+          drawDot(lon, lat, 1.8, 200, 180, 150, 0.6);
+        }
+      }
 
       // === DAY/NIGHT TERMINATOR ===
       const terminator = phase + Math.PI * 0.72;
