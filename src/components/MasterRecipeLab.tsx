@@ -5,7 +5,7 @@ import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe, publi
 import { DEFAULT_ELEMENT_CATEGORIES, type Element, type MasterRecipe, type WorldEffectMap } from '../types';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
 import { isImageIcon, resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
-import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
+import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './MasterRecipeLab.css';
 
 function errorMessage(error: unknown): string {
@@ -125,11 +125,11 @@ export function MasterRecipeLab() {
     if (target === 'A') setInputA(resolveElementName(element, state.nameOverrides));
     if (target === 'B') setInputB(resolveElementName(element, state.nameOverrides));
     if (target === 'OUT') {
-      setOutput(element.name);
+      setOutput(resolveElementName(element, state.nameOverrides));
       setOutputIcon(resolveElementIconRaw(element, state.iconOverrides));
-      setOutputName(element.name);
-      setOutputDescription(element.description);
-      setOutputCategory(element.category);
+      setOutputName(resolveElementName(element, state.nameOverrides));
+      setOutputDescription(resolveElementDescription(element, state.descriptionOverrides));
+      setOutputCategory(resolveElementCategory(element, state.categoryOverrides));
       const actsAsId = state.actsAsOverrides[element.id];
       const actsAsElement = actsAsId ? allElements.find((entry) => entry.id === actsAsId) : null;
       setOutputActsAs(actsAsElement ? resolveElementName(actsAsElement, state.nameOverrides) : '');
@@ -170,9 +170,9 @@ export function MasterRecipeLab() {
     const baseElement = allElements.find((element) => element.id === outputId);
     if (!baseElement) return;
     setOutputIcon(resolveElementIconRaw(baseElement, state.iconOverrides));
-    setOutputName(baseElement.name);
-    setOutputDescription(baseElement.description);
-    setOutputCategory(baseElement.category);
+    setOutputName(resolveElementName(baseElement, state.nameOverrides));
+    setOutputDescription(resolveElementDescription(baseElement, state.descriptionOverrides));
+    setOutputCategory(resolveElementCategory(baseElement, state.categoryOverrides));
     const actsAsId = state.actsAsOverrides[baseElement.id];
     const actsAsElement = actsAsId ? allElements.find((entry) => entry.id === actsAsId) : null;
     setOutputActsAs(actsAsElement ? resolveElementName(actsAsElement, state.nameOverrides) : '');
