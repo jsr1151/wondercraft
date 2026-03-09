@@ -381,7 +381,6 @@ function recoverLostElements(state: GameState): GameState {
 
   if (!state.bigBangDone) return state;
 
-  const coreIds = new Set(ELEMENTS.map((el) => el.id));
   const existingCustomIds = new Set(state.customElements.map((el) => el.id));
   const discovered = new Set(state.discoveredElements);
   const newCustom: Element[] = [];
