@@ -1,4 +1,5 @@
 import type { EmojiAtlasEntry } from '../types';
+import { decodeUtf8Base64, encodeUtf8Base64 } from '../utils/base64';
 
 const OWNER = 'jsr1151';
 const REPO = 'wondercraft';
@@ -65,7 +66,7 @@ async function getRemoteDoc(token: string): Promise<{ doc: EmojiAtlasDoc; sha?: 
   }
 
   const payload = (await response.json()) as GitHubContentResponse;
-  const decoded = atob(payload.content.replace(/\n/g, ''));
+  const decoded = decodeUtf8Base64(payload.content);
   return { doc: parseDocument(decoded), sha: payload.sha };
 }
 
@@ -77,7 +78,7 @@ export async function publishGlobalEmojiEntry(entry: EmojiAtlasEntry, token: str
     entries: nextEntries,
   };
 
-  const content = btoa(JSON.stringify(nextDoc, null, 2));
+  const content = encodeUtf8Base64(JSON.stringify(nextDoc, null, 2));
   const response = await fetch(CONTENTS_API, {
     method: 'PUT',
     headers: {

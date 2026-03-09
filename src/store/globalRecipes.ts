@@ -1,5 +1,6 @@
 import type { MasterRecipe } from '../types';
 import bundledRecipeDoc from '../../shared/master-recipes.json';
+import { decodeUtf8Base64, encodeUtf8Base64 } from '../utils/base64';
 
 const OWNER = 'jsr1151';
 const REPO = 'wondercraft';
@@ -156,12 +157,12 @@ async function getRemoteDoc(filePath: string, token: string): Promise<{ doc: Glo
   }
 
   const payload = (await response.json()) as GitHubContentResponse;
-  const decoded = atob(payload.content.replace(/\n/g, ''));
+  const decoded = decodeUtf8Base64(payload.content);
   return { doc: parseDocument(decoded), sha: payload.sha };
 }
 
 async function writeRemoteDoc(filePath: string, doc: GlobalRecipeDoc, token: string, message: string, sha?: string): Promise<void> {
-  const content = btoa(JSON.stringify(doc, null, 2));
+  const content = encodeUtf8Base64(JSON.stringify(doc, null, 2));
   const response = await fetch(getContentsApi(filePath), {
     method: 'PUT',
     headers: {
