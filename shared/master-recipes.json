@@ -1,6 +1,344 @@
 {
-  "updatedAt": 1773002383156,
+  "updatedAt": 1773081106590,
   "recipes": [
+    {
+      "id": "m_1773076094646_kgltpw",
+      "inputA": "earth",
+      "inputB": "earth",
+      "output": "mountain",
+      "createdAt": 1773076094646,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773076115160_9dkywl",
+      "inputA": "water",
+      "inputB": "custom_puddle",
+      "output": "custom_pond",
+      "createdAt": 1773076115160,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076133002_72iqx5",
+      "inputA": "custom_puddle",
+      "inputB": "custom_puddle",
+      "output": "custom_pond",
+      "createdAt": 1773076133002,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076148642_apgdmf",
+      "inputA": "custom_pond",
+      "inputB": "water",
+      "output": "lake",
+      "createdAt": 1773076148642,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076156148_ta67dq",
+      "inputA": "custom_pond",
+      "inputB": "custom_pond",
+      "output": "lake",
+      "createdAt": 1773076156148,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076167564_bulxfa",
+      "inputA": "lake",
+      "inputB": "water",
+      "output": "ocean",
+      "createdAt": 1773076167564,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076178830_nqjxrv",
+      "inputA": "lake",
+      "inputB": "lake",
+      "output": "ocean",
+      "createdAt": 1773076178830,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076190734_kqcsyo",
+      "inputA": "custom_pond",
+      "inputB": "lake",
+      "output": "ocean",
+      "createdAt": 1773076190734,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076200598_8vao5n",
+      "inputA": "custom_pond",
+      "inputB": "custom_puddle",
+      "output": "lake",
+      "createdAt": 1773076200598,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076375208_ihcvwl",
+      "inputA": "air",
+      "inputB": "air",
+      "output": "atmosphere",
+      "createdAt": 1773076375208,
+      "outputWorldEffects": {
+        "atmosphere": 3,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773076911058_fipr03",
+      "inputA": "sun",
+      "inputB": "custom_puddle",
+      "output": "rainbow",
+      "createdAt": 1773076911058,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773076923326_34h0ym",
+      "inputA": "custom_puddle",
+      "inputB": "air",
+      "output": "cloud",
+      "createdAt": 1773076923326,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773076943876_qi6935",
+      "inputA": "mountain",
+      "inputB": "fire",
+      "output": "volcano",
+      "createdAt": 1773076943876,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773076969744_khogek",
+      "inputA": "mountain",
+      "inputB": "air",
+      "output": "stone",
+      "createdAt": 1773076969744,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773076983211_eiztnl",
+      "inputA": "atmosphere",
+      "inputB": "energy",
+      "output": "wind",
+      "createdAt": 1773076983211,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773076989808_u4wmhj",
+      "inputA": "atmosphere",
+      "inputB": "water",
+      "output": "cloud",
+      "createdAt": 1773076989808,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077011179_v36v8v",
+      "inputA": "energy",
+      "inputB": "mud",
+      "output": "life",
+      "createdAt": 1773077011179,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1773077020642_39lz7v",
+      "inputA": "steam",
+      "inputB": "air",
+      "output": "cloud",
+      "createdAt": 1773077020642,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077128264_3joig9",
+      "inputA": "earth",
+      "inputB": "dust",
+      "output": "sand",
+      "createdAt": 1773077128264,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077332541_1ga7bg",
+      "inputA": "sun",
+      "inputB": "fire",
+      "output": "custom_heatwave",
+      "createdAt": 1773077332541
+    },
+    {
+      "id": "m_1773077433915_tnqnz7",
+      "inputA": "sun",
+      "inputB": "sun",
+      "output": "custom_supernova",
+      "createdAt": 1773077433915
+    },
+    {
+      "id": "m_1773077566121_zen79l",
+      "inputA": "steam",
+      "inputB": "steam",
+      "output": "cloud",
+      "createdAt": 1773077566121,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077577809_6kkp8t",
+      "inputA": "steam",
+      "inputB": "sun",
+      "output": "rainbow",
+      "createdAt": 1773077577809,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773077697382_f63jau",
+      "inputA": "fire",
+      "inputB": "mud",
+      "output": "brick",
+      "createdAt": 1773077697382
+    },
+    {
+      "id": "m_1773077704941_67bt0c",
+      "inputA": "mud",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773077704941,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077711576_zn18bz",
+      "inputA": "air",
+      "inputB": "mud",
+      "output": "dust",
+      "createdAt": 1773077711576,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773077718821_qyzfhn",
+      "inputA": "earth",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773077718821,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077784221_ildcvg",
+      "inputA": "dust",
+      "inputB": "fire",
+      "output": "ash",
+      "createdAt": 1773077784221
+    },
+    {
+      "id": "m_1773077791481_zq1ibm",
+      "inputA": "dust",
+      "inputB": "dust",
+      "output": "sand",
+      "createdAt": 1773077791481,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077800206_pj8egr",
+      "inputA": "dust",
+      "inputB": "water",
+      "output": "mud",
+      "createdAt": 1773077800206
+    },
+    {
+      "id": "m_1773077851869_ykxajx",
+      "inputA": "dust",
+      "inputB": "air",
+      "output": "custom_sandstorm",
+      "createdAt": 1773077851869,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077899532_0us84y",
+      "inputA": "fire",
+      "inputB": "custom_puddle",
+      "output": "steam",
+      "createdAt": 1773077899532,
+      "outputWorldEffects": {
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077908328_mhxt6y",
+      "inputA": "earth",
+      "inputB": "custom_puddle",
+      "output": "mud",
+      "createdAt": 1773077908328
+    },
+    {
+      "id": "m_1773078040295_d2fkjo",
+      "inputA": "earth",
+      "inputB": "mountain",
+      "output": "stone",
+      "createdAt": 1773078040295,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773078088147_8dorug",
+      "inputA": "mountain",
+      "inputB": "mountain",
+      "output": "custom_mountain_2",
+      "createdAt": 1773078088147,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
     {
       "id": "m_1772983511127_vh8j6e",
       "inputA": "custom_farmer",
