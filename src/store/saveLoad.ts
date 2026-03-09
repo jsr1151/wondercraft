@@ -24,6 +24,61 @@ function parseSave(data: string | null): Partial<SerializableGameState> | null {
   return JSON.parse(data) as SerializableGameState;
 }
 
+function mergeUnique<T>(left: T[] = [], right: T[] = [], key: (value: T) => string): T[] {
+  const merged = new Map<string, T>();
+  for (const item of right) merged.set(key(item), item);
+  for (const item of left) merged.set(key(item), item);
+  return Array.from(merged.values());
+}
+
+function mergeStringArrays(left: string[] = [], right: string[] = []): string[] {
+  return Array.from(new Set([...right, ...left]));
+}
+
+function mergeRecord<T>(left: Record<string, T> = {}, right: Record<string, T> = {}): Record<string, T> {
+  return { ...right, ...left };
+}
+
+function chooseRicherSave(
+  primary: Partial<SerializableGameState> | null,
+  backup: Partial<SerializableGameState> | null,
+): Partial<SerializableGameState> | null {
+  if (!primary) return backup;
+  if (!backup) return primary;
+  return countDiscoveredEntries(primary) >= countDiscoveredEntries(backup) ? primary : backup;
+}
+
+function mergeSaves(
+  primary: Partial<SerializableGameState> | null,
+  backup: Partial<SerializableGameState> | null,
+): Partial<SerializableGameState> | null {
+  const base = chooseRicherSave(primary, backup);
+  if (!base) return null;
+  const other = base === primary ? backup : primary;
+  if (!other) return base;
+
+  return {
+    ...other,
+    ...base,
+    planets: base.planets ?? other.planets,
+    activePlanetIndex: base.activePlanetIndex ?? other.activePlanetIndex,
+    profile: base.profile ?? other.profile,
+    discoveredElements: mergeStringArrays(base.discoveredElements, other.discoveredElements),
+    recentDiscoveries: mergeStringArrays(base.recentDiscoveries, other.recentDiscoveries),
+    eventLog: [...(other.eventLog ?? []), ...(base.eventLog ?? [])].slice(-400),
+    attemptedCombinations: mergeStringArrays(base.attemptedCombinations, other.attemptedCombinations),
+    favoriteElementIds: mergeStringArrays(base.favoriteElementIds, other.favoriteElementIds),
+    masterRecipes: mergeUnique(base.masterRecipes, other.masterRecipes, (recipe) => [recipe.inputA, recipe.inputB].sort().join('|')),
+    customElements: mergeUnique(base.customElements, other.customElements, (element) => element.id),
+    iconOverrides: mergeRecord(base.iconOverrides, other.iconOverrides),
+    nameOverrides: mergeRecord(base.nameOverrides, other.nameOverrides),
+    descriptionOverrides: mergeRecord(base.descriptionOverrides, other.descriptionOverrides),
+    categoryOverrides: mergeRecord(base.categoryOverrides, other.categoryOverrides),
+    actsAsOverrides: mergeRecord(base.actsAsOverrides, other.actsAsOverrides),
+    effectOverrides: mergeRecord(base.effectOverrides, other.effectOverrides),
+  };
+}
+
 function summarizeSave(
   key: 'primary' | 'backup',
   state: Partial<SerializableGameState> | null,
@@ -104,18 +159,18 @@ export function loadGame(): Partial<SerializableGameState> | null {
   try {
     const primary = parseSave(localStorage.getItem(SAVE_KEY));
     const backup = parseSave(localStorage.getItem(BACKUP_SAVE_KEY));
-    if (!primary) return backup;
-    if (!backup) return primary;
+    const merged = mergeSaves(primary, backup);
+    if (!merged) return null;
 
-    const primaryCount = countDiscoveredEntries(primary);
-    const backupCount = countDiscoveredEntries(backup);
-
-    if (backupCount >= primaryCount + 50 && primaryCount <= Math.floor(backupCount * 0.6)) {
-      console.warn('Primary Wondercraft save looks truncated; loading backup save instead.');
-      return backup;
+    if (primary && backup) {
+      const primaryCount = countDiscoveredEntries(primary);
+      const backupCount = countDiscoveredEntries(backup);
+      if (backupCount >= primaryCount + 50 && primaryCount <= Math.floor(backupCount * 0.6)) {
+        console.warn('Primary Wondercraft save looks truncated; merged with richer backup data.');
+      }
     }
 
-    return primary;
+    return merged;
   } catch (e) {
     console.warn('Failed to load game:', e);
     return null;

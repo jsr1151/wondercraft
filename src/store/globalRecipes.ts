@@ -7,6 +7,8 @@ const FILE_PATH = 'shared/master-recipes.json';
 
 const RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${FILE_PATH}`;
 const CONTENTS_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+const LOCAL_URL = './shared/master-recipes.json';
+const GLOBAL_RECIPE_CACHE_KEY = 'wondercraft_cached_shared_recipes_v1';
 
 export const GLOBAL_RECIPE_TOKEN_KEY = 'wondercraft_global_recipe_token';
 
@@ -55,6 +57,24 @@ function parseDocument(raw: string): GlobalRecipeDoc {
   }
 }
 
+function readCachedRecipes(): MasterRecipe[] {
+  try {
+    const raw = localStorage.getItem(GLOBAL_RECIPE_CACHE_KEY);
+    if (!raw) return [];
+    return parseDocument(raw).recipes;
+  } catch {
+    return [];
+  }
+}
+
+function writeCachedRecipes(recipes: MasterRecipe[]): void {
+  try {
+    localStorage.setItem(GLOBAL_RECIPE_CACHE_KEY, JSON.stringify({ updatedAt: Date.now(), recipes }));
+  } catch {
+    // Ignore cache write failures.
+  }
+}
+
 async function buildGitHubError(response: Response, action: 'read' | 'write'): Promise<Error> {
   const fallback = `GitHub ${action} failed (${response.status})`;
 
@@ -74,13 +94,23 @@ async function buildGitHubError(response: Response, action: 'read' | 'write'): P
 }
 
 export async function fetchGlobalRecipes(): Promise<MasterRecipe[]> {
-  const url = `${RAW_URL}?t=${Date.now()}`;
-  const response = await fetch(url, { cache: 'no-store' });
-  if (!response.ok) {
-    return [];
+  const urls = [`${RAW_URL}?t=${Date.now()}`, `${LOCAL_URL}?t=${Date.now()}`];
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) continue;
+      const text = await response.text();
+      const recipes = parseDocument(text).recipes;
+      if (recipes.length > 0) {
+        writeCachedRecipes(recipes);
+      }
+      return recipes;
+    } catch {
+      // Try the next source.
+    }
   }
-  const text = await response.text();
-  return parseDocument(text).recipes;
+
+  return readCachedRecipes();
 }
 
 async function getRemoteDoc(token: string): Promise<{ doc: GlobalRecipeDoc; sha?: string }> {
@@ -135,6 +165,7 @@ export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): 
   };
 
   await writeRemoteDoc(nextDoc, token, `chore: update global master recipes (${recipe.inputA}+${recipe.inputB})`, sha);
+  writeCachedRecipes(nextRecipes);
 
   return nextRecipes;
 }
@@ -149,6 +180,7 @@ export async function publishGlobalRecipes(recipes: MasterRecipe[], token: strin
   };
 
   await writeRemoteDoc(nextDoc, token, `chore: bulk update global master recipes (${incoming.length})`, sha);
+  writeCachedRecipes(nextRecipes);
 
   return nextRecipes;
 }

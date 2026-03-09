@@ -1055,7 +1055,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       const nextState: GameState = {
         ...state,
-        masterRecipes: [action.recipe, ...filtered].slice(0, 300),
+        masterRecipes: [action.recipe, ...filtered],
       };
       const planet = activePlanet(nextState);
       return withActivePlanetFields(withAvailableElementPool(
