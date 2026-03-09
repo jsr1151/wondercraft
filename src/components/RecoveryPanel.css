@@ -1,0 +1,76 @@
+.recovery-panel {
+  width: 100%;
+  border: 1px solid rgba(255, 120, 120, 0.28);
+  background: rgba(120, 20, 20, 0.12);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.recovery-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.recovery-panel-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd0d0;
+}
+
+.recovery-panel-richest {
+  font-size: 0.72rem;
+  color: rgba(255, 220, 180, 0.85);
+}
+
+.recovery-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recovery-snapshot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+}
+
+.recovery-snapshot.best {
+  border-color: rgba(255, 210, 120, 0.35);
+}
+
+.recovery-snapshot-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: rgba(255, 230, 230, 0.82);
+}
+
+.recovery-restore-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 0.76rem;
+  background: rgba(255, 170, 120, 0.18);
+  color: #ffd9c0;
+  cursor: pointer;
+}
+
+.recovery-restore-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recovery-panel-note {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: rgba(255, 220, 220, 0.7);
+}

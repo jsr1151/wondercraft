@@ -3,6 +3,14 @@ import type { GameState, SerializableGameState, SerializablePlanetState, PlanetS
 const SAVE_KEY = 'wondercraft_save_v1';
 const BACKUP_SAVE_KEY = 'wondercraft_save_v1_backup';
 
+export interface SaveDiagnostics {
+  key: 'primary' | 'backup';
+  discoveredCount: number;
+  planetCount: number;
+  customElementCount: number;
+  recipeCount: number;
+}
+
 function countDiscoveredEntries(state: Partial<SerializableGameState> | null): number {
   if (!state) return 0;
   if (state.planets && state.planets.length > 0) {
@@ -14,6 +22,20 @@ function countDiscoveredEntries(state: Partial<SerializableGameState> | null): n
 function parseSave(data: string | null): Partial<SerializableGameState> | null {
   if (!data) return null;
   return JSON.parse(data) as SerializableGameState;
+}
+
+function summarizeSave(
+  key: 'primary' | 'backup',
+  state: Partial<SerializableGameState> | null,
+): SaveDiagnostics | null {
+  if (!state) return null;
+  return {
+    key,
+    discoveredCount: countDiscoveredEntries(state),
+    planetCount: state.planets?.length ?? 1,
+    customElementCount: state.customElements?.length ?? 0,
+    recipeCount: state.masterRecipes?.length ?? 0,
+  };
 }
 
 function serializePlanet(planet: PlanetState): SerializablePlanetState {
@@ -103,4 +125,30 @@ export function loadGame(): Partial<SerializableGameState> | null {
 export function clearSave(): void {
   localStorage.removeItem(SAVE_KEY);
   localStorage.removeItem(BACKUP_SAVE_KEY);
+}
+
+export function getSaveDiagnostics(): SaveDiagnostics[] {
+  try {
+    const primary = summarizeSave('primary', parseSave(localStorage.getItem(SAVE_KEY)));
+    const backup = summarizeSave('backup', parseSave(localStorage.getItem(BACKUP_SAVE_KEY)));
+    return [primary, backup].filter((entry): entry is SaveDiagnostics => entry !== null);
+  } catch {
+    return [];
+  }
+}
+
+export function restoreSaveSnapshot(key: 'primary' | 'backup'): boolean {
+  try {
+    const sourceKey = key === 'primary' ? SAVE_KEY : BACKUP_SAVE_KEY;
+    const data = localStorage.getItem(sourceKey);
+    if (!data) return false;
+    const current = localStorage.getItem(SAVE_KEY);
+    if (current && current !== data) {
+      localStorage.setItem(BACKUP_SAVE_KEY, current);
+    }
+    localStorage.setItem(SAVE_KEY, data);
+    return true;
+  } catch {
+    return false;
+  }
 }

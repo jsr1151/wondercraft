@@ -17,6 +17,7 @@ import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
 import { SolarSystemView } from './components/SolarSystemView';
 import { ProfilePanel } from './components/ProfilePanel';
 import { QuestPanel } from './components/QuestPanel';
+import { RecoveryPanel } from './components/RecoveryPanel';
 import './App.css';
 
 interface CollapsiblePanelProps {
@@ -89,6 +90,8 @@ function GameApp() {
           <button className="btn-reset" onClick={handleReset}>🔄 Reset</button>
         </div>
       </header>
+
+      <RecoveryPanel />
 
       <main className="app-main">
         <div className="app-left">
