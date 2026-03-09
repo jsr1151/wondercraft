@@ -1260,21 +1260,33 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'TICK_INSIGHT': {
       const livePlanets = state.planets.filter((planet) => planet.bigBangDone && !planet.destroyed);
       if (livePlanets.length === 0) return state;
+      const elems = allElements(state);
       const gains = livePlanets.reduce(
         (sum, planet) =>
           addInsight(
             sum,
             calculateInsightGainPerSecond(
               planet.discoveredElements,
-              allElements(state),
+              elems,
               state.categoryOverrides
             )
           ),
         { ...EMPTY_INSIGHT }
       );
+      // Scale gains by tick interval (5 seconds)
+      const scaledGains: InsightCurrency = {
+        nature: gains.nature * 5,
+        life: gains.life * 5,
+        civilization: gains.civilization * 5,
+        technology: gains.technology * 5,
+        cosmic: gains.cosmic * 5,
+        materials: gains.materials * 5,
+        weird: gains.weird * 5,
+        warfare: gains.warfare * 5,
+      };
       return {
         ...state,
-        insight: applyInsightTick(state.insight, gains),
+        insight: applyInsightTick(state.insight, scaledGains),
       };
     }
 
@@ -1613,7 +1625,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (!state.bigBangDone) return;
     const timer = setInterval(() => {
       dispatch({ type: 'TICK_INSIGHT' });
-    }, 1000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [state.bigBangDone]);
 
