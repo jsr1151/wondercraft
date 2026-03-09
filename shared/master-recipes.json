@@ -1,6 +1,3990 @@
 {
-  "updatedAt": 1773081106590,
+  "updatedAt": 1773095304795,
   "recipes": [
+    {
+      "id": "m_1773082972504_cx3got",
+      "inputA": "atmosphere",
+      "inputB": "fire",
+      "output": "energy",
+      "createdAt": 1773082972504
+    },
+    {
+      "id": "m_1773082985010_9uc5ub",
+      "inputA": "atmosphere",
+      "inputB": "earth",
+      "output": "dust",
+      "createdAt": 1773082985010,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773083067408_sggn8s",
+      "inputA": "atmosphere",
+      "inputB": "atmosphere",
+      "output": "custom_sky",
+      "createdAt": 1773083067408,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773083077647_dnzq5d",
+      "inputA": "air",
+      "inputB": "atmosphere",
+      "output": "wind",
+      "createdAt": 1773083077647,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773084089705_gngqu5",
+      "inputA": "energy",
+      "inputB": "fire",
+      "output": "sun",
+      "createdAt": 1773084089705,
+      "outputWorldEffects": {
+        "brightness": 10,
+        "heat": 3,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773084103479_huxagx",
+      "inputA": "energy",
+      "inputB": "energy",
+      "output": "custom_explosion",
+      "createdAt": 1773084103479,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      },
+      "outputElement": {
+        "id": "custom_explosion",
+        "name": "Explosion",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v50ea2cdr3awqaxna5yqm7ugy9g9",
+        "worldEffects": {
+          "brightness": 5,
+          "heat": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773084113108_yws549",
+      "inputA": "energy",
+      "inputB": "sun",
+      "output": "custom_supernova",
+      "createdAt": 1773084113108,
+      "outputElement": {
+        "id": "custom_supernova",
+        "name": "Supernova",
+        "category": "Cosmic",
+        "description": "A massive star",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/cupe6n6bm06mbleleld5fc26qrn5"
+      }
+    },
+    {
+      "id": "m_1773084160875_hcft5a",
+      "inputA": "energy",
+      "inputB": "water",
+      "output": "custom_wave",
+      "createdAt": 1773084160875,
+      "outputElement": {
+        "id": "custom_wave",
+        "name": "Wave",
+        "category": "Nature",
+        "description": "Occur when a body of water is upset",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1go5cm0s3eybnr23xxemizt1mqjv"
+      }
+    },
+    {
+      "id": "m_1773084218057_bgjitx",
+      "inputA": "earth",
+      "inputB": "energy",
+      "output": "custom_earthquake",
+      "createdAt": 1773084218057,
+      "outputElement": {
+        "id": "custom_earthquake",
+        "name": "Earthquake",
+        "category": "Weather",
+        "description": "Occurs when the earth is upset",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/e725jrx2t42yr0awagssjtidmfxo"
+      }
+    },
+    {
+      "id": "m_1773084231408_e73ct1",
+      "inputA": "energy",
+      "inputB": "steam",
+      "output": "engine",
+      "createdAt": 1773084231408,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773084404808_2hq3v4",
+      "inputA": "cloud",
+      "inputB": "steam",
+      "output": "rain",
+      "createdAt": 1773084404808,
+      "outputWorldEffects": {
+        "water": 1
+      }
+    },
+    {
+      "id": "m_1773084424052_jluplk",
+      "inputA": "cloud",
+      "inputB": "sun",
+      "output": "sunlight",
+      "createdAt": 1773084424052,
+      "outputWorldEffects": {
+        "brightness": 4,
+        "heat": 1,
+        "pollution": -2
+      }
+    },
+    {
+      "id": "m_1773084469648_pto0o7",
+      "inputA": "cloud",
+      "inputB": "cloud",
+      "output": "storm",
+      "createdAt": 1773084469648,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1773084478502_wsob2n",
+      "inputA": "cloud",
+      "inputB": "energy",
+      "output": "lightning",
+      "createdAt": 1773084478502,
+      "outputWorldEffects": {
+        "brightness": 2
+      }
+    },
+    {
+      "id": "m_1773084553834_s3gs1m",
+      "inputA": "cloud",
+      "inputB": "earth",
+      "output": "fog",
+      "createdAt": 1773084553834,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773084599195_tugoiz",
+      "inputA": "air",
+      "inputB": "cloud",
+      "output": "custom_sky",
+      "createdAt": 1773084599195,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773084769840_jgdnrw",
+      "inputA": "mud",
+      "inputB": "rain",
+      "output": "plant",
+      "createdAt": 1773084769840,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1773084793931_yesm3g",
+      "inputA": "rain",
+      "inputB": "water",
+      "output": "custom_puddle",
+      "createdAt": 1773084793931,
+      "outputWorldEffects": {
+        "water": 1
+      },
+      "outputElement": {
+        "id": "custom_puddle",
+        "name": "Puddle",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/zolv4j4w3s7ysptb40l8usabn4nq",
+        "worldEffects": {
+          "water": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773084827786_69xctz",
+      "inputA": "cloud",
+      "inputB": "mud",
+      "output": "dust",
+      "createdAt": 1773084827786,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773084835747_bomlw0",
+      "inputA": "rain",
+      "inputB": "rain",
+      "output": "custom_flood",
+      "createdAt": 1773084835747,
+      "outputElement": {
+        "id": "custom_flood",
+        "name": "Flood",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/b9dk4fn9fz7uzrahd2otp60a9af8"
+      }
+    },
+    {
+      "id": "m_1773084855886_rne2kt",
+      "inputA": "fire",
+      "inputB": "rain",
+      "output": "steam",
+      "createdAt": 1773084855887,
+      "outputWorldEffects": {
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773084864411_nz6bfx",
+      "inputA": "air",
+      "inputB": "rain",
+      "output": "storm",
+      "createdAt": 1773084864411,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1773084875175_eb88bg",
+      "inputA": "rain",
+      "inputB": "sun",
+      "output": "rainbow",
+      "createdAt": 1773084875175,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773084884018_y2z79r",
+      "inputA": "rain",
+      "inputB": "steam",
+      "output": "cloud",
+      "createdAt": 1773084884018,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773084894863_cxudp5",
+      "inputA": "energy",
+      "inputB": "rain",
+      "output": "lightning",
+      "createdAt": 1773084894863,
+      "outputWorldEffects": {
+        "brightness": 2
+      }
+    },
+    {
+      "id": "m_1773084904155_9iozrp",
+      "inputA": "cloud",
+      "inputB": "rain",
+      "output": "storm",
+      "createdAt": 1773084904155,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1773085037073_96pmmo",
+      "inputA": "clay",
+      "inputB": "cloud",
+      "output": "mud",
+      "createdAt": 1773085037073
+    },
+    {
+      "id": "m_1773085097853_p34lj3",
+      "inputA": "clay",
+      "inputB": "energy",
+      "output": "brick",
+      "createdAt": 1773085097853
+    },
+    {
+      "id": "m_1773085105050_x50opi",
+      "inputA": "clay",
+      "inputB": "water",
+      "output": "mud",
+      "createdAt": 1773085105050
+    },
+    {
+      "id": "m_1773085114424_ubb9xm",
+      "inputA": "clay",
+      "inputB": "rain",
+      "output": "mud",
+      "createdAt": 1773085114424
+    },
+    {
+      "id": "m_1773085122615_x4k048",
+      "inputA": "clay",
+      "inputB": "earth",
+      "output": "custom_adobe",
+      "createdAt": 1773085122615,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773085130505_6o0t24",
+      "inputA": "clay",
+      "inputB": "clay",
+      "output": "custom_pottery",
+      "createdAt": 1773085130505,
+      "outputElement": {
+        "id": "custom_pottery",
+        "name": "Pottery",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/886x3e0epwnkh43dnygvbid1m4n3"
+      }
+    },
+    {
+      "id": "m_1773085143651_g6zc2h",
+      "inputA": "clay",
+      "inputB": "mud",
+      "output": "custom_adobe",
+      "createdAt": 1773085143651,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773085152213_vs9u7r",
+      "inputA": "clay",
+      "inputB": "steam",
+      "output": "brick",
+      "createdAt": 1773085152213
+    },
+    {
+      "id": "m_1773085159232_4cvlqz",
+      "inputA": "air",
+      "inputB": "clay",
+      "output": "custom_adobe",
+      "createdAt": 1773085159232,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773085333505_4ctfmv",
+      "inputA": "lightning",
+      "inputB": "water",
+      "output": "electricity",
+      "createdAt": 1773085333505,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773085346619_wg9dme",
+      "inputA": "lightning",
+      "inputB": "clay",
+      "output": "brick",
+      "createdAt": 1773085346619
+    },
+    {
+      "id": "m_1773085355715_312lxj",
+      "inputA": "lightning",
+      "inputB": "sun",
+      "output": "custom_supernova",
+      "createdAt": 1773085355715,
+      "outputElement": {
+        "id": "custom_supernova",
+        "name": "Supernova",
+        "category": "Cosmic",
+        "description": "A massive star",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/cupe6n6bm06mbleleld5fc26qrn5"
+      }
+    },
+    {
+      "id": "m_1773085379691_smuqhw",
+      "inputA": "earth",
+      "inputB": "lightning",
+      "output": "electricity",
+      "createdAt": 1773085379691,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773085389397_cu516z",
+      "inputA": "lightning",
+      "inputB": "steam",
+      "output": "engine",
+      "createdAt": 1773085389397,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773085397865_o8a687",
+      "inputA": "cloud",
+      "inputB": "lightning",
+      "output": "storm",
+      "createdAt": 1773085397865,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1773085406427_jzh2sn",
+      "inputA": "lightning",
+      "inputB": "mud",
+      "output": "life",
+      "createdAt": 1773085406427,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1773085415139_uj7sz8",
+      "inputA": "fire",
+      "inputB": "lightning",
+      "output": "energy",
+      "createdAt": 1773085415139
+    },
+    {
+      "id": "m_1773085426647_msx5he",
+      "inputA": "lightning",
+      "inputB": "lightning",
+      "output": "electricity",
+      "createdAt": 1773085426647,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773085435563_bnlswy",
+      "inputA": "energy",
+      "inputB": "lightning",
+      "output": "electricity",
+      "createdAt": 1773085435563,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773085444399_idl9yk",
+      "inputA": "lightning",
+      "inputB": "rain",
+      "output": "storm",
+      "createdAt": 1773085444399,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1773085498987_hfemne",
+      "inputA": "earth",
+      "inputB": "lava",
+      "output": "stone",
+      "createdAt": 1773085498987,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773085506698_27o143",
+      "inputA": "lava",
+      "inputB": "custom_puddle",
+      "output": "obsidian",
+      "createdAt": 1773085506698
+    },
+    {
+      "id": "m_1773085514505_wu7gnm",
+      "inputA": "lava",
+      "inputB": "lava",
+      "output": "volcano",
+      "createdAt": 1773085514505,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773085527581_04xa6f",
+      "inputA": "fire",
+      "inputB": "lava",
+      "output": "sun",
+      "createdAt": 1773085527581,
+      "outputWorldEffects": {
+        "brightness": 10,
+        "heat": 3,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773085714287_g9yecf",
+      "inputA": "earth",
+      "inputB": "custom_sandstorm",
+      "output": "desert",
+      "createdAt": 1773085714287,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773085771899_pwqc74",
+      "inputA": "lava",
+      "inputB": "custom_sandstorm",
+      "output": "custom_firestorm",
+      "createdAt": 1773085771899,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 2,
+        "heat": 2,
+        "ruin": 5
+      },
+      "outputElement": {
+        "id": "custom_firestorm",
+        "name": "Firestorm",
+        "category": "Weather",
+        "description": "A nasty storm of rain and fire",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/8739yn2z7e1z6cfokiedap9ov69u",
+        "worldEffects": {
+          "brightness": 1,
+          "air": 2,
+          "heat": 2,
+          "ruin": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773085785349_cfp2rp",
+      "inputA": "custom_sandstorm",
+      "inputB": "custom_sandstorm",
+      "output": "desert",
+      "createdAt": 1773085785349,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773085840185_yzjk1o",
+      "inputA": "custom_puddle",
+      "inputB": "custom_sandstorm",
+      "output": "custom_oasis",
+      "createdAt": 1773085840185,
+      "outputWorldEffects": {
+        "water": 2,
+        "heat": 2
+      },
+      "outputElement": {
+        "id": "custom_oasis",
+        "name": "Oasis",
+        "category": "Nature",
+        "description": "A special, flourishing location in the middle of a desert",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/kd4rf185vwhxdsfgwcwk4omc3pm6",
+        "worldEffects": {
+          "water": 2,
+          "heat": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773085866333_zdtczv",
+      "inputA": "fire",
+      "inputB": "custom_sandstorm",
+      "output": "glass",
+      "createdAt": 1773085866333
+    },
+    {
+      "id": "m_1773085889067_8j4uy3",
+      "inputA": "dust",
+      "inputB": "custom_puddle",
+      "output": "mud",
+      "createdAt": 1773085889067
+    },
+    {
+      "id": "m_1773085897903_1189r4",
+      "inputA": "dust",
+      "inputB": "lava",
+      "output": "stone",
+      "createdAt": 1773085897903,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773085907655_d634eb",
+      "inputA": "custom_sandstorm",
+      "inputB": "water",
+      "output": "mud",
+      "createdAt": 1773085907655
+    },
+    {
+      "id": "m_1773085999739_7ldeaz",
+      "inputA": "dust",
+      "inputB": "custom_sandstorm",
+      "output": "custom_dust_devil",
+      "createdAt": 1773085999739,
+      "outputWorldEffects": {
+        "pollution": 1
+      },
+      "outputElement": {
+        "id": "custom_dust_devil",
+        "name": "Dust Devil",
+        "category": "Weather",
+        "description": "Emergence of the dust bowl",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/43t2qnqjfnw74ajwo7pwmu161j9w",
+        "worldEffects": {
+          "pollution": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773086023731_8mkcxw",
+      "inputA": "air",
+      "inputB": "custom_sandstorm",
+      "output": "custom_dust_devil",
+      "createdAt": 1773086023731,
+      "outputWorldEffects": {
+        "pollution": 1
+      },
+      "outputElement": {
+        "id": "custom_dust_devil",
+        "name": "Dust Devil",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/43t2qnqjfnw74ajwo7pwmu161j9w",
+        "worldEffects": {
+          "pollution": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773086056463_pzl7ke",
+      "inputA": "custom_puddle",
+      "inputB": "stone",
+      "output": "custom_pond",
+      "createdAt": 1773086056463,
+      "outputWorldEffects": {
+        "water": 2
+      },
+      "outputElement": {
+        "id": "custom_pond",
+        "name": "Pond",
+        "category": "Nature",
+        "description": "A small-ish container of water",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/x2fb511nb7nd4n2gi8w438p883ub",
+        "worldEffects": {
+          "water": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773086066091_ad54ig",
+      "inputA": "custom_sandstorm",
+      "inputB": "sun",
+      "output": "desert",
+      "createdAt": 1773086066091,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773086076689_h433y8",
+      "inputA": "mountain",
+      "inputB": "sun",
+      "output": "stone",
+      "createdAt": 1773086076689,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086116590_atzmld",
+      "inputA": "custom_sandstorm",
+      "inputB": "stone",
+      "output": "custom_sandstone",
+      "createdAt": 1773086116590,
+      "outputElement": {
+        "id": "custom_sandstone",
+        "name": "Sandstone",
+        "category": "Materials",
+        "description": "Solidified block of sand",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ssb9kd9ki5udvzjqzvamkgmjcpsl"
+      }
+    },
+    {
+      "id": "m_1773086135729_71py1f",
+      "inputA": "lava",
+      "inputB": "stone",
+      "output": "volcano",
+      "createdAt": 1773086135729,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773086145967_ljypos",
+      "inputA": "dust",
+      "inputB": "stone",
+      "output": "sand",
+      "createdAt": 1773086145967,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086157277_052ndc",
+      "inputA": "dust",
+      "inputB": "mountain",
+      "output": "stone",
+      "createdAt": 1773086157277,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086176178_pabkbm",
+      "inputA": "mountain",
+      "inputB": "stone",
+      "output": "custom_boulder",
+      "createdAt": 1773086176178,
+      "outputElement": {
+        "id": "custom_boulder",
+        "name": "Boulder",
+        "category": "Nature",
+        "description": "It's not just a boulder...",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/djxcq8u2hdfmc3dmcmtee7juj7f5"
+      }
+    },
+    {
+      "id": "m_1773086193973_xlry99",
+      "inputA": "mountain",
+      "inputB": "custom_sandstorm",
+      "output": "desert",
+      "createdAt": 1773086193973,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773086209028_z4o14t",
+      "inputA": "lava",
+      "inputB": "sun",
+      "output": "custom_supernova",
+      "createdAt": 1773086209028,
+      "outputElement": {
+        "id": "custom_supernova",
+        "name": "Supernova",
+        "category": "Cosmic",
+        "description": "A massive star",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/cupe6n6bm06mbleleld5fc26qrn5"
+      }
+    },
+    {
+      "id": "m_1773086221207_9zws8k",
+      "inputA": "mountain",
+      "inputB": "custom_puddle",
+      "output": "river",
+      "createdAt": 1773086221207,
+      "outputWorldEffects": {
+        "water": 2,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773086227731_kll7g0",
+      "inputA": "dust",
+      "inputB": "sun",
+      "output": "desert",
+      "createdAt": 1773086227731,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773086236912_sdg9bt",
+      "inputA": "stone",
+      "inputB": "sun",
+      "output": "sand",
+      "createdAt": 1773086236912,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086389657_2ml83g",
+      "inputA": "mountain",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773086389657,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086400087_dar3pr",
+      "inputA": "dust",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773086400087,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086429747_46snsa",
+      "inputA": "mud",
+      "inputB": "stone",
+      "output": "clay",
+      "createdAt": 1773086429747,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086437400_2g2a4n",
+      "inputA": "mud",
+      "inputB": "custom_sandstorm",
+      "output": "clay",
+      "createdAt": 1773086437400,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086444087_mzn0xo",
+      "inputA": "lava",
+      "inputB": "mud",
+      "output": "brick",
+      "createdAt": 1773086444087
+    },
+    {
+      "id": "m_1773086451211_aaamm6",
+      "inputA": "mud",
+      "inputB": "custom_puddle",
+      "output": "swamp",
+      "createdAt": 1773086451211,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773086532866_exuuiy",
+      "inputA": "custom_boulder",
+      "inputB": "custom_sandstorm",
+      "output": "sand",
+      "createdAt": 1773086532866,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086541982_x5u7m7",
+      "inputA": "custom_boulder",
+      "inputB": "custom_puddle",
+      "output": "stone",
+      "createdAt": 1773086541982,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086551678_3pqw5m",
+      "inputA": "custom_boulder",
+      "inputB": "sun",
+      "output": "volcano",
+      "createdAt": 1773086551678,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773086560076_dkhbzp",
+      "inputA": "air",
+      "inputB": "custom_boulder",
+      "output": "dust",
+      "createdAt": 1773086560076,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773086574816_mquf59",
+      "inputA": "custom_boulder",
+      "inputB": "earth",
+      "output": "mountain",
+      "createdAt": 1773086574816,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773086584498_atgoyx",
+      "inputA": "custom_boulder",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773086584498,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086592009_r6gib6",
+      "inputA": "custom_boulder",
+      "inputB": "dust",
+      "output": "sand",
+      "createdAt": 1773086592009,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086600578_nvgrem",
+      "inputA": "custom_boulder",
+      "inputB": "stone",
+      "output": "mountain",
+      "createdAt": 1773086600578,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773086607032_nwq8c2",
+      "inputA": "custom_boulder",
+      "inputB": "water",
+      "output": "stone",
+      "createdAt": 1773086607032,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773086613894_kwzobe",
+      "inputA": "custom_boulder",
+      "inputB": "fire",
+      "output": "lava",
+      "createdAt": 1773086613894,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773086646030_bw47mi",
+      "inputA": "custom_boulder",
+      "inputB": "mountain",
+      "output": "custom_mountain_range",
+      "createdAt": 1773086646030,
+      "outputElement": {
+        "id": "custom_mountain_range",
+        "name": "Mountain Range",
+        "category": "Nature",
+        "description": "A congregation of mountains",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9zcnqi2tyzo4rpe9b86xouooe2gv"
+      }
+    },
+    {
+      "id": "m_1773086655617_rojm3q",
+      "inputA": "mountain",
+      "inputB": "mountain",
+      "output": "custom_mountain_range",
+      "createdAt": 1773086655617,
+      "outputElement": {
+        "id": "custom_mountain_range",
+        "name": "Mountain Range",
+        "category": "Nature",
+        "description": "A congregation of mountains",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9zcnqi2tyzo4rpe9b86xouooe2gv"
+      }
+    },
+    {
+      "id": "m_1773086671712_mzopjg",
+      "inputA": "custom_boulder",
+      "inputB": "lava",
+      "output": "volcano",
+      "createdAt": 1773086671712,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773086682952_fgr0e6",
+      "inputA": "custom_boulder",
+      "inputB": "custom_boulder",
+      "output": "mountain",
+      "createdAt": 1773086682952,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773086992113_ilwbv5",
+      "inputA": "air",
+      "inputB": "swamp",
+      "output": "custom_fart",
+      "createdAt": 1773086992113,
+      "outputElement": {
+        "id": "custom_fart",
+        "name": "Fart",
+        "category": "Weird",
+        "description": "It wasn't me...",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/85958k82ibkwjliah8y8v9i49cyk"
+      }
+    },
+    {
+      "id": "m_1773087004368_5vr3gj",
+      "inputA": "custom_boulder",
+      "inputB": "swamp",
+      "output": "moss",
+      "createdAt": 1773087004368,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773087015496_aqrdb4",
+      "inputA": "mountain",
+      "inputB": "swamp",
+      "output": "river",
+      "createdAt": 1773087015496,
+      "outputWorldEffects": {
+        "water": 2,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773087024917_bos9v6",
+      "inputA": "sun",
+      "inputB": "swamp",
+      "output": "plant",
+      "createdAt": 1773087024917,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1773087046492_dz0zdp",
+      "inputA": "swamp",
+      "inputB": "swamp",
+      "output": "mud",
+      "createdAt": 1773087046492
+    },
+    {
+      "id": "m_1773087059486_tjcbkj",
+      "inputA": "swamp",
+      "inputB": "water",
+      "output": "custom_pond",
+      "createdAt": 1773087059486,
+      "outputWorldEffects": {
+        "water": 2
+      },
+      "outputElement": {
+        "id": "custom_pond",
+        "name": "Pond",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/x2fb511nb7nd4n2gi8w438p883ub",
+        "worldEffects": {
+          "water": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773087069292_l7f2v3",
+      "inputA": "dust",
+      "inputB": "swamp",
+      "output": "mud",
+      "createdAt": 1773087069292
+    },
+    {
+      "id": "m_1773087128503_u6g25y",
+      "inputA": "fire",
+      "inputB": "swamp",
+      "output": "custom_smoke",
+      "createdAt": 1773087128503,
+      "outputWorldEffects": {
+        "pollution": 3
+      },
+      "outputElement": {
+        "id": "custom_smoke",
+        "name": "Smoke",
+        "category": "Weather",
+        "description": "Noxious, but helpful for identification",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/t8argprc20m7tnjcffo3oekrualb",
+        "worldEffects": {
+          "pollution": 3
+        }
+      }
+    },
+    {
+      "id": "m_1773087142654_trkbfw",
+      "inputA": "lava",
+      "inputB": "swamp",
+      "output": "stone",
+      "createdAt": 1773087142654,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773087153940_pdt30o",
+      "inputA": "custom_sandstorm",
+      "inputB": "swamp",
+      "output": "mud",
+      "createdAt": 1773087153940
+    },
+    {
+      "id": "m_1773087162532_ql8saj",
+      "inputA": "earth",
+      "inputB": "swamp",
+      "output": "mud",
+      "createdAt": 1773087162532
+    },
+    {
+      "id": "m_1773087171382_2s8zp6",
+      "inputA": "stone",
+      "inputB": "swamp",
+      "output": "moss",
+      "createdAt": 1773087171382,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773087203470_kyugn6",
+      "inputA": "custom_puddle",
+      "inputB": "swamp",
+      "output": "custom_pond",
+      "createdAt": 1773087203470,
+      "outputWorldEffects": {
+        "water": 2
+      },
+      "outputElement": {
+        "id": "custom_pond",
+        "name": "Pond",
+        "category": "Nature",
+        "description": "A smallish body of water",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/x2fb511nb7nd4n2gi8w438p883ub",
+        "worldEffects": {
+          "water": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773087240586_1otlgf",
+      "inputA": "mud",
+      "inputB": "swamp",
+      "output": "clay",
+      "createdAt": 1773087240586,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773087738534_k4pomx",
+      "inputA": "sand",
+      "inputB": "wind",
+      "output": "custom_sandstorm",
+      "createdAt": 1773087738534,
+      "outputWorldEffects": {
+        "earthy": 1
+      },
+      "outputElement": {
+        "id": "custom_sandstorm",
+        "name": "Sandstorm",
+        "category": "Weather",
+        "description": "Dududududu",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/rcc67caupeuxqy1i0ep48gerduui",
+        "worldEffects": {
+          "earthy": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773087746122_ktn0ry",
+      "inputA": "dust",
+      "inputB": "sand",
+      "output": "desert",
+      "createdAt": 1773087746122,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1773087812553_cbfdpo",
+      "inputA": "sand",
+      "inputB": "water",
+      "output": "custom_beach",
+      "createdAt": 1773087812553,
+      "outputElement": {
+        "id": "custom_beach",
+        "name": "Beach",
+        "category": "Biome",
+        "description": "A relaxing vacation spot!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m4j733ne4l0eaeh0gx0zvq1k2m5i"
+      }
+    },
+    {
+      "id": "m_1773087828217_rk88zl",
+      "inputA": "air",
+      "inputB": "sand",
+      "output": "custom_sandstorm",
+      "createdAt": 1773087828217,
+      "outputWorldEffects": {
+        "earthy": 1
+      },
+      "outputElement": {
+        "id": "custom_sandstorm",
+        "name": "Sandstorm",
+        "category": "Weather",
+        "description": "Dududududu",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/rcc67caupeuxqy1i0ep48gerduui",
+        "worldEffects": {
+          "earthy": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773087849410_i0vfpz",
+      "inputA": "atmosphere",
+      "inputB": "wind",
+      "output": "tornado",
+      "createdAt": 1773087849410,
+      "outputWorldEffects": {
+        "air": 1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773087859772_u8ih3u",
+      "inputA": "water",
+      "inputB": "wind",
+      "output": "custom_wave",
+      "createdAt": 1773087859772,
+      "outputElement": {
+        "id": "custom_wave",
+        "name": "Wave",
+        "category": "Nature",
+        "description": "Occur when a body of water is upset",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1go5cm0s3eybnr23xxemizt1mqjv"
+      }
+    },
+    {
+      "id": "m_1773087870910_ehqhu9",
+      "inputA": "atmosphere",
+      "inputB": "dust",
+      "output": "custom_dust_devil",
+      "createdAt": 1773087870910,
+      "outputWorldEffects": {
+        "pollution": 1
+      },
+      "outputElement": {
+        "id": "custom_dust_devil",
+        "name": "Dust Devil",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/43t2qnqjfnw74ajwo7pwmu161j9w",
+        "worldEffects": {
+          "pollution": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773087883520_z2nzl3",
+      "inputA": "earth",
+      "inputB": "wind",
+      "output": "tornado",
+      "createdAt": 1773087883520,
+      "outputWorldEffects": {
+        "air": 1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773087897902_t5sa8p",
+      "inputA": "atmosphere",
+      "inputB": "sand",
+      "output": "custom_sandstorm",
+      "createdAt": 1773087897902,
+      "outputWorldEffects": {
+        "earthy": 1
+      },
+      "outputElement": {
+        "id": "custom_sandstorm",
+        "name": "Sandstorm",
+        "category": "Weather",
+        "description": "Dududududu",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/rcc67caupeuxqy1i0ep48gerduui",
+        "worldEffects": {
+          "earthy": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773087907560_u8syhe",
+      "inputA": "air",
+      "inputB": "wind",
+      "output": "tornado",
+      "createdAt": 1773087907560,
+      "outputWorldEffects": {
+        "air": 1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773087916263_muotdv",
+      "inputA": "dust",
+      "inputB": "wind",
+      "output": "custom_dust_devil",
+      "createdAt": 1773087916263,
+      "outputWorldEffects": {
+        "pollution": 1
+      },
+      "outputElement": {
+        "id": "custom_dust_devil",
+        "name": "Dust Devil",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/43t2qnqjfnw74ajwo7pwmu161j9w",
+        "worldEffects": {
+          "pollution": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773087926256_c5nds0",
+      "inputA": "wind",
+      "inputB": "wind",
+      "output": "tornado",
+      "createdAt": 1773087926256,
+      "outputWorldEffects": {
+        "air": 1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773087942383_261gxr",
+      "inputA": "sand",
+      "inputB": "sand",
+      "output": "custom_sandstone",
+      "createdAt": 1773087942383,
+      "outputElement": {
+        "id": "custom_sandstone",
+        "name": "Sandstone",
+        "category": "Materials",
+        "description": "Solidified block of sand",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ssb9kd9ki5udvzjqzvamkgmjcpsl"
+      }
+    },
+    {
+      "id": "m_1773087954014_4hsj44",
+      "inputA": "earth",
+      "inputB": "sand",
+      "output": "custom_sandstone",
+      "createdAt": 1773087954014,
+      "outputElement": {
+        "id": "custom_sandstone",
+        "name": "Sandstone",
+        "category": "Materials",
+        "description": "Solidified block of sand",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ssb9kd9ki5udvzjqzvamkgmjcpsl"
+      }
+    },
+    {
+      "id": "m_1773087972472_0il49b",
+      "inputA": "atmosphere",
+      "inputB": "mountain",
+      "output": "custom_sky",
+      "createdAt": 1773087972472,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773087987808_dlacq2",
+      "inputA": "mountain",
+      "inputB": "sand",
+      "output": "dust",
+      "createdAt": 1773087987808,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773087999297_wqldhb",
+      "inputA": "mountain",
+      "inputB": "wind",
+      "output": "atmosphere",
+      "createdAt": 1773087999297,
+      "outputWorldEffects": {
+        "atmosphere": 3,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773088175966_7vc0tk",
+      "inputA": "energy",
+      "inputB": "mountain",
+      "output": "volcano",
+      "createdAt": 1773088175966,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773088184379_kyooqx",
+      "inputA": "energy",
+      "inputB": "sand",
+      "output": "glass",
+      "createdAt": 1773088184379
+    },
+    {
+      "id": "m_1773088193424_s44y1i",
+      "inputA": "energy",
+      "inputB": "wind",
+      "output": "tornado",
+      "createdAt": 1773088193424,
+      "outputWorldEffects": {
+        "air": 1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773088200254_vyb1p1",
+      "inputA": "dust",
+      "inputB": "energy",
+      "output": "custom_dust_devil",
+      "createdAt": 1773088200254,
+      "outputWorldEffects": {
+        "pollution": 1
+      },
+      "outputElement": {
+        "id": "custom_dust_devil",
+        "name": "Dust Devil",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/43t2qnqjfnw74ajwo7pwmu161j9w",
+        "worldEffects": {
+          "pollution": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773088628263_8gida7",
+      "inputA": "atmosphere",
+      "inputB": "glass",
+      "output": "custom_sky",
+      "createdAt": 1773088628263,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773088647656_z32cym",
+      "inputA": "glass",
+      "inputB": "mountain",
+      "output": "obsidian",
+      "createdAt": 1773088647656
+    },
+    {
+      "id": "m_1773088688427_aiaew2",
+      "inputA": "fire",
+      "inputB": "glass",
+      "output": "custom_lens",
+      "createdAt": 1773088688427,
+      "outputElement": {
+        "id": "custom_lens",
+        "name": "Lens",
+        "category": "Tools",
+        "description": "Finetunes light in a direction",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d2t8af3gcuyrk6n3n2lc0b9sk3jp"
+      }
+    },
+    {
+      "id": "m_1773088742787_kfa2t3",
+      "inputA": "glass",
+      "inputB": "wind",
+      "output": "custom_window",
+      "createdAt": 1773088742787,
+      "outputElement": {
+        "id": "custom_window",
+        "name": "Window",
+        "category": "Tools",
+        "description": "Think of it as a gateway of sorts",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3yeyudgmwk2kk6zvm1x5sllqekj6"
+      }
+    },
+    {
+      "id": "m_1773088790033_5m2aue",
+      "inputA": "air",
+      "inputB": "glass",
+      "output": "custom_bottle",
+      "createdAt": 1773088790033,
+      "outputElement": {
+        "id": "custom_bottle",
+        "name": "Bottle",
+        "category": "Tools",
+        "description": "Useful for containing liquids",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/shs2pq1asolarizhzcv67nk6rj07"
+      }
+    },
+    {
+      "id": "m_1773088803929_17dw53",
+      "inputA": "glass",
+      "inputB": "glass",
+      "output": "custom_window",
+      "createdAt": 1773088803929,
+      "outputElement": {
+        "id": "custom_window",
+        "name": "Window",
+        "category": "Tools",
+        "description": "Think of it as a gateway of sorts",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3yeyudgmwk2kk6zvm1x5sllqekj6"
+      }
+    },
+    {
+      "id": "m_1773088852327_oaynxy",
+      "inputA": "earth",
+      "inputB": "glass",
+      "output": "custom_hourglass",
+      "createdAt": 1773088852327,
+      "outputElement": {
+        "id": "custom_hourglass",
+        "name": "Hourglass",
+        "category": "Tools",
+        "description": "Captures the finite essence of temporality",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/sj577gw3zzpf5u9ltlzjiny6ra9l"
+      }
+    },
+    {
+      "id": "m_1773088861593_g0xfoe",
+      "inputA": "glass",
+      "inputB": "sand",
+      "output": "custom_hourglass",
+      "createdAt": 1773088861593,
+      "outputElement": {
+        "id": "custom_hourglass",
+        "name": "Hourglass",
+        "category": "Tools",
+        "description": "Captures the finite essence of temporality",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/sj577gw3zzpf5u9ltlzjiny6ra9l"
+      }
+    },
+    {
+      "id": "m_1773088894075_ukw8yt",
+      "inputA": "dust",
+      "inputB": "glass",
+      "output": "custom_mirror",
+      "createdAt": 1773088894075,
+      "outputElement": {
+        "id": "custom_mirror",
+        "name": "Mirror",
+        "category": "Tools",
+        "description": "What do YOU see when you look at it?",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "•"
+      }
+    },
+    {
+      "id": "m_1773088933936_hqwkdz",
+      "inputA": "energy",
+      "inputB": "glass",
+      "output": "custom_light_bulb",
+      "createdAt": 1773088933936,
+      "outputWorldEffects": {
+        "brightness": 1
+      },
+      "outputElement": {
+        "id": "custom_light_bulb",
+        "name": "Light Bulb",
+        "category": "Tools",
+        "description": "Let there be light!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/f9z6dfwz91f5mtl65wmxg6l6pt71",
+        "worldEffects": {
+          "brightness": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773088958167_ps66jh",
+      "inputA": "glass",
+      "inputB": "water",
+      "output": "custom_mirror",
+      "createdAt": 1773088958167,
+      "outputElement": {
+        "id": "custom_mirror",
+        "name": "Mirror",
+        "category": "Tools",
+        "description": "What do YOU see when you look at it?",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/8x2cla9akewj5jvo7rdgq4jh8iat"
+      }
+    },
+    {
+      "id": "m_1773089101577_awe096",
+      "inputA": "glass",
+      "inputB": "stone",
+      "output": "custom_gemstone",
+      "createdAt": 1773089101577,
+      "outputElement": {
+        "id": "custom_gemstone",
+        "name": "Gemstone",
+        "category": "Nature",
+        "description": "Nature's treasure",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d15zyv1mlze5hghap22a9fjs592v"
+      }
+    },
+    {
+      "id": "m_1773089119041_p4p86k",
+      "inputA": "atmosphere",
+      "inputB": "stone",
+      "output": "custom_meteor",
+      "createdAt": 1773089119041,
+      "outputElement": {
+        "id": "custom_meteor",
+        "name": "Meteor",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/uuh8c1l6dmwbtvp5cfg5qo6fz4kp"
+      }
+    },
+    {
+      "id": "m_1773089127052_58yxpf",
+      "inputA": "sand",
+      "inputB": "stone",
+      "output": "custom_sandstone",
+      "createdAt": 1773089127052,
+      "outputElement": {
+        "id": "custom_sandstone",
+        "name": "Sandstone",
+        "category": "Materials",
+        "description": "Solidified block of sand",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ssb9kd9ki5udvzjqzvamkgmjcpsl"
+      }
+    },
+    {
+      "id": "m_1773089136905_if9hjx",
+      "inputA": "energy",
+      "inputB": "stone",
+      "output": "lava",
+      "createdAt": 1773089136905,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773089145275_qj7l13",
+      "inputA": "stone",
+      "inputB": "wind",
+      "output": "sand",
+      "createdAt": 1773089145275,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773089294292_2t9tql",
+      "inputA": "energy",
+      "inputB": "lava",
+      "output": "volcano",
+      "createdAt": 1773089294292,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773089301413_0gnlw3",
+      "inputA": "lava",
+      "inputB": "sand",
+      "output": "glass",
+      "createdAt": 1773089301413
+    },
+    {
+      "id": "m_1773089308868_9pvohk",
+      "inputA": "glass",
+      "inputB": "lava",
+      "output": "obsidian",
+      "createdAt": 1773089308868
+    },
+    {
+      "id": "m_1773089317811_98r4ko",
+      "inputA": "atmosphere",
+      "inputB": "lava",
+      "output": "custom_firestorm",
+      "createdAt": 1773089317811,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 2,
+        "heat": 2,
+        "ruin": 5
+      },
+      "outputElement": {
+        "id": "custom_firestorm",
+        "name": "Firestorm",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/8739yn2z7e1z6cfokiedap9ov69u",
+        "worldEffects": {
+          "brightness": 1,
+          "air": 2,
+          "heat": 2,
+          "ruin": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773089324727_hirjxx",
+      "inputA": "lava",
+      "inputB": "wind",
+      "output": "ash",
+      "createdAt": 1773089324727
+    },
+    {
+      "id": "m_1773089580153_4e6csp",
+      "inputA": "ash",
+      "inputB": "wind",
+      "output": "dust",
+      "createdAt": 1773089580153,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773089586637_depqhq",
+      "inputA": "ash",
+      "inputB": "dust",
+      "output": "dust",
+      "createdAt": 1773089586637,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773089598159_r7s7yw",
+      "inputA": "ash",
+      "inputB": "glass",
+      "output": "obsidian",
+      "createdAt": 1773089598159
+    },
+    {
+      "id": "m_1773089605137_uzh3vk",
+      "inputA": "ash",
+      "inputB": "earth",
+      "output": "plant",
+      "createdAt": 1773089605137,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1773089611457_54huzt",
+      "inputA": "ash",
+      "inputB": "fire",
+      "output": "energy",
+      "createdAt": 1773089611457
+    },
+    {
+      "id": "m_1773089622909_2wqgsl",
+      "inputA": "ash",
+      "inputB": "sand",
+      "output": "dust",
+      "createdAt": 1773089622909,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773089629621_kzpn4g",
+      "inputA": "ash",
+      "inputB": "stone",
+      "output": "lava",
+      "createdAt": 1773089629621,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773089639317_4178u2",
+      "inputA": "ash",
+      "inputB": "energy",
+      "output": "fire",
+      "createdAt": 1773089639317,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      }
+    },
+    {
+      "id": "m_1773089646759_cnsf2c",
+      "inputA": "ash",
+      "inputB": "lava",
+      "output": "volcano",
+      "createdAt": 1773089646759,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773089656465_8p0rqq",
+      "inputA": "ash",
+      "inputB": "mountain",
+      "output": "volcano",
+      "createdAt": 1773089656465,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773089720039_h8z7j1",
+      "inputA": "ash",
+      "inputB": "ash",
+      "output": "dust",
+      "createdAt": 1773089720039,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773089736481_uu9x7h",
+      "inputA": "air",
+      "inputB": "ash",
+      "output": "haze",
+      "createdAt": 1773089736481,
+      "outputWorldEffects": {
+        "pollution": 2
+      }
+    },
+    {
+      "id": "m_1773089747541_r1oum0",
+      "inputA": "ash",
+      "inputB": "atmosphere",
+      "output": "haze",
+      "createdAt": 1773089747541,
+      "outputWorldEffects": {
+        "pollution": 2
+      }
+    },
+    {
+      "id": "m_1773090139219_tj0swy",
+      "inputA": "ash",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773090139219,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773090148685_b6zv4j",
+      "inputA": "custom_adobe",
+      "inputB": "earth",
+      "output": "custom_house",
+      "createdAt": 1773090148685,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773090157371_4t4kqt",
+      "inputA": "custom_adobe",
+      "inputB": "sun",
+      "output": "brick",
+      "createdAt": 1773090157371
+    },
+    {
+      "id": "m_1773090166207_k7ddeu",
+      "inputA": "custom_adobe",
+      "inputB": "fire",
+      "output": "brick",
+      "createdAt": 1773090166207
+    },
+    {
+      "id": "m_1773090174039_ml8d3a",
+      "inputA": "glass",
+      "inputB": "mud",
+      "output": "custom_bottle",
+      "createdAt": 1773090174039,
+      "outputElement": {
+        "id": "custom_bottle",
+        "name": "Bottle",
+        "category": "Tools",
+        "description": "Useful for containing liquids",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/shs2pq1asolarizhzcv67nk6rj07"
+      }
+    },
+    {
+      "id": "m_1773090182115_9p8ewr",
+      "inputA": "custom_adobe",
+      "inputB": "stone",
+      "output": "custom_house",
+      "createdAt": 1773090182115,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773090192719_rcd6qz",
+      "inputA": "custom_adobe",
+      "inputB": "atmosphere",
+      "output": "dust",
+      "createdAt": 1773090192719,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773090203302_o0srkj",
+      "inputA": "sun",
+      "inputB": "wind",
+      "output": "custom_heatwave",
+      "createdAt": 1773090203302,
+      "outputElement": {
+        "id": "custom_heatwave",
+        "name": "Heatwave",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ivpmn99z4xh1pg1atnptkgkop3t4"
+      }
+    },
+    {
+      "id": "m_1773090223205_yyeg35",
+      "inputA": "custom_adobe",
+      "inputB": "lava",
+      "output": "brick",
+      "createdAt": 1773090223205
+    },
+    {
+      "id": "m_1773090233912_259wjw",
+      "inputA": "atmosphere",
+      "inputB": "sun",
+      "output": "custom_sky",
+      "createdAt": 1773090233912,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773090241729_h7tdmy",
+      "inputA": "glass",
+      "inputB": "sun",
+      "output": "custom_lens",
+      "createdAt": 1773090241729,
+      "outputElement": {
+        "id": "custom_lens",
+        "name": "Lens",
+        "category": "Tools",
+        "description": "Finetunes light in a direction",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d2t8af3gcuyrk6n3n2lc0b9sk3jp"
+      }
+    },
+    {
+      "id": "m_1773090253378_j0yovd",
+      "inputA": "custom_adobe",
+      "inputB": "energy",
+      "output": "brick",
+      "createdAt": 1773090253378
+    },
+    {
+      "id": "m_1773090261046_wy5ky0",
+      "inputA": "custom_adobe",
+      "inputB": "wind",
+      "output": "dust",
+      "createdAt": 1773090261046,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773090271283_3tplob",
+      "inputA": "custom_adobe",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773090271283,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773090279623_i8vss4",
+      "inputA": "custom_adobe",
+      "inputB": "custom_adobe",
+      "output": "custom_house",
+      "createdAt": 1773090279623,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773090381676_4w8044",
+      "inputA": "custom_adobe",
+      "inputB": "mountain",
+      "output": "custom_cabin",
+      "createdAt": 1773090381676,
+      "outputWorldEffects": {
+        "civilization": -2
+      },
+      "outputElement": {
+        "id": "custom_cabin",
+        "name": "Cabin",
+        "category": "Civilization",
+        "description": "A living location far away from civilization",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/laxt927tghjy52xm7okjxpqov5dh",
+        "worldEffects": {
+          "civilization": -2
+        }
+      }
+    },
+    {
+      "id": "m_1773090395906_v2oigs",
+      "inputA": "custom_adobe",
+      "inputB": "air",
+      "output": "dust",
+      "createdAt": 1773090395906,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773090407482_i0wm0p",
+      "inputA": "custom_adobe",
+      "inputB": "glass",
+      "output": "custom_window",
+      "createdAt": 1773090407482,
+      "outputElement": {
+        "id": "custom_window",
+        "name": "Window",
+        "category": "Tools",
+        "description": "Think of it as a gateway of sorts",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3yeyudgmwk2kk6zvm1x5sllqekj6"
+      }
+    },
+    {
+      "id": "m_1773090419748_60ngf5",
+      "inputA": "custom_adobe",
+      "inputB": "sand",
+      "output": "custom_sandstone",
+      "createdAt": 1773090419748,
+      "outputElement": {
+        "id": "custom_sandstone",
+        "name": "Sandstone",
+        "category": "Materials",
+        "description": "Solidified block of sand",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ssb9kd9ki5udvzjqzvamkgmjcpsl"
+      }
+    },
+    {
+      "id": "m_1773090440152_vf2ia5",
+      "inputA": "custom_adobe",
+      "inputB": "water",
+      "output": "clay",
+      "createdAt": 1773090440152,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773090448303_s0fvfe",
+      "inputA": "custom_adobe",
+      "inputB": "ash",
+      "output": "brick",
+      "createdAt": 1773090448303
+    },
+    {
+      "id": "m_1773090464964_fonoew",
+      "inputA": "mud",
+      "inputB": "wind",
+      "output": "clay",
+      "createdAt": 1773090464964,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773090478898_r6tczk",
+      "inputA": "atmosphere",
+      "inputB": "mud",
+      "output": "mountain",
+      "createdAt": 1773090478898,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773090488225_6usq8k",
+      "inputA": "mud",
+      "inputB": "sand",
+      "output": "clay",
+      "createdAt": 1773090488225,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773090499166_d2s07f",
+      "inputA": "ash",
+      "inputB": "sun",
+      "output": "custom_explosion",
+      "createdAt": 1773090499166,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      },
+      "outputElement": {
+        "id": "custom_explosion",
+        "name": "Explosion",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v50ea2cdr3awqaxna5yqm7ugy9g9",
+        "worldEffects": {
+          "brightness": 5,
+          "heat": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773090518920_xpttgv",
+      "inputA": "custom_adobe",
+      "inputB": "dust",
+      "output": "brick",
+      "createdAt": 1773090518920
+    },
+    {
+      "id": "m_1773090958640_i4pdce",
+      "inputA": "custom_adobe",
+      "inputB": "plant",
+      "output": "custom_potted_plant",
+      "createdAt": 1773090958640,
+      "outputElement": {
+        "id": "custom_potted_plant",
+        "name": "Potted Plant",
+        "category": "Nature",
+        "description": "It's a plant... in a pot!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3532c3z8fv1n1e1iy6gbdtow6jt5"
+      }
+    },
+    {
+      "id": "m_1773090975684_ai3x5w",
+      "inputA": "glass",
+      "inputB": "plant",
+      "output": "custom_green_house",
+      "createdAt": 1773090975684,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773090987714_fx1snr",
+      "inputA": "plant",
+      "inputB": "sand",
+      "output": "custom_cactus",
+      "createdAt": 1773090987714,
+      "outputElement": {
+        "id": "custom_cactus",
+        "name": "Cactus",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vybkjwncb0xgolt9w8ns4v4b08w3"
+      }
+    },
+    {
+      "id": "m_1773090997106_cad3zt",
+      "inputA": "dust",
+      "inputB": "plant",
+      "output": "seed",
+      "createdAt": 1773090997106
+    },
+    {
+      "id": "m_1773091048715_bixgvz",
+      "inputA": "atmosphere",
+      "inputB": "plant",
+      "output": "custom_palm_tree",
+      "createdAt": 1773091048715,
+      "outputElement": {
+        "id": "custom_palm_tree",
+        "name": "Palm Tree",
+        "category": "Nature",
+        "description": "A very tall, tropical tree",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/8en7v4fw80sbzhkj7qp8zkv2ja32"
+      }
+    },
+    {
+      "id": "m_1773091057696_fwlyjy",
+      "inputA": "lava",
+      "inputB": "plant",
+      "output": "ash",
+      "createdAt": 1773091057696
+    },
+    {
+      "id": "m_1773091108446_46covu",
+      "inputA": "mountain",
+      "inputB": "plant",
+      "output": "custom_pine_tree",
+      "createdAt": 1773091108446,
+      "outputElement": {
+        "id": "custom_pine_tree",
+        "name": "Pine Tree",
+        "category": "Nature",
+        "description": "A tree built for cold locations",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/anbruizoo19kxe6el5x6gz8jgld4"
+      }
+    },
+    {
+      "id": "m_1773091120648_bfkin0",
+      "inputA": "fire",
+      "inputB": "plant",
+      "output": "ash",
+      "createdAt": 1773091120648
+    },
+    {
+      "id": "m_1773091164349_sifty0",
+      "inputA": "plant",
+      "inputB": "wind",
+      "output": "custom_dandelion",
+      "createdAt": 1773091164349,
+      "outputElement": {
+        "id": "custom_dandelion",
+        "name": "Dandelion",
+        "category": "Nature",
+        "description": "Gone with the wind",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/fqwggqymzxdwrnxfhcvhag8h4b05"
+      }
+    },
+    {
+      "id": "m_1773091179158_oke8pu",
+      "inputA": "air",
+      "inputB": "plant",
+      "output": "custom_dandelion",
+      "createdAt": 1773091179158,
+      "outputElement": {
+        "id": "custom_dandelion",
+        "name": "Dandelion",
+        "category": "Nature",
+        "description": "Gone with the wind",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/fqwggqymzxdwrnxfhcvhag8h4b05"
+      }
+    },
+    {
+      "id": "m_1773091192386_9axai3",
+      "inputA": "energy",
+      "inputB": "plant",
+      "output": "tree",
+      "createdAt": 1773091192386,
+      "outputWorldEffects": {
+        "vegetation": 3
+      }
+    },
+    {
+      "id": "m_1773091199192_bywil7",
+      "inputA": "ash",
+      "inputB": "plant",
+      "output": "tree",
+      "createdAt": 1773091199192,
+      "outputWorldEffects": {
+        "vegetation": 3
+      }
+    },
+    {
+      "id": "m_1773091214228_xlrjlg",
+      "inputA": "plant",
+      "inputB": "sun",
+      "output": "flower",
+      "createdAt": 1773091214228,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773091371322_qyv5ur",
+      "inputA": "brick",
+      "inputB": "mountain",
+      "output": "castle",
+      "createdAt": 1773091371322,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1773091379592_likrqx",
+      "inputA": "brick",
+      "inputB": "glass",
+      "output": "custom_window",
+      "createdAt": 1773091379592,
+      "outputElement": {
+        "id": "custom_window",
+        "name": "Window",
+        "category": "Tools",
+        "description": "Think of it as a gateway of sorts",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3yeyudgmwk2kk6zvm1x5sllqekj6"
+      }
+    },
+    {
+      "id": "m_1773091388010_9wl9k0",
+      "inputA": "brick",
+      "inputB": "sand",
+      "output": "custom_adobe",
+      "createdAt": 1773091388010,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773091399044_yl53j0",
+      "inputA": "brick",
+      "inputB": "dust",
+      "output": "custom_adobe",
+      "createdAt": 1773091399044,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773091445738_xij6sc",
+      "inputA": "air",
+      "inputB": "brick",
+      "output": "dust",
+      "createdAt": 1773091445738,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773091456326_mj51fw",
+      "inputA": "brick",
+      "inputB": "energy",
+      "output": "custom_oven",
+      "createdAt": 1773091456326,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_oven",
+        "name": "Oven",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6gnkkz3a3u38gaz7vorq7h8g5bqh",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773091467228_q291d2",
+      "inputA": "brick",
+      "inputB": "water",
+      "output": "clay",
+      "createdAt": 1773091467228,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773091474598_the89e",
+      "inputA": "brick",
+      "inputB": "earth",
+      "output": "custom_house",
+      "createdAt": 1773091474598,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773091484120_d6iq7k",
+      "inputA": "ash",
+      "inputB": "brick",
+      "output": "custom_kiln",
+      "createdAt": 1773091484120,
+      "outputElement": {
+        "id": "custom_kiln",
+        "name": "Kiln",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/sp1qldeb0kaf127krbws1kfbztyn"
+      }
+    },
+    {
+      "id": "m_1773091494316_gdo2a3",
+      "inputA": "brick",
+      "inputB": "lava",
+      "output": "custom_oven",
+      "createdAt": 1773091494316,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_oven",
+        "name": "Oven",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6gnkkz3a3u38gaz7vorq7h8g5bqh",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773091502508_yihu01",
+      "inputA": "brick",
+      "inputB": "wind",
+      "output": "dust",
+      "createdAt": 1773091502508,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773091513370_2ev5jo",
+      "inputA": "atmosphere",
+      "inputB": "brick",
+      "output": "dust",
+      "createdAt": 1773091513370,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773091522376_zgy762",
+      "inputA": "custom_adobe",
+      "inputB": "brick",
+      "output": "custom_house",
+      "createdAt": 1773091522376,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773091535829_6ehqxl",
+      "inputA": "brick",
+      "inputB": "plant",
+      "output": "custom_potted_plant",
+      "createdAt": 1773091535829,
+      "outputElement": {
+        "id": "custom_potted_plant",
+        "name": "Potted Plant",
+        "category": "Nature",
+        "description": "It's a plant... in a pot!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3532c3z8fv1n1e1iy6gbdtow6jt5"
+      }
+    },
+    {
+      "id": "m_1773091544724_xl54y0",
+      "inputA": "brick",
+      "inputB": "stone",
+      "output": "custom_wall",
+      "createdAt": 1773091544724,
+      "outputElement": {
+        "id": "custom_wall",
+        "name": "Wall",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/f1q96khstdhv0i92j568ug6qzdwa"
+      }
+    },
+    {
+      "id": "m_1773091865507_zdc1fq",
+      "inputA": "energy",
+      "inputB": "custom_house",
+      "output": "electricity",
+      "createdAt": 1773091865507,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773091877263_p7aw5n",
+      "inputA": "custom_house",
+      "inputB": "mountain",
+      "output": "custom_cabin",
+      "createdAt": 1773091877263,
+      "outputWorldEffects": {
+        "civilization": -2
+      },
+      "outputElement": {
+        "id": "custom_cabin",
+        "name": "Cabin",
+        "category": "Civilization",
+        "description": "A living location far away from civilization",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/laxt927tghjy52xm7okjxpqov5dh",
+        "worldEffects": {
+          "civilization": -2
+        }
+      }
+    },
+    {
+      "id": "m_1773091887531_wnsyin",
+      "inputA": "custom_house",
+      "inputB": "stone",
+      "output": "castle",
+      "createdAt": 1773091887531,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1773091896099_azsbbl",
+      "inputA": "dust",
+      "inputB": "custom_house",
+      "output": "ruin",
+      "createdAt": 1773091896099,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773091905765_bfe962",
+      "inputA": "fire",
+      "inputB": "custom_house",
+      "output": "custom_fireplace",
+      "createdAt": 1773091905765,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      },
+      "outputElement": {
+        "id": "custom_fireplace",
+        "name": "Fireplace",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/aztkddjzlwdtssnbjujcw58f1dwo",
+        "worldEffects": {
+          "brightness": 0,
+          "heat": 0
+        }
+      }
+    },
+    {
+      "id": "m_1773091921076_bltqks",
+      "inputA": "air",
+      "inputB": "custom_house",
+      "output": "custom_cabin",
+      "createdAt": 1773091921076,
+      "outputWorldEffects": {
+        "civilization": -2
+      },
+      "outputElement": {
+        "id": "custom_cabin",
+        "name": "Cabin",
+        "category": "Civilization",
+        "description": "A living location far away from civilization",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/laxt927tghjy52xm7okjxpqov5dh",
+        "worldEffects": {
+          "civilization": -2
+        }
+      }
+    },
+    {
+      "id": "m_1773091930577_ogyjo4",
+      "inputA": "custom_house",
+      "inputB": "sand",
+      "output": "custom_adobe",
+      "createdAt": 1773091930577,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773091950875_526nqa",
+      "inputA": "custom_house",
+      "inputB": "sun",
+      "output": "solar_panel",
+      "createdAt": 1773091950875,
+      "outputWorldEffects": {
+        "pollution": -1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773092031363_lfpcee",
+      "inputA": "custom_house",
+      "inputB": "atmosphere",
+      "output": "custom_feng_shui",
+      "createdAt": 1773092031363,
+      "outputElement": {
+        "id": "custom_feng_shui",
+        "name": "Feng Shui",
+        "category": "Civilization",
+        "description": "When a living space achieves perfect balance",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/xlcpub6rpzynzyn4066abu9vksi4"
+      }
+    },
+    {
+      "id": "m_1773092075085_nzwh59",
+      "inputA": "custom_house",
+      "inputB": "lava",
+      "output": "ruin",
+      "createdAt": 1773092075085,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773092082227_l9povs",
+      "inputA": "ash",
+      "inputB": "custom_house",
+      "output": "ruin",
+      "createdAt": 1773092082227,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773092136643_r9h0np",
+      "inputA": "earth",
+      "inputB": "custom_house",
+      "output": "custom_bunker",
+      "createdAt": 1773092136643,
+      "outputElement": {
+        "id": "custom_bunker",
+        "name": "Bunker",
+        "category": "Structures",
+        "description": "Provides safety on the brink of collapse",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/68kp1swlrm4suep1w6siz8h4wef3"
+      }
+    },
+    {
+      "id": "m_1773092155621_bn3fay",
+      "inputA": "custom_house",
+      "inputB": "wind",
+      "output": "custom_windmill",
+      "createdAt": 1773092155621,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      },
+      "outputElement": {
+        "id": "custom_windmill",
+        "name": "Windmill",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ho4w0xk48idzuxehf3fauzva6u07",
+        "worldEffects": {
+          "air": 2,
+          "atmosphere": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773092166427_acyvnp",
+      "inputA": "custom_adobe",
+      "inputB": "custom_house",
+      "output": "village",
+      "createdAt": 1773092166427,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1773092177361_zuey93",
+      "inputA": "custom_house",
+      "inputB": "mud",
+      "output": "custom_adobe",
+      "createdAt": 1773092177361,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773092186775_qbik4z",
+      "inputA": "brick",
+      "inputB": "custom_house",
+      "output": "custom_fireplace",
+      "createdAt": 1773092186775,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      },
+      "outputElement": {
+        "id": "custom_fireplace",
+        "name": "Fireplace",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/aztkddjzlwdtssnbjujcw58f1dwo",
+        "worldEffects": {
+          "brightness": 0,
+          "heat": 0
+        }
+      }
+    },
+    {
+      "id": "m_1773092196683_ulc0t5",
+      "inputA": "custom_house",
+      "inputB": "plant",
+      "output": "custom_potted_plant",
+      "createdAt": 1773092196683,
+      "outputElement": {
+        "id": "custom_potted_plant",
+        "name": "Potted Plant",
+        "category": "Nature",
+        "description": "It's a plant... in a pot!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3532c3z8fv1n1e1iy6gbdtow6jt5"
+      }
+    },
+    {
+      "id": "m_1773092202369_l8m246",
+      "inputA": "custom_house",
+      "inputB": "water",
+      "output": "custom_flood",
+      "createdAt": 1773092202369,
+      "outputElement": {
+        "id": "custom_flood",
+        "name": "Flood",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/b9dk4fn9fz7uzrahd2otp60a9af8"
+      }
+    },
+    {
+      "id": "m_1773092212141_8zmdtr",
+      "inputA": "glass",
+      "inputB": "custom_house",
+      "output": "custom_green_house",
+      "createdAt": 1773092212141,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773092721177_ny3ead",
+      "inputA": "brick",
+      "inputB": "custom_window",
+      "output": "custom_house",
+      "createdAt": 1773092721177,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773092731289_xvi21i",
+      "inputA": "sun",
+      "inputB": "custom_window",
+      "output": "solar_panel",
+      "createdAt": 1773092731289,
+      "outputWorldEffects": {
+        "pollution": -1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773092739339_dzj5hc",
+      "inputA": "lava",
+      "inputB": "custom_window",
+      "output": "obsidian",
+      "createdAt": 1773092739339
+    },
+    {
+      "id": "m_1773092749585_5czhx0",
+      "inputA": "glass",
+      "inputB": "custom_window",
+      "output": "custom_mirror",
+      "createdAt": 1773092749585,
+      "outputElement": {
+        "id": "custom_mirror",
+        "name": "Mirror",
+        "category": "Tools",
+        "description": "What do YOU see when you look at it?",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "✨"
+      }
+    },
+    {
+      "id": "m_1773092760089_g4w39l",
+      "inputA": "atmosphere",
+      "inputB": "custom_window",
+      "output": "custom_sky",
+      "createdAt": 1773092760089,
+      "outputElement": {
+        "id": "custom_sky",
+        "name": "Sky",
+        "category": "Weather",
+        "description": "The vast blue above",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/vxqif0896d62wdwmebbge9ymnu2m"
+      }
+    },
+    {
+      "id": "m_1773092773184_61xrjy",
+      "inputA": "custom_house",
+      "inputB": "custom_window",
+      "output": "custom_green_house",
+      "createdAt": 1773092773184,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773092797547_r8bldl",
+      "inputA": "air",
+      "inputB": "custom_window",
+      "output": "wind",
+      "createdAt": 1773092797547,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773092808200_n3mx36",
+      "inputA": "plant",
+      "inputB": "custom_window",
+      "output": "custom_green_house",
+      "createdAt": 1773092808200,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773092820889_f78gvw",
+      "inputA": "mountain",
+      "inputB": "custom_window",
+      "output": "castle",
+      "createdAt": 1773092820889,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1773092831095_n0lbcv",
+      "inputA": "water",
+      "inputB": "custom_window",
+      "output": "rain",
+      "createdAt": 1773092831095,
+      "outputWorldEffects": {
+        "water": 1
+      }
+    },
+    {
+      "id": "m_1773092842381_v5bglw",
+      "inputA": "ash",
+      "inputB": "custom_window",
+      "output": "custom_mirror",
+      "createdAt": 1773092842381,
+      "outputElement": {
+        "id": "custom_mirror",
+        "name": "Mirror",
+        "category": "Tools",
+        "description": "What do YOU see when you look at it?",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "✨"
+      }
+    },
+    {
+      "id": "m_1773092860513_s41099",
+      "inputA": "custom_adobe",
+      "inputB": "custom_window",
+      "output": "custom_house",
+      "createdAt": 1773092860513,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773092919411_tcebre",
+      "inputA": "earth",
+      "inputB": "custom_window",
+      "output": "custom_adobe",
+      "createdAt": 1773092919411,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773092930416_l2eqe6",
+      "inputA": "mud",
+      "inputB": "custom_window",
+      "output": "custom_adobe",
+      "createdAt": 1773092930416,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773092937495_sv782j",
+      "inputA": "dust",
+      "inputB": "custom_window",
+      "output": "custom_mirror",
+      "createdAt": 1773092937495,
+      "outputElement": {
+        "id": "custom_mirror",
+        "name": "Mirror",
+        "category": "Tools",
+        "description": "What do YOU see when you look at it?",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "✨"
+      }
+    },
+    {
+      "id": "m_1773092947951_j47z6w",
+      "inputA": "fire",
+      "inputB": "custom_window",
+      "output": "glass",
+      "createdAt": 1773092947951
+    },
+    {
+      "id": "m_1773092988393_c4efrp",
+      "inputA": "wind",
+      "inputB": "custom_window",
+      "output": "custom_wall",
+      "createdAt": 1773092988393,
+      "outputElement": {
+        "id": "custom_wall",
+        "name": "Wall",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/f1q96khstdhv0i92j568ug6qzdwa"
+      }
+    },
+    {
+      "id": "m_1773092997920_ffmab8",
+      "inputA": "stone",
+      "inputB": "custom_window",
+      "output": "glass",
+      "createdAt": 1773092997920
+    },
+    {
+      "id": "m_1773093011752_kbuuvr",
+      "inputA": "energy",
+      "inputB": "custom_window",
+      "output": "custom_light_bulb",
+      "createdAt": 1773093011752,
+      "outputWorldEffects": {
+        "brightness": 1
+      },
+      "outputElement": {
+        "id": "custom_light_bulb",
+        "name": "Light Bulb",
+        "category": "Tools",
+        "description": "Let there be light!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/f9z6dfwz91f5mtl65wmxg6l6pt71",
+        "worldEffects": {
+          "brightness": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773093021432_zjqagw",
+      "inputA": "custom_window",
+      "inputB": "custom_window",
+      "output": "custom_green_house",
+      "createdAt": 1773093021432,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773093031817_15yt2c",
+      "inputA": "sand",
+      "inputB": "custom_window",
+      "output": "glass",
+      "createdAt": 1773093031817
+    },
+    {
+      "id": "m_1773093270127_gf64xm",
+      "inputA": "energy",
+      "inputB": "village",
+      "output": "electricity",
+      "createdAt": 1773093270127,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773093281241_cfqfk0",
+      "inputA": "earth",
+      "inputB": "village",
+      "output": "farm",
+      "createdAt": 1773093281241,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773093296124_f2hgzw",
+      "inputA": "village",
+      "inputB": "wind",
+      "output": "custom_windmill",
+      "createdAt": 1773093296124,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      },
+      "outputElement": {
+        "id": "custom_windmill",
+        "name": "Windmill",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ho4w0xk48idzuxehf3fauzva6u07",
+        "worldEffects": {
+          "air": 2,
+          "atmosphere": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773093307817_i6wn5s",
+      "inputA": "lava",
+      "inputB": "village",
+      "output": "ruin",
+      "createdAt": 1773093307817,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773093315721_k5a1ej",
+      "inputA": "fire",
+      "inputB": "village",
+      "output": "ruin",
+      "createdAt": 1773093315721,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773093325450_91j2jj",
+      "inputA": "custom_house",
+      "inputB": "village",
+      "output": "city",
+      "createdAt": 1773093325450,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1773093333295_vnhcxx",
+      "inputA": "glass",
+      "inputB": "village",
+      "output": "custom_green_house",
+      "createdAt": 1773093333295,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      },
+      "outputElement": {
+        "id": "custom_green_house",
+        "name": "Green House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/72uhzxskfr10qwjnzm547xwh4uhv",
+        "worldEffects": {
+          "vegetation": 2,
+          "civilization": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773093341951_l1n3tb",
+      "inputA": "ash",
+      "inputB": "village",
+      "output": "ruin",
+      "createdAt": 1773093341951,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773093352290_3swntp",
+      "inputA": "village",
+      "inputB": "custom_window",
+      "output": "custom_house",
+      "createdAt": 1773093352290,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
+    {
+      "id": "m_1773093368307_l3e1s4",
+      "inputA": "atmosphere",
+      "inputB": "village",
+      "output": "custom_feng_shui",
+      "createdAt": 1773093368307,
+      "outputElement": {
+        "id": "custom_feng_shui",
+        "name": "Feng Shui",
+        "category": "Civilization",
+        "description": "When a living space achieves perfect balance",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/xlcpub6rpzynzyn4066abu9vksi4"
+      }
+    },
+    {
+      "id": "m_1773093382751_n9e3fx",
+      "inputA": "dust",
+      "inputB": "village",
+      "output": "ruin",
+      "createdAt": 1773093382751,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1773093392887_4vxus3",
+      "inputA": "sand",
+      "inputB": "village",
+      "output": "custom_adobe",
+      "createdAt": 1773093392887,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773093401463_hm2zgr",
+      "inputA": "air",
+      "inputB": "village",
+      "output": "custom_windmill",
+      "createdAt": 1773093401463,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      },
+      "outputElement": {
+        "id": "custom_windmill",
+        "name": "Windmill",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ho4w0xk48idzuxehf3fauzva6u07",
+        "worldEffects": {
+          "air": 2,
+          "atmosphere": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773093410573_eoxcwc",
+      "inputA": "brick",
+      "inputB": "village",
+      "output": "city",
+      "createdAt": 1773093410573,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1773093419321_o5f34t",
+      "inputA": "sun",
+      "inputB": "village",
+      "output": "solar_panel",
+      "createdAt": 1773093419322,
+      "outputWorldEffects": {
+        "pollution": -1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1773093485628_z8o1dt",
+      "inputA": "village",
+      "inputB": "water",
+      "output": "custom_water_wheel",
+      "createdAt": 1773093485628,
+      "outputElement": {
+        "id": "custom_water_wheel",
+        "name": "Water Wheel",
+        "category": "Tools",
+        "description": "Uses water to provide energy",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/lhlbsixf2l37zioo352lvyz5e7xn"
+      }
+    },
+    {
+      "id": "m_1773093495668_b908d3",
+      "inputA": "mud",
+      "inputB": "village",
+      "output": "custom_adobe",
+      "createdAt": 1773093495668,
+      "outputElement": {
+        "id": "custom_adobe",
+        "name": "Adobe",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v015ktl4alejkcd8d08nkyq608nm"
+      }
+    },
+    {
+      "id": "m_1773093504681_kojy0m",
+      "inputA": "plant",
+      "inputB": "village",
+      "output": "farm",
+      "createdAt": 1773093504681,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773093514345_gzf50n",
+      "inputA": "mountain",
+      "inputB": "village",
+      "output": "castle",
+      "createdAt": 1773093514345,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1773093525145_yqh9v3",
+      "inputA": "custom_adobe",
+      "inputB": "village",
+      "output": "custom_house",
+      "createdAt": 1773093525145,
+      "outputWorldEffects": {
+        "civilization": 5
+      },
+      "outputElement": {
+        "id": "custom_house",
+        "name": "House",
+        "category": "Weird",
+        "description": "A rediscovered element.",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/irja2133y0im4to1d740jo6f3ty3",
+        "worldEffects": {
+          "civilization": 5
+        }
+      }
+    },
     {
       "id": "m_1773076094646_kgltpw",
       "inputA": "earth",
@@ -327,16 +4311,6 @@
       "createdAt": 1773078040295,
       "outputWorldEffects": {
         "earthy": 1
-      }
-    },
-    {
-      "id": "m_1773078088147_8dorug",
-      "inputA": "mountain",
-      "inputB": "mountain",
-      "output": "custom_mountain_2",
-      "createdAt": 1773078088147,
-      "outputWorldEffects": {
-        "earthy": 2
       }
     },
     {
