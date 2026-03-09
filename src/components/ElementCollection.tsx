@@ -1,11 +1,9 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
-import { RECIPES } from '../data/recipes';
 import { ElementCard } from './ElementCard';
 import { DEFAULT_ELEMENT_CATEGORIES, type ElementCategory } from '../types';
 import { hasElementCategory, resolveElementCategories } from '../utils/categoryResolver';
-import { getAvailableElements } from '../utils/elementAvailability';
 import { resolveElementName } from '../utils/nameResolver';
 import './ElementCollection.css';
 
@@ -13,10 +11,9 @@ export function ElementCollection() {
   const { state, dispatch } = useGame();
   const [activeCategory, setActiveCategory] = useState<ElementCategory | 'All'>('All');
   const [search, setSearch] = useState('');
-  const allRecipes = useMemo(() => [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES], [state.masterRecipes, state.sharedRecipes]);
   const allElements = useMemo(
-    () => getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes),
-    [state.customElements, allRecipes]
+    () => [...ELEMENTS, ...state.customElements],
+    [state.customElements]
   );
 
   const discoveredElements = useMemo(() => {

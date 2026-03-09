@@ -28,12 +28,10 @@ import {
   getHintInsightCost,
   getRandomDiscoveryInsightCost,
 } from '../engine/insightEngine';
-import { getAvailableElementIdSet, getAvailableElements } from '../utils/elementAvailability';
-import { saveGame, loadGame } from './saveLoad';
+import { saveGame, loadGame, updateElementRegistry, updateRecipeRegistry, loadElementRegistry, loadRecipeRegistry } from './saveLoad';
 import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
-const RECOVERY_FLAG = 'wondercraft_recovery_v3_done';
 
 const DESTRUCTIVE_ELEMENT_IDS = new Set([
   'nuke', 'nuclear_bomb', 'antimatter', 'black_hole', 'supernova',
@@ -368,8 +366,8 @@ function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): 
   return [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
 }
 
-function allElements(state: Pick<GameState, 'customElements' | 'masterRecipes' | 'sharedRecipes'>) {
-  return getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes(state));
+function allElements(state: Pick<GameState, 'customElements'>) {
+  return [...ELEMENTS, ...state.customElements];
 }
 
 function createInitialPlanet(name: string = 'Genesis'): PlanetState {
@@ -732,26 +730,12 @@ function removeElementIdsFromState(state: GameState, removedIds: Set<string>): G
   });
 }
 
-function withAvailableElementPool(state: GameState, recipes: Recipe[]): GameState {
-  const availableIds = getAvailableElementIdSet(recipes);
-
-  // Only prune custom elements that have no recipe producing them.
-  // Never remove core elements or discovered elements — the availability set
-  // can be temporarily incomplete (e.g. sharedRecipes not yet fetched) and
-  // pruning discoveredElements would cause permanent data loss once saved.
-  const orphanCustom = state.customElements.filter((el) => !availableIds.has(el.id));
-  if (orphanCustom.length === 0) return state;
-
-  const removedIds = new Set(orphanCustom.map((el) => el.id));
-  const next = removeElementIdsFromState(state, removedIds);
-  const nextWithCustom = {
-    ...next,
-    customElements: next.customElements.filter((el) => !removedIds.has(el.id)),
-  };
-  const planet = activePlanet(nextWithCustom);
-  return updateActivePlanet(nextWithCustom, {
-    worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), allElements(nextWithCustom), nextWithCustom.effectOverrides),
-  });
+/** Custom elements are never auto-pruned. Removing elements that temporarily
+ *  have no recipe (e.g. while shared recipes are loading) caused permanent
+ *  data loss in the past. Elements stay in state forever; visibility is
+ *  determined at render time. */
+function withAvailableElementPool(state: GameState, _recipes: Recipe[]): GameState {
+  return state;
 }
 
 function migrateLegacyOceanPuddleState(state: GameState): GameState {
@@ -882,15 +866,10 @@ function migrateLegacyOceanPuddleState(state: GameState): GameState {
   });
 }
 
-/** One-time recovery: re-create custom elements and re-discover everything
- *  that was lost to the availability-pruning bug.
- *  Runs across ALL planets, not just the active one. */
+/** Recovery: re-create custom elements referenced by recipes but missing from
+ *  state, and transitively re-discover outputs whose inputs are both discovered.
+ *  Idempotent — safe to run every session. */
 function recoverLostElements(state: GameState): GameState {
-  // Only run once per version
-  try {
-    if (localStorage.getItem(RECOVERY_FLAG)) return state;
-  } catch { /* proceed */ }
-
   if (!activePlanet(state).bigBangDone) return state;
 
   const existingCustomIds = new Set(state.customElements.map((el) => el.id));
@@ -951,6 +930,9 @@ function recoverLostElements(state: GameState): GameState {
       }
     }
 
+    // Only modify planet if something was actually recovered
+    if (discovered.size === planet.discoveredElements.size && newCustom.length === 0) return planet;
+
     return {
       ...planet,
       discoveredElements: discovered,
@@ -959,15 +941,14 @@ function recoverLostElements(state: GameState): GameState {
     };
   });
 
+  // Skip state update if nothing changed
+  if (newCustom.length === 0 && nextPlanets === state.planets) return state;
+
   const nextState = withActivePlanetFields({
     ...state,
     planets: nextPlanets,
     customElements: nextCustom,
   });
-
-  try {
-    localStorage.setItem(RECOVERY_FLAG, '1');
-  } catch { /* ok */ }
 
   return nextState;
 }
@@ -1384,12 +1365,27 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'LOAD_STATE': {
       const saved = action.state;
       if (!saved) return state;
-      const customElements = saved.customElements ?? [];
+
+      // Merge saved data with append-only registry to recover any elements
+      // or recipes that were lost from the main save.
+      const registryElements = loadElementRegistry();
+      const registryRecipes = loadRecipeRegistry();
+
+      const savedCustom = saved.customElements ?? [];
+      const customMap = new Map(registryElements.map((el) => [el.id, el]));
+      for (const el of savedCustom) customMap.set(el.id, el);
+      const customElements = Array.from(customMap.values());
+
+      const savedRecipes = saved.masterRecipes ?? [];
+      const recipeMap = new Map(registryRecipes.map((r) => [[r.inputA, r.inputB].sort().join('|'), r]));
+      for (const r of savedRecipes) recipeMap.set([r.inputA, r.inputB].sort().join('|'), r);
+      const masterRecipes = Array.from(recipeMap.values());
+
       const loadedOverrides = saved.effectOverrides ?? {};
 
       // Build global fields
       const globalFields = {
-        masterRecipes: saved.masterRecipes ?? [],
+        masterRecipes,
         customElements,
         sharedRecipes: state.sharedRecipes,
         iconOverrides: saved.iconOverrides ?? {},
@@ -1627,7 +1623,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (state.bigBangDone) {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-      saveTimerRef.current = setTimeout(() => saveGame(flushInsight(state)), 2000);
+      saveTimerRef.current = setTimeout(() => {
+        const flushed = flushInsight(state);
+        saveGame(flushed);
+        // Append-only registry: custom elements and recipes never lost
+        updateElementRegistry(flushed.customElements);
+        updateRecipeRegistry(flushed.masterRecipes);
+      }, 2000);
     }
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [state]);

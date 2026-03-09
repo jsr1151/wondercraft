@@ -1,11 +1,9 @@
 import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { ELEMENTS } from '../data/elements';
-import { RECIPES } from '../data/recipes';
 import { useGame } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe, publishGlobalRecipes } from '../store/globalRecipes';
 import { DEFAULT_ELEMENT_CATEGORIES, type Element, type MasterRecipe, type WorldEffectMap } from '../types';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
-import { getAvailableElements } from '../utils/elementAvailability';
 import { isImageIcon, resolveElementIcon, resolveElementIconRaw } from '../utils/iconResolver';
 import { findElementByNameOrId, resolveElementName } from '../utils/nameResolver';
 import './MasterRecipeLab.css';
@@ -76,10 +74,9 @@ export function MasterRecipeLab() {
   const [outputActsAs, setOutputActsAs] = useState('');
   const [iconStatus, setIconStatus] = useState<string | null>(null);
 
-  const allRecipes = useMemo(() => [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES], [state.masterRecipes, state.sharedRecipes]);
   const allElements = useMemo(
-    () => getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes),
-    [state.customElements, allRecipes]
+    () => [...ELEMENTS, ...state.customElements],
+    [state.customElements]
   );
 
   const elementOptions = useMemo(

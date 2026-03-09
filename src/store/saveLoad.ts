@@ -1,7 +1,9 @@
-import type { GameState, SerializableGameState, SerializablePlanetState, PlanetState } from '../types';
+import type { GameState, SerializableGameState, SerializablePlanetState, PlanetState, Element, MasterRecipe } from '../types';
 
 const SAVE_KEY = 'wondercraft_save_v1';
 const BACKUP_SAVE_KEY = 'wondercraft_save_v1_backup';
+const ELEMENT_REGISTRY_KEY = 'wondercraft_custom_elements_registry';
+const RECIPE_REGISTRY_KEY = 'wondercraft_custom_recipes_registry';
 
 export interface SaveDiagnostics {
   key: 'primary' | 'backup';
@@ -205,5 +207,53 @@ export function restoreSaveSnapshot(key: 'primary' | 'backup'): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Independent registry: append-only backup of custom elements and recipes.
+// Even if the main save is lost or corrupted, the registry preserves all
+// custom data the player ever created.
+// ---------------------------------------------------------------------------
+
+/** Merge new custom elements into the registry (append-only, never shrinks). */
+export function updateElementRegistry(elements: Element[]): void {
+  try {
+    const existing = loadElementRegistry();
+    const map = new Map(existing.map((el) => [el.id, el]));
+    for (const el of elements) map.set(el.id, el);
+    localStorage.setItem(ELEMENT_REGISTRY_KEY, JSON.stringify(Array.from(map.values())));
+  } catch { /* best effort */ }
+}
+
+/** Load the custom element registry. */
+export function loadElementRegistry(): Element[] {
+  try {
+    const raw = localStorage.getItem(ELEMENT_REGISTRY_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as Element[];
+  } catch {
+    return [];
+  }
+}
+
+/** Merge new master recipes into the registry (append-only, never shrinks). */
+export function updateRecipeRegistry(recipes: MasterRecipe[]): void {
+  try {
+    const existing = loadRecipeRegistry();
+    const map = new Map(existing.map((r) => [[r.inputA, r.inputB].sort().join('|'), r]));
+    for (const r of recipes) map.set([r.inputA, r.inputB].sort().join('|'), r);
+    localStorage.setItem(RECIPE_REGISTRY_KEY, JSON.stringify(Array.from(map.values())));
+  } catch { /* best effort */ }
+}
+
+/** Load the recipe registry. */
+export function loadRecipeRegistry(): MasterRecipe[] {
+  try {
+    const raw = localStorage.getItem(RECIPE_REGISTRY_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as MasterRecipe[];
+  } catch {
+    return [];
   }
 }

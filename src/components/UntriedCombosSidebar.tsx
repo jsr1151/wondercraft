@@ -4,7 +4,6 @@ import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
 import { resolveActsAsElementId } from '../engine/actingAs';
 import { useGame } from '../store/useGame';
-import { getAvailableElements } from '../utils/elementAvailability';
 import { resolveElementIcon } from '../utils/iconResolver';
 import { resolveElementName } from '../utils/nameResolver';
 import './UntriedCombosSidebar.css';
@@ -35,7 +34,7 @@ export function UntriedCombosSidebar() {
   const [elementsOpen, setElementsOpen] = useState(false);
   const [mode, setMode] = useState<'untried' | 'no-output'>('untried');
   const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
-  const allElements = getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes);
+  const allElements = [...ELEMENTS, ...state.customElements];
 
   const uniqueElements = useMemo(() => {
     const seen = new Set<string>();

@@ -1,11 +1,9 @@
 import { useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
-import { RECIPES } from '../data/recipes';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
 import { resolveElementIconRaw } from '../utils/iconResolver';
 import { DEFAULT_ELEMENT_CATEGORIES, type WorldEffectMap } from '../types';
-import { getAvailableElements } from '../utils/elementAvailability';
 import { ElementIcon } from './ElementIcon';
 import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './CraftingArea.css';
@@ -42,8 +40,7 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 export function CraftingArea() {
   const { state, dispatch } = useGame();
   const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides, categoryOverrides, actsAsOverrides } = state;
-  const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
-  const allElements = getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes);
+  const allElements = [...ELEMENTS, ...state.customElements];
   const categoryOptions = Array.from(new Set([
     ...(DEFAULT_ELEMENT_CATEGORIES as readonly string[]),
     ...allElements.flatMap((element) => parseElementCategories(resolveElementCategory(element, categoryOverrides))),

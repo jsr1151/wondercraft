@@ -1,15 +1,12 @@
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
-import { RECIPES } from '../data/recipes';
-import { getAvailableElements } from '../utils/elementAvailability';
 import { ElementIcon } from './ElementIcon';
 import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './RecentDiscoveries.css';
 
 export function RecentDiscoveries() {
   const { state } = useGame();
-  const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
-  const allElements = getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes);
+  const allElements = [...ELEMENTS, ...state.customElements];
   const recent = state.recentDiscoveries
     .map(id => allElements.find(e => e.id === id))
     .filter((e): e is NonNullable<typeof e> => e != null);
