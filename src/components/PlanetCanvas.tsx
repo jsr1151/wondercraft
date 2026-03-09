@@ -258,23 +258,42 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
     }));
 
     // --- Ambient entity data ---
-    // Each entity gets a home position, speed, wander radius, and phase offset
-    const mkEntities = (count: number, latRange: number) =>
+    // Land entities spawn near continent centres so they cluster on land
+    const mkLandEntities = (count: number) => {
+      const ents = [];
+      for (let i = 0; i < count; i++) {
+        const c = continents[Math.floor(rng() * continents.length)];
+        // Scatter within continent radius (lon/lat offsets scaled to blob size)
+        const lonSpread = (c.rx / 200) * (0.5 + rng());
+        const latSpread = (c.ry / 200) * (0.5 + rng());
+        ents.push({
+          lon: c.lon + (rng() - 0.5) * lonSpread * 2,
+          lat: c.lat + (rng() - 0.5) * latSpread * 2,
+          speed: 0.15 + rng() * 0.35,
+          wanderR: 0.04 + rng() * 0.09,
+          phase: rng() * Math.PI * 2,
+          seed: rng() * 1000,
+        });
+      }
+      return ents;
+    };
+    // Water entities spawn away from continent centres
+    const mkWaterEntities = (count: number) =>
       Array.from({ length: count }, () => ({
         lon: rng() * Math.PI * 2,
-        lat: (rng() - 0.5) * latRange,
+        lat: (rng() - 0.5) * 1.4,
         speed: 0.15 + rng() * 0.35,
         wanderR: 0.08 + rng() * 0.18,
         phase: rng() * Math.PI * 2,
         seed: rng() * 1000,
       }));
 
-    const humanEntities  = mkEntities(24, 1.2);
-    const animalEntities = mkEntities(18, 1.5);
-    const birdEntities   = mkEntities(14, 1.6);
-    const fishEntities   = mkEntities(16, 1.4);
-    const insectEntities = mkEntities(20, 1.3);
-    const boatEntities   = mkEntities(8, 1.0);
+    const humanEntities  = mkLandEntities(24);
+    const animalEntities = mkLandEntities(18);
+    const birdEntities   = mkLandEntities(14);
+    const insectEntities = mkLandEntities(20);
+    const fishEntities   = mkWaterEntities(16);
+    const boatEntities   = mkWaterEntities(8);
 
     const has = (id: string) => !!discoveredRef.current?.has(id);
     const emoji = (id: string) => emojiMapRef.current?.[id] ?? '';
@@ -707,56 +726,80 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
       // === AMBIENT ENTITIES (living dots) ===
       const ts = t * 0.001; // time in seconds for smooth motion
 
-      const drawDot = (
-        lon: number, lat: number, radius: number,
-        r2: number, g: number, b: number, a: number,
-      ) => {
-        const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
-        if (!p.visible) return;
-        ctx.fillStyle = `rgba(${r2},${g},${b},${a * p.alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius * p.scale, 0, Math.PI * 2);
-        ctx.fill();
-      };
-
-      // Humans — small warm dots that wander near cities
+      // Humans — upright stick figures near land
       if (has('human')) {
         for (const e of humanEntities) {
           const wobble = ts * e.speed + e.phase;
           const lon = e.lon + Math.sin(wobble) * e.wanderR;
           const lat = e.lat + Math.cos(wobble * 0.7 + e.seed) * e.wanderR * 0.6;
-          drawDot(lon, lat, 1.6, 230, 195, 150, 0.7);
+          const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
+          if (!p.visible) continue;
+          const s = 2.2 * p.scale;
+          const a = 0.75 * p.alpha;
+          ctx.strokeStyle = `rgba(230,195,150,${a})`;
+          ctx.lineWidth = 0.8 * p.scale;
+          // Head
+          ctx.beginPath();
+          ctx.arc(p.x, p.y - s * 1.2, s * 0.45, 0, Math.PI * 2);
+          ctx.stroke();
+          // Body
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y - s * 0.75); ctx.lineTo(p.x, p.y + s * 0.3);
+          ctx.stroke();
+          // Legs (walking motion)
+          const legSwing = Math.sin(wobble * 3) * s * 0.4;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y + s * 0.3); ctx.lineTo(p.x + legSwing, p.y + s);
+          ctx.moveTo(p.x, p.y + s * 0.3); ctx.lineTo(p.x - legSwing, p.y + s);
+          ctx.stroke();
         }
       }
 
-      // Animals / mammals — earthy dots that roam freely
+      // Animals — small diamond shapes on land
       if (has('animal') || has('mammal')) {
         for (const e of animalEntities) {
           const wobble = ts * e.speed * 0.7 + e.phase;
           const lon = e.lon + Math.sin(wobble * 0.8) * e.wanderR * 1.3;
           const lat = e.lat + Math.cos(wobble * 0.5 + e.seed) * e.wanderR;
-          drawDot(lon, lat, 1.8, 140, 110, 65, 0.65);
-        }
-      }
-
-      // Birds — dots that trace arc paths above surface
-      if (has('bird')) {
-        for (const e of birdEntities) {
-          const wobble = ts * e.speed * 1.2 + e.phase;
-          const lon = e.lon + wobble * 0.3; // steady drift
-          const lat = e.lat + Math.sin(wobble * 2.5) * 0.12;
-          const p = projectToSphere(cx, cy, r * 1.01, lon, lat, phase);
+          const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
           if (!p.visible) continue;
-          // Slight vertical bob
-          const bob = Math.sin(wobble * 4) * 2 * p.scale;
-          ctx.fillStyle = `rgba(60,60,70,${0.6 * p.alpha})`;
+          const s = 2.4 * p.scale;
+          const a = 0.7 * p.alpha;
+          ctx.fillStyle = `rgba(140,110,65,${a})`;
+          // Diamond shape
           ctx.beginPath();
-          ctx.arc(p.x, p.y + bob, 1.2 * p.scale, 0, Math.PI * 2);
+          ctx.moveTo(p.x, p.y - s);
+          ctx.lineTo(p.x + s * 0.7, p.y);
+          ctx.lineTo(p.x, p.y + s * 0.5);
+          ctx.lineTo(p.x - s * 0.7, p.y);
+          ctx.closePath();
           ctx.fill();
         }
       }
 
-      // Fish — blue dots that swim in water areas
+      // Birds — small V / chevron shapes that fly above surface
+      if (has('bird')) {
+        for (const e of birdEntities) {
+          const wobble = ts * e.speed * 1.2 + e.phase;
+          const lon = e.lon + wobble * 0.3;
+          const lat = e.lat + Math.sin(wobble * 2.5) * 0.12;
+          const p = projectToSphere(cx, cy, r * 1.01, lon, lat, phase);
+          if (!p.visible) continue;
+          const s = 2.5 * p.scale;
+          const bob = Math.sin(wobble * 4) * 1.5 * p.scale;
+          const wingFlap = Math.sin(wobble * 6) * s * 0.35;
+          const a = 0.65 * p.alpha;
+          ctx.strokeStyle = `rgba(50,50,60,${a})`;
+          ctx.lineWidth = 0.9 * p.scale;
+          ctx.beginPath();
+          ctx.moveTo(p.x - s, p.y + bob - wingFlap);
+          ctx.lineTo(p.x, p.y + bob + wingFlap * 0.3);
+          ctx.lineTo(p.x + s, p.y + bob - wingFlap);
+          ctx.stroke();
+        }
+      }
+
+      // Fish — small oval/teardrop shapes in water
       if (has('fish') || has('whale')) {
         for (const e of fishEntities) {
           const wobble = ts * e.speed * 0.5 + e.phase;
@@ -764,32 +807,72 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
           const lat = e.lat + Math.cos(wobble * 0.4) * e.wanderR * 0.8;
           const p = projectToSphere(cx, cy, r * 0.96, lon, lat, phase);
           if (!p.visible) continue;
-          const sz = has('whale') ? 2.2 : 1.4;
-          ctx.fillStyle = `rgba(30,90,180,${0.55 * p.alpha})`;
+          const isWhale = has('whale') && e.seed > 500;
+          const s = (isWhale ? 3.0 : 1.8) * p.scale;
+          const a = 0.6 * p.alpha;
+          // Fish body (oval) + tail
+          const dir = Math.cos(wobble * 0.6 + e.seed) > 0 ? 1 : -1;
+          ctx.fillStyle = `rgba(30,90,180,${a})`;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, sz * p.scale, 0, Math.PI * 2);
+          ctx.ellipse(p.x, p.y, s, s * 0.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Tail fin
+          ctx.beginPath();
+          ctx.moveTo(p.x - s * dir, p.y);
+          ctx.lineTo(p.x - s * 1.6 * dir, p.y - s * 0.5);
+          ctx.lineTo(p.x - s * 1.6 * dir, p.y + s * 0.5);
+          ctx.closePath();
           ctx.fill();
         }
       }
 
-      // Insects — tiny flickering specks near vegetation
+      // Insects — tiny flickering crosses near vegetation
       if (has('insect')) {
         for (const e of insectEntities) {
           const wobble = ts * e.speed * 2.5 + e.phase;
           const lon = e.lon + Math.sin(wobble * 3) * 0.04;
           const lat = e.lat + Math.cos(wobble * 4 + e.seed) * 0.03;
+          const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
+          if (!p.visible) continue;
+          const s = 1.0 * p.scale;
           const flicker = 0.3 + 0.5 * Math.abs(Math.sin(wobble * 6));
-          drawDot(lon, lat, 0.9, 180, 200, 60, flicker);
+          ctx.strokeStyle = `rgba(180,200,60,${flicker * p.alpha})`;
+          ctx.lineWidth = 0.6 * p.scale;
+          // Tiny + shape
+          ctx.beginPath();
+          ctx.moveTo(p.x - s, p.y); ctx.lineTo(p.x + s, p.y);
+          ctx.moveTo(p.x, p.y - s); ctx.lineTo(p.x, p.y + s);
+          ctx.stroke();
         }
       }
 
-      // Boats — dots that trace slow arcs on the water
+      // Boats — small triangle sails on water
       if (has('boat')) {
         for (const e of boatEntities) {
           const wobble = ts * e.speed * 0.25 + e.phase;
           const lon = e.lon + wobble * 0.15;
           const lat = e.lat + Math.sin(wobble * 0.4) * 0.15;
-          drawDot(lon, lat, 1.8, 200, 180, 150, 0.6);
+          const p = projectToSphere(cx, cy, r * 0.97, lon, lat, phase);
+          if (!p.visible) continue;
+          const s = 2.5 * p.scale;
+          const a = 0.65 * p.alpha;
+          // Hull (flat bottom)
+          ctx.fillStyle = `rgba(120,80,40,${a})`;
+          ctx.beginPath();
+          ctx.moveTo(p.x - s, p.y);
+          ctx.lineTo(p.x + s, p.y);
+          ctx.lineTo(p.x + s * 0.6, p.y + s * 0.4);
+          ctx.lineTo(p.x - s * 0.6, p.y + s * 0.4);
+          ctx.closePath();
+          ctx.fill();
+          // Sail (white triangle)
+          ctx.fillStyle = `rgba(240,240,235,${a})`;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y - s * 1.2);
+          ctx.lineTo(p.x + s * 0.5, p.y);
+          ctx.lineTo(p.x - s * 0.15, p.y);
+          ctx.closePath();
+          ctx.fill();
         }
       }
 
