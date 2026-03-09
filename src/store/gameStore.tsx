@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType } from '../types';
+import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType, PlanetState, PlanetStartMode } from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
@@ -31,10 +31,12 @@ function allElements(state: Pick<GameState, 'customElements' | 'masterRecipes' |
   return getAvailableElements([...ELEMENTS, ...state.customElements], allRecipes(state));
 }
 
-function createInitialState(): GameState {
+function createInitialPlanet(name: string = 'Genesis'): PlanetState {
   const seed = Math.floor(Math.random() * 0xffffffff);
   return {
+    name,
     seed,
+    createdAt: Date.now(),
     bigBangDone: false,
     discoveredElements: new Set<string>(),
     worldInfluence: { ...DEFAULT_WORLD_INFLUENCE },
@@ -42,6 +44,53 @@ function createInitialState(): GameState {
     eventLog: [],
     selectedSlotA: null,
     selectedSlotB: null,
+    attemptedCombinations: new Set<string>(),
+    favoriteElementIds: new Set<string>(),
+    insight: { ...EMPTY_INSIGHT },
+    hints: ['Click the cosmic orb to begin...'],
+    lastCombinationResult: null,
+    destroyed: false,
+  };
+}
+
+/** Derive the flat convenience fields on GameState from the active planet. */
+function withActivePlanetFields(state: GameState): GameState {
+  const planet = state.planets[state.activePlanetIndex];
+  return {
+    ...state,
+    seed: planet.seed,
+    bigBangDone: planet.bigBangDone,
+    discoveredElements: planet.discoveredElements,
+    worldInfluence: planet.worldInfluence,
+    recentDiscoveries: planet.recentDiscoveries,
+    eventLog: planet.eventLog,
+    selectedSlotA: planet.selectedSlotA,
+    selectedSlotB: planet.selectedSlotB,
+    attemptedCombinations: planet.attemptedCombinations,
+    favoriteElementIds: planet.favoriteElementIds,
+    insight: planet.insight,
+    hints: planet.hints,
+    lastCombinationResult: planet.lastCombinationResult,
+  };
+}
+
+/** Update the active planet in the planets array and re-derive convenience fields. */
+function updateActivePlanet(state: GameState, update: Partial<PlanetState>): GameState {
+  const planets = [...state.planets];
+  planets[state.activePlanetIndex] = { ...planets[state.activePlanetIndex], ...update };
+  return withActivePlanetFields({ ...state, planets });
+}
+
+/** Get the active planet. */
+function activePlanet(state: GameState): PlanetState {
+  return state.planets[state.activePlanetIndex];
+}
+
+function createInitialState(): GameState {
+  const planet = createInitialPlanet();
+  return withActivePlanetFields({
+    planets: [planet],
+    activePlanetIndex: 0,
     masterRecipes: [],
     sharedRecipes: [],
     customElements: [],
@@ -51,11 +100,63 @@ function createInitialState(): GameState {
     categoryOverrides: {},
     actsAsOverrides: {},
     effectOverrides: {},
-    attemptedCombinations: new Set<string>(),
-    favoriteElementIds: new Set<string>(),
+    // These will be filled by withActivePlanetFields
+    seed: planet.seed,
+    bigBangDone: false,
+    discoveredElements: new Set(),
+    worldInfluence: { ...DEFAULT_WORLD_INFLUENCE },
+    recentDiscoveries: [],
+    eventLog: [],
+    selectedSlotA: null,
+    selectedSlotB: null,
+    attemptedCombinations: new Set(),
+    favoriteElementIds: new Set(),
     insight: { ...EMPTY_INSIGHT },
-    hints: ['Click the cosmic orb to begin...'],
+    hints: [],
     lastCombinationResult: null,
+  });
+}
+
+/** Check whether multi-planet is unlocked (has Rocket/Spaceship + Planet + tech threshold). */
+function isMultiPlanetUnlocked(state: GameState): boolean {
+  const disc = activePlanet(state).discoveredElements;
+  const hasLaunchVehicle = disc.has('rocket') || disc.has('spaceship') || disc.has('spacecraft') || disc.has('space_shuttle');
+  const hasPlanet = disc.has('planet') || disc.has('mars') || disc.has('jupiter') || disc.has('venus');
+  return hasLaunchVehicle && hasPlanet;
+}
+
+function createNewPlanet(
+  state: GameState,
+  name: string,
+  mode: PlanetStartMode,
+  customElementIds?: string[],
+): PlanetState {
+  const planet = createInitialPlanet(name);
+  // Start with Big Bang already done
+  let discovered: Set<string>;
+  if (mode === 'all') {
+    discovered = new Set(activePlanet(state).discoveredElements);
+  } else if (mode === 'custom' && customElementIds) {
+    discovered = new Set([...PRIMORDIAL_ELEMENTS, ...customElementIds]);
+  } else {
+    // basic4
+    discovered = new Set(PRIMORDIAL_ELEMENTS);
+  }
+
+  const worldInfluence = calculateWorldInfluence(
+    Array.from(discovered),
+    allElements(state),
+    state.effectOverrides,
+  );
+
+  return {
+    ...planet,
+    bigBangDone: true,
+    discoveredElements: discovered,
+    worldInfluence,
+    recentDiscoveries: [...PRIMORDIAL_ELEMENTS],
+    eventLog: [`🌌 A new planet "${name}" has formed!`],
+    hints: ['Explore this new world by combining elements!'],
   };
 }
 
@@ -68,15 +169,17 @@ function recipePairKey(inputA: string, inputB: string): string {
 }
 
 function getUndiscoveredElementsByInsightType(state: GameState, insightType: InsightType): Element[] {
+  const planet = activePlanet(state);
   return allElements(state).filter((element) => {
-    if (state.discoveredElements.has(element.id)) return false;
+    if (planet.discoveredElements.has(element.id)) return false;
     return getElementInsightType(element, state.categoryOverrides) === insightType;
   });
 }
 
 function discoverElementInState(state: GameState, elementId: string): GameState {
-  if (state.discoveredElements.has(elementId)) return state;
-  const discoveredElements = new Set(state.discoveredElements);
+  const planet = activePlanet(state);
+  if (planet.discoveredElements.has(elementId)) return state;
+  const discoveredElements = new Set(planet.discoveredElements);
   discoveredElements.add(elementId);
 
   const worldInfluence = calculateWorldInfluence(
@@ -85,18 +188,17 @@ function discoverElementInState(state: GameState, elementId: string): GameState 
     state.effectOverrides
   );
 
-  const eventLog = [...state.eventLog];
+  const eventLog = [...planet.eventLog];
   if (MAJOR_ELEMENT_EVENTS[elementId]) {
     eventLog.push(MAJOR_ELEMENT_EVENTS[elementId]);
   }
 
-  return {
-    ...state,
+  return updateActivePlanet(state, {
     discoveredElements,
     worldInfluence,
-    recentDiscoveries: [elementId, ...state.recentDiscoveries].slice(0, 10),
+    recentDiscoveries: [elementId, ...planet.recentDiscoveries].slice(0, 10),
     eventLog,
-  };
+  });
 }
 
 function spendInsight(
@@ -116,7 +218,7 @@ function buildCategoryHintText(
   target: Element,
   recipes: Recipe[]
 ): string {
-  const discovered = state.discoveredElements;
+  const discovered = activePlanet(state).discoveredElements;
   const elementMap = new Map(allElements(state).map((element) => [element.id, element]));
   const targetRecipes = recipes.filter((recipe) => recipe.output === target.id);
 
@@ -155,75 +257,73 @@ function buildCategoryHintText(
 }
 
 function requestInsightHintForType(state: GameState, insightType: InsightType): GameState {
+  const planet = activePlanet(state);
   const candidates = getUndiscoveredElementsByInsightType(state, insightType);
   if (candidates.length === 0) {
-    return {
-      ...state,
-      hints: [`No undiscovered ${INSIGHT_LABELS[insightType]} elements remain.`, ...state.hints].slice(0, 5),
-    };
+    return updateActivePlanet(state, {
+      hints: [`No undiscovered ${INSIGHT_LABELS[insightType]} elements remain.`, ...planet.hints].slice(0, 5),
+    });
   }
 
   const discoveredCounts = countDiscoveredByInsightType(
-    state.discoveredElements,
+    planet.discoveredElements,
     allElements(state),
     state.categoryOverrides
   );
   const cost = getHintInsightCost(discoveredCounts[insightType]);
-  if (state.insight[insightType] < cost) {
-    return {
-      ...state,
+  if (planet.insight[insightType] < cost) {
+    return updateActivePlanet(state, {
       hints: [
         `Need ${cost.toFixed(1)} ${INSIGHT_LABELS[insightType]} Insight for a hint.`,
-        ...state.hints,
+        ...planet.hints,
       ].slice(0, 5),
-    };
+    });
   }
 
   const target = candidates[Math.floor(Math.random() * candidates.length)];
   const recipes = allRecipes(state);
   const hint = buildCategoryHintText(state, insightType, target, recipes);
 
-  return {
-    ...state,
-    insight: spendInsight(state.insight, insightType, cost),
-    hints: [hint, ...state.hints].slice(0, 5),
+  return updateActivePlanet(state, {
+    insight: spendInsight(planet.insight, insightType, cost),
+    hints: [hint, ...planet.hints].slice(0, 5),
     eventLog: [
-      ...state.eventLog,
+      ...planet.eventLog,
       `💡 Spent ${cost.toFixed(1)} ${INSIGHT_LABELS[insightType]} Insight for a hint.`,
     ],
-  };
+  });
 }
 
 function removeElementIdsFromState(state: GameState, removedIds: Set<string>): GameState {
   if (removedIds.size === 0) return state;
 
+  const planet = activePlanet(state);
   const discoveredElements = new Set(
-    Array.from(state.discoveredElements).filter((id) => !removedIds.has(id))
+    Array.from(planet.discoveredElements).filter((id) => !removedIds.has(id))
   );
 
   const attemptedCombinations = new Set(
-    Array.from(state.attemptedCombinations).filter((key) => {
+    Array.from(planet.attemptedCombinations).filter((key) => {
       const [a, b] = key.split('|');
       return !removedIds.has(a) && !removedIds.has(b);
     })
   );
 
-  return {
-    ...state,
+  return updateActivePlanet(state, {
     discoveredElements,
     favoriteElementIds: new Set(
-      Array.from(state.favoriteElementIds).filter((id) => !removedIds.has(id))
+      Array.from(planet.favoriteElementIds).filter((id) => !removedIds.has(id))
     ),
     attemptedCombinations,
-    recentDiscoveries: state.recentDiscoveries.filter((id) => !removedIds.has(id)),
-    selectedSlotA: state.selectedSlotA && removedIds.has(state.selectedSlotA) ? null : state.selectedSlotA,
-    selectedSlotB: state.selectedSlotB && removedIds.has(state.selectedSlotB) ? null : state.selectedSlotB,
+    recentDiscoveries: planet.recentDiscoveries.filter((id) => !removedIds.has(id)),
+    selectedSlotA: planet.selectedSlotA && removedIds.has(planet.selectedSlotA) ? null : planet.selectedSlotA,
+    selectedSlotB: planet.selectedSlotB && removedIds.has(planet.selectedSlotB) ? null : planet.selectedSlotB,
     lastCombinationResult:
-      state.lastCombinationResult?.elementId && removedIds.has(state.lastCombinationResult.elementId)
+      planet.lastCombinationResult?.elementId && removedIds.has(planet.lastCombinationResult.elementId)
         ? null
-        : state.lastCombinationResult,
+        : planet.lastCombinationResult,
     worldInfluence: calculateWorldInfluence(Array.from(discoveredElements), allElements(state), state.effectOverrides),
-  };
+  });
 }
 
 function withAvailableElementPool(state: GameState, recipes: Recipe[]): GameState {
@@ -238,11 +338,14 @@ function withAvailableElementPool(state: GameState, recipes: Recipe[]): GameStat
 
   const removedIds = new Set(orphanCustom.map((el) => el.id));
   const next = removeElementIdsFromState(state, removedIds);
-  return {
+  const nextWithCustom = {
     ...next,
     customElements: next.customElements.filter((el) => !removedIds.has(el.id)),
-    worldInfluence: calculateWorldInfluence(Array.from(next.discoveredElements), allElements(next), next.effectOverrides),
   };
+  const planet = activePlanet(nextWithCustom);
+  return updateActivePlanet(nextWithCustom, {
+    worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), allElements(nextWithCustom), nextWithCustom.effectOverrides),
+  });
 }
 
 function migrateLegacyOceanPuddleState(state: GameState): GameState {
@@ -351,24 +454,26 @@ function migrateLegacyOceanPuddleState(state: GameState): GameState {
   }
   delete nextActsAsOverrides[OCEAN_ID];
 
-  const discoveredElements = new Set(state.discoveredElements);
+  const planet = activePlanet(state);
+  const discoveredElements = new Set(planet.discoveredElements);
   if ((hasRecipeForPuddle || looksLikePuddle) && discoveredElements.has(OCEAN_ID)) {
     discoveredElements.add(puddleId);
   }
 
-  return {
+  return updateActivePlanet({
     ...state,
     customElements: nextCustomElements,
     masterRecipes: remappedMasterRecipes,
-    discoveredElements,
     nameOverrides: nextNameOverrides,
     descriptionOverrides: nextDescriptionOverrides,
     categoryOverrides: nextCategoryOverrides,
     iconOverrides: nextIconOverrides,
     effectOverrides: nextEffectOverrides,
     actsAsOverrides: nextActsAsOverrides,
-    eventLog: [...state.eventLog, '🧩 Migrated legacy Ocean/Puddle state into separate elements.'],
-  };
+  }, {
+    discoveredElements,
+    eventLog: [...planet.eventLog, '🧩 Migrated legacy Ocean/Puddle state into separate elements.'],
+  });
 }
 
 /** One-time recovery: re-create custom elements and re-discover everything
@@ -379,10 +484,11 @@ function recoverLostElements(state: GameState): GameState {
     if (localStorage.getItem(RECOVERY_FLAG)) return state;
   } catch { /* proceed */ }
 
-  if (!state.bigBangDone) return state;
+  if (!activePlanet(state).bigBangDone) return state;
 
   const existingCustomIds = new Set(state.customElements.map((el) => el.id));
-  const discovered = new Set(state.discoveredElements);
+  const planet = activePlanet(state);
+  const discovered = new Set(planet.discoveredElements);
   const newCustom: Element[] = [];
   const allRec = allRecipes(state);
 
@@ -435,17 +541,18 @@ function recoverLostElements(state: GameState): GameState {
   }
 
   const nextCustom = [...state.customElements, ...newCustom];
-  const nextState: GameState = {
+  const nextState = updateActivePlanet({
     ...state,
     customElements: nextCustom,
+  }, {
     discoveredElements: discovered,
     worldInfluence: calculateWorldInfluence(
       Array.from(discovered),
       [...ELEMENTS, ...nextCustom],
       state.effectOverrides,
     ),
-    eventLog: [...state.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
-  };
+    eventLog: [...planet.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
+  });
 
   try {
     localStorage.setItem(RECOVERY_FLAG, '1');
@@ -474,43 +581,43 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'BIG_BANG': {
       const discovered = new Set(PRIMORDIAL_ELEMENTS);
       const worldInfluence = calculateWorldInfluence(PRIMORDIAL_ELEMENTS, allElements(state), state.effectOverrides);
-      return {
-        ...state,
+      return updateActivePlanet(state, {
         bigBangDone: true,
         discoveredElements: discovered,
         worldInfluence,
         recentDiscoveries: [...PRIMORDIAL_ELEMENTS],
         eventLog: ['🌌 The Big Bang! The universe springs into existence!', '🔥💧🟫💨 The primordial elements emerge: Fire, Water, Earth, Air'],
         hints: ['Combine two elements to discover new ones!'],
-      };
+      });
     }
 
     case 'SELECT_SLOT_A':
-      return { ...state, selectedSlotA: action.elementId, lastCombinationResult: null };
+      return updateActivePlanet(state, { selectedSlotA: action.elementId, lastCombinationResult: null });
 
     case 'SELECT_SLOT_B':
-      return { ...state, selectedSlotB: action.elementId, lastCombinationResult: null };
+      return updateActivePlanet(state, { selectedSlotB: action.elementId, lastCombinationResult: null });
 
     case 'TRY_COMBINE': {
-      const { selectedSlotA, selectedSlotB } = state;
+      const planet = activePlanet(state);
+      const { selectedSlotA, selectedSlotB } = planet;
       if (!selectedSlotA || !selectedSlotB) {
-        return { ...state, lastCombinationResult: { success: false } };
+        return updateActivePlanet(state, { lastCombinationResult: { success: false } });
       }
 
       const canonicalA = resolveActsAsElementId(selectedSlotA, state.actsAsOverrides);
       const canonicalB = resolveActsAsElementId(selectedSlotB, state.actsAsOverrides);
-      const attemptedCombinations = new Set(state.attemptedCombinations);
+      const attemptedCombinations = new Set(planet.attemptedCombinations);
       attemptedCombinations.add(comboKey(canonicalA, canonicalB));
 
       const recipes = allRecipes(state);
       const recipe = findRecipe(selectedSlotA, selectedSlotB, recipes, state.actsAsOverrides);
       
       if (!recipe) {
-        return { ...state, attemptedCombinations, lastCombinationResult: { success: false } };
+        return updateActivePlanet(state, { attemptedCombinations, lastCombinationResult: { success: false } });
       }
 
       const outputId = recipe.output;
-      const alreadyDiscovered = state.discoveredElements.has(outputId);
+      const alreadyDiscovered = planet.discoveredElements.has(outputId);
       const recipeEffects: WorldEffectMap | undefined =
         'outputWorldEffects' in recipe && recipe.outputWorldEffects
           ? (recipe.outputWorldEffects as WorldEffectMap)
@@ -524,32 +631,30 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         };
       }
       
-      const newDiscovered = new Set(state.discoveredElements);
+      const newDiscovered = new Set(planet.discoveredElements);
       newDiscovered.add(outputId);
       
       const newRecent = alreadyDiscovered
-        ? state.recentDiscoveries
-        : [outputId, ...state.recentDiscoveries].slice(0, 10);
+        ? planet.recentDiscoveries
+        : [outputId, ...planet.recentDiscoveries].slice(0, 10);
       
       const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), allElements(state), nextOverrides);
       
-      const newEventLog = [...state.eventLog];
+      const newEventLog = [...planet.eventLog];
       if (!alreadyDiscovered && MAJOR_ELEMENT_EVENTS[outputId]) {
         newEventLog.push(MAJOR_ELEMENT_EVENTS[outputId]);
       }
 
-      const nextState: GameState = {
-        ...state,
+      const nextState = updateActivePlanet({ ...state, effectOverrides: nextOverrides }, {
         discoveredElements: newDiscovered,
         worldInfluence,
         recentDiscoveries: newRecent,
         eventLog: newEventLog,
-        effectOverrides: nextOverrides,
         attemptedCombinations,
         selectedSlotA: null,
         selectedSlotB: null,
         lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
-      };
+      });
       return withAvailableElementPool(nextState, recipes);
     }
 
@@ -560,9 +665,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const nextState: GameState = {
         ...state,
         masterRecipes: [action.recipe, ...filtered].slice(0, 300),
-        eventLog: [...state.eventLog, `🧪 Master recipe added: ${action.recipe.inputA} + ${action.recipe.inputB} -> ${action.recipe.output}`],
       };
-      return withAvailableElementPool(nextState, allRecipes(nextState));
+      const planet = activePlanet(nextState);
+      return withActivePlanetFields(withAvailableElementPool(
+        updateActivePlanet(nextState, {
+          eventLog: [...planet.eventLog, `🧪 Master recipe added: ${action.recipe.inputA} + ${action.recipe.inputB} -> ${action.recipe.output}`],
+        }),
+        allRecipes(nextState),
+      ));
     }
 
     case 'REMOVE_MASTER_RECIPE': {
@@ -581,11 +691,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const removedCount = state.masterRecipes.length - keptLocal.length;
       if (removedCount === 0) return state;
 
-      const nextState: GameState = {
+      const planet = activePlanet(state);
+      const nextState = updateActivePlanet({
         ...state,
         masterRecipes: keptLocal,
-        eventLog: [...state.eventLog, `☁️ Synced ${removedCount} local recipes to global and removed local duplicates.`],
-      };
+      }, {
+        eventLog: [...planet.eventLog, `☁️ Synced ${removedCount} local recipes to global and removed local duplicates.`],
+      });
       return withAvailableElementPool(nextState, allRecipes(nextState));
     }
 
@@ -607,11 +719,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         nextCustomElements.push(action.element);
       }
 
-      return {
+      const planet = activePlanet(state);
+      return updateActivePlanet({
         ...state,
         customElements: nextCustomElements,
-        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), [...ELEMENTS, ...nextCustomElements], state.effectOverrides),
-      };
+      }, {
+        worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), [...ELEMENTS, ...nextCustomElements], state.effectOverrides),
+      });
     }
 
     case 'SET_ICON_OVERRIDE': {
@@ -714,21 +828,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...state.effectOverrides,
         [action.elementId]: action.worldEffects,
       };
-      return {
+      const planet = activePlanet(state);
+      return updateActivePlanet({
         ...state,
         effectOverrides: nextOverrides,
-        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), allElements(state), nextOverrides),
-      };
+      }, {
+        worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), allElements(state), nextOverrides),
+      });
     }
 
     case 'CLEAR_EFFECT_OVERRIDE': {
       const nextOverrides = { ...state.effectOverrides };
       delete nextOverrides[action.elementId];
-      return {
+      const planet = activePlanet(state);
+      return updateActivePlanet({
         ...state,
         effectOverrides: nextOverrides,
-        worldInfluence: calculateWorldInfluence(Array.from(state.discoveredElements), allElements(state), nextOverrides),
-      };
+      }, {
+        worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), allElements(state), nextOverrides),
+      });
     }
 
     case 'DELETE_ELEMENT': {
@@ -736,32 +854,34 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'TOGGLE_FAVORITE': {
-      const next = new Set(state.favoriteElementIds);
+      const planet = activePlanet(state);
+      const next = new Set(planet.favoriteElementIds);
       if (next.has(action.elementId)) next.delete(action.elementId);
       else next.add(action.elementId);
-      return { ...state, favoriteElementIds: next };
+      return updateActivePlanet(state, { favoriteElementIds: next });
     }
 
     case 'TICK_INSIGHT': {
-      if (!state.bigBangDone) return state;
+      const planet = activePlanet(state);
+      if (!planet.bigBangDone) return state;
       const gains = calculateInsightGainPerSecond(
-        state.discoveredElements,
+        planet.discoveredElements,
         allElements(state),
         state.categoryOverrides
       );
-      return {
-        ...state,
-        insight: applyInsightTick(state.insight, gains),
-      };
+      return updateActivePlanet(state, {
+        insight: applyInsightTick(planet.insight, gains),
+      });
     }
 
     case 'REQUEST_HINT': {
+      const planet = activePlanet(state);
       const hint = generateHint(
-        Array.from(state.discoveredElements),
+        Array.from(planet.discoveredElements),
         RECIPES,
         allElements(state)
       );
-      return { ...state, hints: [hint, ...state.hints].slice(0, 5) };
+      return updateActivePlanet(state, { hints: [hint, ...planet.hints].slice(0, 5) });
     }
 
     case 'REQUEST_INSIGHT_HINT': {
@@ -769,63 +889,62 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'REQUEST_INSIGHT_HINT_AUTO': {
+      const planet = activePlanet(state);
       const discoveredCounts = countDiscoveredByInsightType(
-        state.discoveredElements,
+        planet.discoveredElements,
         allElements(state),
         state.categoryOverrides
       );
 
-      const preferredType = (Object.keys(state.insight) as InsightType[])
+      const preferredType = (Object.keys(planet.insight) as InsightType[])
         .filter((type) => getUndiscoveredElementsByInsightType(state, type).length > 0)
-        .filter((type) => state.insight[type] >= getHintInsightCost(discoveredCounts[type]))
-        .sort((a, b) => state.insight[b] - state.insight[a])[0];
+        .filter((type) => planet.insight[type] >= getHintInsightCost(discoveredCounts[type]))
+        .sort((a, b) => planet.insight[b] - planet.insight[a])[0];
 
       if (!preferredType) {
-        return {
-          ...state,
-          hints: ['Not enough Insight to buy a hint yet. Keep building your world.'].concat(state.hints).slice(0, 5),
-        };
+        return updateActivePlanet(state, {
+          hints: ['Not enough Insight to buy a hint yet. Keep building your world.'].concat(planet.hints).slice(0, 5),
+        });
       }
 
       return requestInsightHintForType(state, preferredType);
     }
 
     case 'REQUEST_RANDOM_DISCOVERY': {
+      const planet = activePlanet(state);
       const candidates = getUndiscoveredElementsByInsightType(state, action.insightType);
       if (candidates.length === 0) {
-        return {
-          ...state,
-          eventLog: [...state.eventLog, `🧭 No ${INSIGHT_LABELS[action.insightType]} discoveries remain to unlock.`],
-        };
+        return updateActivePlanet(state, {
+          eventLog: [...planet.eventLog, `🧭 No ${INSIGHT_LABELS[action.insightType]} discoveries remain to unlock.`],
+        });
       }
 
       const discoveredCounts = countDiscoveredByInsightType(
-        state.discoveredElements,
+        planet.discoveredElements,
         allElements(state),
         state.categoryOverrides
       );
       const cost = getRandomDiscoveryInsightCost(discoveredCounts[action.insightType]);
-      if (state.insight[action.insightType] < cost) {
-        return {
-          ...state,
+      if (planet.insight[action.insightType] < cost) {
+        return updateActivePlanet(state, {
           eventLog: [
-            ...state.eventLog,
+            ...planet.eventLog,
             `🧠 Need ${cost.toFixed(1)} ${INSIGHT_LABELS[action.insightType]} Insight for a random unlock.`,
           ],
-        };
+        });
       }
 
       const picked = candidates[Math.floor(Math.random() * candidates.length)];
       const discoveredState = discoverElementInState(state, picked.id);
-      return {
-        ...discoveredState,
-        insight: spendInsight(discoveredState.insight, action.insightType, cost),
+      const discoveredPlanet = activePlanet(discoveredState);
+      return updateActivePlanet(discoveredState, {
+        insight: spendInsight(discoveredPlanet.insight, action.insightType, cost),
         eventLog: [
-          ...discoveredState.eventLog,
+          ...discoveredPlanet.eventLog,
           `🧬 Spent ${cost.toFixed(1)} ${INSIGHT_LABELS[action.insightType]} Insight to discover ${picked.name}.`,
         ],
-        hints: [`Insight revealed a new ${INSIGHT_LABELS[action.insightType]} element: ${picked.name}.`, ...discoveredState.hints].slice(0, 5),
-      };
+        hints: [`Insight revealed a new ${INSIGHT_LABELS[action.insightType]} element: ${picked.name}.`, ...discoveredPlanet.hints].slice(0, 5),
+      });
     }
 
     case 'DISCOVER_ELEMENT': {
@@ -839,19 +958,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'LOAD_STATE': {
       const saved = action.state;
       if (!saved) return state;
-      const discovered = new Set<string>(saved.discoveredElements ?? []);
       const customElements = saved.customElements ?? [];
       const loadedOverrides = saved.effectOverrides ?? {};
-      const computedInfluence = calculateWorldInfluence(Array.from(discovered), [...ELEMENTS, ...customElements], loadedOverrides);
-      const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
-      const nextState: GameState = {
-        ...state,
-        seed: saved.seed ?? state.seed,
-        bigBangDone: saved.bigBangDone ?? false,
-        discoveredElements: discovered,
-        worldInfluence,
-        recentDiscoveries: saved.recentDiscoveries ?? [],
-        eventLog: saved.eventLog ?? [],
+
+      // Build global fields
+      const globalFields = {
         masterRecipes: saved.masterRecipes ?? [],
         customElements,
         sharedRecipes: state.sharedRecipes,
@@ -861,20 +972,96 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         categoryOverrides: saved.categoryOverrides ?? {},
         actsAsOverrides: saved.actsAsOverrides ?? {},
         effectOverrides: loadedOverrides,
-        attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
-        favoriteElementIds: new Set(saved.favoriteElementIds ?? []),
-        insight: saved.insight ?? { ...EMPTY_INSIGHT },
-        hints: saved.hints ?? ['Welcome back!'],
-        selectedSlotA: null,
-        selectedSlotB: null,
-        lastCombinationResult: null,
       };
+
+      let planets: PlanetState[];
+      let activePlanetIndex: number;
+
+      if (saved.planets && saved.planets.length > 0) {
+        // Multi-planet save format
+        planets = saved.planets.map((sp) => {
+          const disc = new Set<string>(sp.discoveredElements ?? []);
+          return {
+            name: sp.name ?? 'Genesis',
+            seed: sp.seed ?? Math.floor(Math.random() * 0xffffffff),
+            createdAt: sp.createdAt ?? Date.now(),
+            bigBangDone: sp.bigBangDone ?? false,
+            discoveredElements: disc,
+            worldInfluence: sp.worldInfluence ?? { ...DEFAULT_WORLD_INFLUENCE },
+            recentDiscoveries: sp.recentDiscoveries ?? [],
+            eventLog: sp.eventLog ?? [],
+            selectedSlotA: null,
+            selectedSlotB: null,
+            attemptedCombinations: new Set<string>(sp.attemptedCombinations ?? []),
+            favoriteElementIds: new Set<string>(sp.favoriteElementIds ?? []),
+            insight: sp.insight ?? { ...EMPTY_INSIGHT },
+            hints: sp.hints ?? ['Welcome back!'],
+            lastCombinationResult: null,
+            destroyed: sp.destroyed ?? false,
+          };
+        });
+        activePlanetIndex = saved.activePlanetIndex ?? 0;
+        if (activePlanetIndex >= planets.length) activePlanetIndex = 0;
+      } else {
+        // Legacy single-planet save format — migrate to planets array
+        const discovered = new Set<string>(saved.discoveredElements ?? []);
+        const computedInfluence = calculateWorldInfluence(Array.from(discovered), [...ELEMENTS, ...customElements], loadedOverrides);
+        const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
+        planets = [{
+          name: 'Genesis',
+          seed: saved.seed ?? state.seed,
+          createdAt: Date.now(),
+          bigBangDone: saved.bigBangDone ?? false,
+          discoveredElements: discovered,
+          worldInfluence,
+          recentDiscoveries: saved.recentDiscoveries ?? [],
+          eventLog: saved.eventLog ?? [],
+          selectedSlotA: null,
+          selectedSlotB: null,
+          attemptedCombinations: new Set(saved.attemptedCombinations ?? []),
+          favoriteElementIds: new Set(saved.favoriteElementIds ?? []),
+          insight: saved.insight ?? { ...EMPTY_INSIGHT },
+          hints: saved.hints ?? ['Welcome back!'],
+          lastCombinationResult: null,
+          destroyed: false,
+        }];
+        activePlanetIndex = 0;
+      }
+
+      const nextState: GameState = withActivePlanetFields({
+        ...state,
+        planets,
+        activePlanetIndex,
+        ...globalFields,
+      });
+
       const migrated = migrateLegacyOceanPuddleState(nextState);
-      const stabilized = {
-        ...migrated,
-        worldInfluence: calculateWorldInfluence(Array.from(migrated.discoveredElements), allElements(migrated), migrated.effectOverrides),
-      };
+      const mPlanet = activePlanet(migrated);
+      const stabilized = updateActivePlanet(migrated, {
+        worldInfluence: calculateWorldInfluence(Array.from(mPlanet.discoveredElements), allElements(migrated), migrated.effectOverrides),
+      });
       return withAvailableElementPool(stabilized, allRecipes(stabilized));
+    }
+
+    case 'CREATE_PLANET': {
+      if (!isMultiPlanetUnlocked(state)) return state;
+      const newPlanet = createNewPlanet(state, action.name, action.mode, action.customElementIds);
+      const planets = [...state.planets, newPlanet];
+      const newIndex = planets.length - 1;
+      return withActivePlanetFields({ ...state, planets, activePlanetIndex: newIndex });
+    }
+
+    case 'SWITCH_PLANET': {
+      if (action.index < 0 || action.index >= state.planets.length) return state;
+      if (state.planets[action.index].destroyed) return state;
+      return withActivePlanetFields({ ...state, activePlanetIndex: action.index });
+    }
+
+    case 'RENAME_PLANET': {
+      if (action.index < 0 || action.index >= state.planets.length) return state;
+      const planets = [...state.planets];
+      planets[action.index] = { ...planets[action.index], name: action.name };
+      return withActivePlanetFields({ ...state, planets });
     }
 
     default:
@@ -886,6 +1073,9 @@ interface GameContextType {
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { isMultiPlanetUnlocked };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const GameContext = createContext<GameContextType | null>(null);

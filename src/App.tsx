@@ -14,6 +14,7 @@ import { InsightPanel } from './components/InsightPanel';
 import { MasterRecipeLab } from './components/MasterRecipeLab';
 import { EmojiAtlas } from './components/EmojiAtlas';
 import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
+import { SolarSystemView } from './components/SolarSystemView';
 import './App.css';
 
 interface CollapsiblePanelProps {
@@ -68,6 +69,8 @@ function GameApp() {
     return <BigBang onBigBang={handleBigBang} />;
   }
 
+  const activePlanetName = state.planets[state.activePlanetIndex]?.name ?? 'Genesis';
+
   const discoveredCount = state.discoveredElements.size;
 
   return (
@@ -76,7 +79,7 @@ function GameApp() {
         <div className="app-title">
           <span className="app-title-icon">🔮</span>
           <h1>Wondercraft</h1>
-          <span className="app-subtitle">Elements Discovered: {discoveredCount}</span>
+          <span className="app-subtitle">{activePlanetName} — {discoveredCount} elements</span>
         </div>
         <div className="app-controls">
           <button className="btn-hint" onClick={handleHint}>💡 Insight Hint</button>
@@ -92,6 +95,7 @@ function GameApp() {
             discoveredElements={state.discoveredElements}
             emojiMap={emojiMap}
           />
+          <SolarSystemView />
           <CollapsiblePanel title="Hints" defaultOpen>
             <HintPanel hints={state.hints} />
           </CollapsiblePanel>

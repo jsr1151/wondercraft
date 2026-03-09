@@ -1,15 +1,39 @@
-import type { GameState, SerializableGameState } from '../types';
+import type { GameState, SerializableGameState, SerializablePlanetState, PlanetState } from '../types';
 
 const SAVE_KEY = 'wondercraft_save_v1';
 
-function serializeState(state: GameState): SerializableGameState {
+function serializePlanet(planet: PlanetState): SerializablePlanetState {
   return {
-    seed: state.seed,
-    bigBangDone: state.bigBangDone,
-    discoveredElements: Array.from(state.discoveredElements),
-    worldInfluence: state.worldInfluence,
-    recentDiscoveries: state.recentDiscoveries,
-    eventLog: state.eventLog,
+    name: planet.name,
+    seed: planet.seed,
+    createdAt: planet.createdAt,
+    bigBangDone: planet.bigBangDone,
+    discoveredElements: Array.from(planet.discoveredElements),
+    worldInfluence: planet.worldInfluence,
+    recentDiscoveries: planet.recentDiscoveries,
+    eventLog: planet.eventLog,
+    attemptedCombinations: Array.from(planet.attemptedCombinations),
+    favoriteElementIds: Array.from(planet.favoriteElementIds),
+    insight: planet.insight,
+    hints: planet.hints,
+    destroyed: planet.destroyed,
+  };
+}
+
+function serializeState(state: GameState): SerializableGameState {
+  const activePlanet = state.planets[state.activePlanetIndex];
+  return {
+    // Multi-planet fields
+    planets: state.planets.map(serializePlanet),
+    activePlanetIndex: state.activePlanetIndex,
+    // Legacy fields (from active planet, for backward compat)
+    seed: activePlanet.seed,
+    bigBangDone: activePlanet.bigBangDone,
+    discoveredElements: Array.from(activePlanet.discoveredElements),
+    worldInfluence: activePlanet.worldInfluence,
+    recentDiscoveries: activePlanet.recentDiscoveries,
+    eventLog: activePlanet.eventLog,
+    // Global fields
     masterRecipes: state.masterRecipes,
     customElements: state.customElements,
     iconOverrides: state.iconOverrides,
@@ -18,10 +42,11 @@ function serializeState(state: GameState): SerializableGameState {
     categoryOverrides: state.categoryOverrides,
     actsAsOverrides: state.actsAsOverrides,
     effectOverrides: state.effectOverrides,
-    attemptedCombinations: Array.from(state.attemptedCombinations),
-    favoriteElementIds: Array.from(state.favoriteElementIds),
-    insight: state.insight,
-    hints: state.hints,
+    // Legacy fields (from active planet)
+    attemptedCombinations: Array.from(activePlanet.attemptedCombinations),
+    favoriteElementIds: Array.from(activePlanet.favoriteElementIds),
+    insight: activePlanet.insight,
+    hints: activePlanet.hints,
   };
 }
 

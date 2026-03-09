@@ -1,0 +1,203 @@
+.solar-system {
+  background: linear-gradient(135deg, #0a0a2e 0%, #1a1a3e 100%);
+  border: 1px solid rgba(100, 100, 200, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.solar-system-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.solar-system-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #c8c8ff;
+}
+
+.solar-system-count {
+  font-size: 0.75rem;
+  color: rgba(200, 200, 255, 0.6);
+}
+
+.solar-system-planets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.solar-planet-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  border: 1px solid transparent;
+}
+
+.solar-planet-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.solar-planet-card.active {
+  border-color: rgba(100, 180, 255, 0.5);
+  background: rgba(100, 180, 255, 0.08);
+  cursor: default;
+}
+
+.solar-planet-orb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    hsl(var(--planet-hue, 200), 60%, 55%),
+    hsl(var(--planet-hue, 200), 40%, 25%)
+  );
+  box-shadow: 0 0 8px hsla(var(--planet-hue, 200), 60%, 40%, 0.4);
+  flex-shrink: 0;
+}
+
+.solar-planet-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.solar-planet-name {
+  font-size: 0.85rem;
+  color: #e0e0ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.solar-planet-name-input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 180, 255, 0.4);
+  border-radius: 4px;
+  color: #e0e0ff;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  outline: none;
+  width: 100%;
+}
+
+.solar-planet-elements {
+  font-size: 0.7rem;
+  color: rgba(200, 200, 255, 0.5);
+}
+
+.solar-planet-active-badge {
+  color: #64b4ff;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.solar-create-btn {
+  width: 100%;
+  padding: 6px;
+  border: 1px dashed rgba(100, 180, 255, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(100, 180, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.solar-create-btn:hover {
+  border-color: rgba(100, 180, 255, 0.6);
+  color: rgba(100, 180, 255, 1);
+  background: rgba(100, 180, 255, 0.05);
+}
+
+.solar-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 180, 255, 0.2);
+}
+
+.solar-create-name {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 180, 255, 0.3);
+  border-radius: 6px;
+  color: #e0e0ff;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.solar-create-name:focus {
+  border-color: rgba(100, 180, 255, 0.6);
+}
+
+.solar-create-modes {
+  display: flex;
+  gap: 12px;
+}
+
+.solar-create-modes label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: rgba(200, 200, 255, 0.7);
+  cursor: pointer;
+}
+
+.solar-create-modes label.selected {
+  color: #64b4ff;
+}
+
+.solar-create-modes input[type="radio"] {
+  accent-color: #64b4ff;
+}
+
+.solar-create-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.solar-create-confirm {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(100, 180, 255, 0.2);
+  color: #64b4ff;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.solar-create-confirm:hover {
+  background: rgba(100, 180, 255, 0.3);
+}
+
+.solar-create-cancel {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 100, 100, 0.1);
+  color: rgba(255, 100, 100, 0.7);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.solar-create-cancel:hover {
+  background: rgba(255, 100, 100, 0.2);
+}

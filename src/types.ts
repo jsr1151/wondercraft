@@ -79,8 +79,12 @@ export interface EmojiAtlasEntry {
   createdAt: number;
 }
 
-export interface GameState {
+export type PlanetStartMode = 'all' | 'basic4' | 'custom';
+
+export interface PlanetState {
+  name: string;
   seed: number;
+  createdAt: number;
   bigBangDone: boolean;
   discoveredElements: Set<string>;
   worldInfluence: WorldInfluence;
@@ -88,6 +92,18 @@ export interface GameState {
   eventLog: string[];
   selectedSlotA: string | null;
   selectedSlotB: string | null;
+  attemptedCombinations: Set<string>;
+  favoriteElementIds: Set<string>;
+  insight: InsightCurrency;
+  hints: string[];
+  lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
+  destroyed: boolean;
+}
+
+export interface GameState {
+  planets: PlanetState[];
+  activePlanetIndex: number;
+  // Global (shared across planets)
   masterRecipes: MasterRecipe[];
   sharedRecipes: MasterRecipe[];
   customElements: Element[];
@@ -97,6 +113,15 @@ export interface GameState {
   categoryOverrides: Record<string, ElementCategory>;
   actsAsOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
+  // Convenience accessors (derived from active planet)
+  seed: number;
+  bigBangDone: boolean;
+  discoveredElements: Set<string>;
+  worldInfluence: WorldInfluence;
+  recentDiscoveries: string[];
+  eventLog: string[];
+  selectedSlotA: string | null;
+  selectedSlotB: string | null;
   attemptedCombinations: Set<string>;
   favoriteElementIds: Set<string>;
   insight: InsightCurrency;
@@ -135,9 +160,32 @@ export type GameAction =
   | { type: 'DISCOVER_ELEMENT'; elementId: string }
   | { type: 'REQUEST_HINT' }
   | { type: 'RESET_WORLD' }
-  | { type: 'LOAD_STATE'; state: Partial<SerializableGameState> };
+  | { type: 'LOAD_STATE'; state: Partial<SerializableGameState> }
+  | { type: 'CREATE_PLANET'; name: string; mode: PlanetStartMode; customElementIds?: string[] }
+  | { type: 'SWITCH_PLANET'; index: number }
+  | { type: 'RENAME_PLANET'; index: number; name: string };
+
+export interface SerializablePlanetState {
+  name: string;
+  seed: number;
+  createdAt: number;
+  bigBangDone: boolean;
+  discoveredElements: string[];
+  worldInfluence: WorldInfluence;
+  recentDiscoveries: string[];
+  eventLog: string[];
+  attemptedCombinations: string[];
+  favoriteElementIds: string[];
+  insight: InsightCurrency;
+  hints: string[];
+  destroyed: boolean;
+}
 
 export interface SerializableGameState {
+  // Multi-planet format
+  planets?: SerializablePlanetState[];
+  activePlanetIndex?: number;
+  // Legacy single-planet fields (for backward compat)
   seed: number;
   bigBangDone: boolean;
   discoveredElements: string[];
