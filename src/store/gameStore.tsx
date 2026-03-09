@@ -1366,10 +1366,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const saved = action.state;
       if (!saved) return state;
 
-      // Merge saved data with append-only registry to recover any elements
-      // or recipes that were lost from the main save.
+      // Merge saved custom elements with append-only element registry
+      // so elements are never lost. Recipe registry is only used as a
+      // fallback when the save file has no masterRecipes.
       const registryElements = loadElementRegistry();
-      const registryRecipes = loadRecipeRegistry();
 
       const savedCustom = saved.customElements ?? [];
       const customMap = new Map(registryElements.map((el) => [el.id, el]));
@@ -1377,9 +1377,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const customElements = Array.from(customMap.values());
 
       const savedRecipes = saved.masterRecipes ?? [];
-      const recipeMap = new Map(registryRecipes.map((r) => [[r.inputA, r.inputB].sort().join('|'), r]));
-      for (const r of savedRecipes) recipeMap.set([r.inputA, r.inputB].sort().join('|'), r);
-      const masterRecipes = Array.from(recipeMap.values());
+      // Only fall back to registry if save has NO recipes at all
+      const masterRecipes = savedRecipes.length > 0
+        ? savedRecipes
+        : loadRecipeRegistry();
 
       const loadedOverrides = saved.effectOverrides ?? {};
 

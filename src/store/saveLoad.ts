@@ -237,13 +237,12 @@ export function loadElementRegistry(): Element[] {
   }
 }
 
-/** Merge new master recipes into the registry (append-only, never shrinks). */
+/** Snapshot the current master recipes into the registry.
+ *  Unlike elements, recipes are replaced wholesale so that recipes
+ *  intentionally removed (e.g. after global publish) don't come back. */
 export function updateRecipeRegistry(recipes: MasterRecipe[]): void {
   try {
-    const existing = loadRecipeRegistry();
-    const map = new Map(existing.map((r) => [[r.inputA, r.inputB].sort().join('|'), r]));
-    for (const r of recipes) map.set([r.inputA, r.inputB].sort().join('|'), r);
-    localStorage.setItem(RECIPE_REGISTRY_KEY, JSON.stringify(Array.from(map.values())));
+    localStorage.setItem(RECIPE_REGISTRY_KEY, JSON.stringify(recipes));
   } catch { /* best effort */ }
 }
 
