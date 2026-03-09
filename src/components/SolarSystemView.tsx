@@ -4,8 +4,6 @@ import { useGame } from '../store/useGame';
 import {
   isMultiPlanetUnlocked,
   DESTRUCTIVE_ELEMENT_IDS,
-  getPlanetCreationInsightCost,
-  PLANET_CREATION_INSIGHT_TYPE,
   MULTI_PLANET_TECH_THRESHOLD,
 } from '../store/gameStore';
 import type { PlanetStartMode } from '../types';
@@ -34,9 +32,6 @@ export function SolarSystemView() {
     ['planet', 'mars', 'jupiter', 'venus'].includes(id)
   );
   const hasTechThreshold = state.worldInfluence.technology >= MULTI_PLANET_TECH_THRESHOLD;
-  const creationCost = unlocked ? getPlanetCreationInsightCost(livePlanets.length) : 0;
-  const cosmicInsight = state.insight[PLANET_CREATION_INSIGHT_TYPE];
-  const canCreatePlanet = creationCost === 0 || cosmicInsight >= creationCost;
 
   const canDestroy = Array.from(state.discoveredElements).some((id) => DESTRUCTIVE_ELEMENT_IDS.has(id));
 
@@ -54,7 +49,6 @@ export function SolarSystemView() {
   }, [state.customElements, state.discoveredElements, state.nameOverrides]);
 
   const handleCreate = () => {
-    if (!canCreatePlanet) return;
     const name = newName.trim() || `Planet ${state.planets.length + 1}`;
     dispatch({
       type: 'CREATE_PLANET',
@@ -85,8 +79,8 @@ export function SolarSystemView() {
       </div>
 
       <div className="solar-system-meta">
-        <span className="solar-system-cost">New planet: {creationCost.toFixed(1)} Cosmic Insight</span>
-        <span className="solar-system-stock">You have {cosmicInsight.toFixed(1)}</span>
+        <span className="solar-system-cost">New planet: Free</span>
+        <span className="solar-system-stock">Testing mode enabled</span>
       </div>
 
       {!unlocked && (
@@ -262,14 +256,11 @@ export function SolarSystemView() {
           )}
 
           <div className="solar-create-actions">
-            <button className="solar-create-confirm" onClick={handleCreate} disabled={!canCreatePlanet}>
-              {creationCost > 0 ? `Create (${creationCost.toFixed(1)} Cosmic)` : 'Create'}
+            <button className="solar-create-confirm" onClick={handleCreate}>
+              Create
             </button>
             <button className="solar-create-cancel" onClick={() => setShowCreateForm(false)}>Cancel</button>
           </div>
-          {!canCreatePlanet && (
-            <p className="solar-create-warning">Not enough Cosmic Insight to found a new planet yet.</p>
-          )}
         </div>
       )}
     </div>
