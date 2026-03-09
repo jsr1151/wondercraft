@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { isImageIcon } from '../utils/iconResolver';
 import type { WorldInfluence } from '../types';
 import './PlanetCanvas.css';
@@ -133,7 +133,7 @@ function drawIcon(
   ctx.restore();
 }
 
-export function PlanetCanvas({ worldInfluence: wi, seed, profileLevel = 1, discoveredElements, emojiMap }: PlanetCanvasProps) {
+export const PlanetCanvas = memo(function PlanetCanvas({ worldInfluence: wi, seed, profileLevel = 1, discoveredElements, emojiMap }: PlanetCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const wiRef = useRef(wi);
@@ -1003,4 +1003,4 @@ export function PlanetCanvas({ worldInfluence: wi, seed, profileLevel = 1, disco
       </div>
     </div>
   );
-}
+});

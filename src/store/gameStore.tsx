@@ -1599,10 +1599,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       });
   }, []);
 
+  // Debounce saves so TICK_INSIGHT (every 1s) doesn't serialize the full state each tick
+  const saveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (state.bigBangDone) {
-      saveGame(state);
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = setTimeout(() => saveGame(state), 2000);
     }
+    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [state]);
 
   useEffect(() => {
