@@ -1,9 +1,10 @@
-import { useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
+import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { useGame } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
+import { RECIPES } from '../data/recipes';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
 import { resolveElementIconRaw } from '../utils/iconResolver';
-import { DEFAULT_ELEMENT_CATEGORIES, type WorldEffectMap } from '../types';
+import { DEFAULT_ELEMENT_CATEGORIES, type Element, type Recipe, type WorldEffectMap } from '../types';
 import { ElementIcon } from './ElementIcon';
 import { findElementByNameOrId, resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './CraftingArea.css';
@@ -14,6 +15,26 @@ const DEFAULT_ATTR_KEYS = [
 ] as const;
 
 const MAX_ICON_IMPORT_BYTES = 400_000;
+
+type RecipeExplorerTab = 'creates' | 'uses';
+
+function recipePairKey(inputA: string, inputB: string): string {
+  return [inputA, inputB].sort().join('|');
+}
+
+function buildEffectiveRecipes(recipes: Recipe[]): Recipe[] {
+  const seenPairs = new Set<string>();
+  const effectiveRecipes: Recipe[] = [];
+
+  for (const recipe of recipes) {
+    const pairKey = recipePairKey(recipe.inputA, recipe.inputB);
+    if (seenPairs.has(pairKey)) continue;
+    seenPairs.add(pairKey);
+    effectiveRecipes.push(recipe);
+  }
+
+  return effectiveRecipes;
+}
 
 async function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -41,6 +62,12 @@ export function CraftingArea() {
   const { state, dispatch } = useGame();
   const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides, categoryOverrides, actsAsOverrides } = state;
   const allElements = [...ELEMENTS, ...state.customElements];
+  const elementMap = useMemo(() => new Map(allElements.map((element) => [element.id, element])), [allElements]);
+  const effectiveRecipes = useMemo(
+    () => buildEffectiveRecipes([...state.masterRecipes, ...state.sharedRecipes, ...RECIPES]),
+    [state.masterRecipes, state.sharedRecipes],
+  );
+  const discoveredRecipeKeys = useMemo(() => new Set(state.profile.discoveredRecipeKeys), [state.profile.discoveredRecipeKeys]);
   const categoryOptions = Array.from(new Set([
     ...(DEFAULT_ELEMENT_CATEGORIES as readonly string[]),
     ...allElements.flatMap((element) => parseElementCategories(resolveElementCategory(element, categoryOverrides))),
@@ -57,6 +84,10 @@ export function CraftingArea() {
   const [attrTarget, setAttrTarget] = useState('');
   const [attrDraft, setAttrDraft] = useState<Record<string, string>>({});
   const [newAttrKey, setNewAttrKey] = useState('');
+  const [showRecipeExplorer, setShowRecipeExplorer] = useState(false);
+  const [recipeTarget, setRecipeTarget] = useState('');
+  const [recipeTab, setRecipeTab] = useState<RecipeExplorerTab>('creates');
+  const [showAllRecipes, setShowAllRecipes] = useState(false);
 
   const elemA = selectedSlotA ? allElements.find(e => e.id === selectedSlotA) : null;
   const elemB = selectedSlotB ? allElements.find(e => e.id === selectedSlotB) : null;
@@ -65,6 +96,22 @@ export function CraftingArea() {
     : null;
 
   const canCombine = !!selectedSlotA && !!selectedSlotB;
+  const recipeTargetElement = findElementByNameOrId(recipeTarget, allElements, nameOverrides);
+  const visibleRecipes = showAllRecipes
+    ? effectiveRecipes
+    : effectiveRecipes.filter((recipe) => discoveredRecipeKeys.has(recipePairKey(recipe.inputA, recipe.inputB)));
+  const createdByRecipes = recipeTargetElement
+    ? visibleRecipes.filter((recipe) => recipe.output === recipeTargetElement.id)
+    : [];
+  const usesElementRecipes = recipeTargetElement
+    ? visibleRecipes.filter((recipe) => recipe.inputA === recipeTargetElement.id || recipe.inputB === recipeTargetElement.id)
+    : [];
+  const totalCreatedByRecipes = recipeTargetElement
+    ? effectiveRecipes.filter((recipe) => recipe.output === recipeTargetElement.id).length
+    : 0;
+  const totalUsesElementRecipes = recipeTargetElement
+    ? effectiveRecipes.filter((recipe) => recipe.inputA === recipeTargetElement.id || recipe.inputB === recipeTargetElement.id).length
+    : 0;
 
   const handleCombine = () => {
     if (canCombine) dispatch({ type: 'TRY_COMBINE' });
@@ -255,6 +302,52 @@ export function CraftingArea() {
     setAttrDraft(buildAttrDraft(target.worldEffects));
   };
 
+  const setRecipeTargetFromElement = (element: Element | null | undefined) => {
+    if (!element) return;
+    setRecipeTarget(resolveElementName(element, nameOverrides));
+  };
+
+  const onRecipeTargetDrop = (event: DragEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const elementId = event.dataTransfer.getData('text/wondercraft-element-id');
+    if (!elementId) return;
+    const element = allElements.find((entry) => entry.id === elementId);
+    if (!element) return;
+    setRecipeTargetFromElement(element);
+  };
+
+  const loadRecipeIntoSlots = (recipe: Recipe) => {
+    dispatch({ type: 'SELECT_SLOT_A', elementId: recipe.inputA });
+    dispatch({ type: 'SELECT_SLOT_B', elementId: recipe.inputB });
+  };
+
+  const renderRecipeRow = (recipe: Recipe) => {
+    const inputA = elementMap.get(recipe.inputA);
+    const inputB = elementMap.get(recipe.inputB);
+    const output = elementMap.get(recipe.output);
+    const recipeKnown = discoveredRecipeKeys.has(recipePairKey(recipe.inputA, recipe.inputB));
+
+    return (
+      <button
+        key={`${recipePairKey(recipe.inputA, recipe.inputB)}:${recipe.output}`}
+        className="recipe-explorer-row"
+        onClick={() => loadRecipeIntoSlots(recipe)}
+        type="button"
+      >
+        <span className="recipe-explorer-expression">
+          <span>{inputA ? resolveElementName(inputA, nameOverrides) : recipe.inputA}</span>
+          <span className="recipe-explorer-operator">+</span>
+          <span>{inputB ? resolveElementName(inputB, nameOverrides) : recipe.inputB}</span>
+          <span className="recipe-explorer-operator">=</span>
+          <span>{output ? resolveElementName(output, nameOverrides) : recipe.output}</span>
+        </span>
+        <span className={`recipe-explorer-badge ${recipeKnown ? 'known' : 'hidden'}`}>
+          {recipeKnown ? 'Unlocked' : 'Cheat'}
+        </span>
+      </button>
+    );
+  };
+
   return (
     <div className="crafting-area">
       <h2 className="crafting-title">⚗️ Crafting</h2>
@@ -375,10 +468,21 @@ export function CraftingArea() {
         🧬 Update Attributes
       </button>
 
+      <button
+        className="craft-button icon-editor-toggle"
+        onClick={() => {
+          const prefill = resultElem ?? elemA ?? elemB;
+          if (prefill) setRecipeTargetFromElement(prefill);
+          setShowRecipeExplorer((value) => !value);
+        }}
+      >
+        📘 Recipe Explorer
+      </button>
+
       {showIconEditor && (
         <div className="icon-editor">
           <input
-            list="craft-icon-targets"
+            list="craft-element-targets"
             value={iconTarget}
             onChange={(event) => {
               const next = event.target.value;
@@ -430,7 +534,7 @@ export function CraftingArea() {
           </div>
 
           <input
-            list="craft-icon-targets"
+            list="craft-element-targets"
             value={actsAsValue}
             onChange={(event) => setActsAsValue(event.target.value)}
             placeholder="Acts as element (recipe skin target)"
@@ -445,12 +549,6 @@ export function CraftingArea() {
               <option key={category} value={category} />
             ))}
           </datalist>
-
-          <datalist id="craft-icon-targets">
-            {allElements.map((element) => (
-              <option key={element.id} value={resolveElementName(element, nameOverrides)} />
-            ))}
-          </datalist>
         </div>
       )}
 
@@ -459,7 +557,7 @@ export function CraftingArea() {
       {showAttrEditor && (
         <div className="attr-editor">
           <input
-            list="craft-icon-targets"
+            list="craft-element-targets"
             value={attrTarget}
             onChange={(event) => {
               setAttrTarget(event.target.value);
@@ -499,6 +597,68 @@ export function CraftingArea() {
         </div>
       )}
 
+      {showRecipeExplorer && (
+        <div className="recipe-explorer">
+          <div className="recipe-explorer-toolbar">
+            <input
+              list="craft-element-targets"
+              value={recipeTarget}
+              onChange={(event) => setRecipeTarget(event.target.value)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={onRecipeTargetDrop}
+              placeholder="Drop element or type name"
+            />
+
+            <div className="recipe-explorer-toggle-row">
+              <button
+                type="button"
+                className={`recipe-explorer-tab ${recipeTab === 'creates' ? 'active' : ''}`}
+                onClick={() => setRecipeTab('creates')}
+              >
+                Creates ({showAllRecipes ? totalCreatedByRecipes : createdByRecipes.length})
+              </button>
+              <button
+                type="button"
+                className={`recipe-explorer-tab ${recipeTab === 'uses' ? 'active' : ''}`}
+                onClick={() => setRecipeTab('uses')}
+              >
+                Uses ({showAllRecipes ? totalUsesElementRecipes : usesElementRecipes.length})
+              </button>
+              <label className="recipe-explorer-cheat-toggle">
+                <input
+                  type="checkbox"
+                  checked={showAllRecipes}
+                  onChange={(event) => setShowAllRecipes(event.target.checked)}
+                />
+                Cheat
+              </label>
+            </div>
+          </div>
+
+          {!recipeTargetElement ? (
+            <p className="recipe-explorer-empty">Select an element to inspect the recipes that create it or use it.</p>
+          ) : (
+            <>
+              <p className="recipe-explorer-summary">
+                Viewing {resolveElementName(recipeTargetElement, nameOverrides)} recipes in {showAllRecipes ? 'cheat' : 'unlocked'} mode.
+              </p>
+
+              <div className="recipe-explorer-list">
+                {(recipeTab === 'creates' ? createdByRecipes : usesElementRecipes).length > 0 ? (
+                  (recipeTab === 'creates' ? createdByRecipes : usesElementRecipes).map(renderRecipeRow)
+                ) : (
+                  <p className="recipe-explorer-empty">
+                    {showAllRecipes
+                      ? `No recipes ${recipeTab === 'creates' ? 'create' : 'use'} this element.`
+                      : `No unlocked recipes ${recipeTab === 'creates' ? 'create' : 'use'} this element yet. Turn on Cheat to reveal all of them.`}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       {lastCombinationResult?.success && resultElem && (
         <div className="craft-discovery-text">
           <p className="discovery-name">
@@ -514,6 +674,12 @@ export function CraftingArea() {
           <p className="discovery-desc">{resolveElementDescription(resultElem, descriptionOverrides)}</p>
         </div>
       )}
+
+      <datalist id="craft-element-targets">
+        {allElements.map((element) => (
+          <option key={element.id} value={resolveElementName(element, nameOverrides)} />
+        ))}
+      </datalist>
     </div>
   );
 }

@@ -178,6 +178,120 @@
   border: 1px solid var(--border);
 }
 
+.recipe-explorer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.recipe-explorer-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recipe-explorer-toolbar input {
+  background: #0f1530;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+.recipe-explorer-toggle-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.recipe-explorer-tab {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+.recipe-explorer-tab.active {
+  border-color: var(--accent);
+  background: rgba(108, 99, 255, 0.16);
+  color: var(--text-primary);
+}
+
+.recipe-explorer-cheat-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.recipe-explorer-summary,
+.recipe-explorer-empty {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.recipe-explorer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recipe-explorer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(15, 21, 48, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.recipe-explorer-row:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.recipe-explorer-expression {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.recipe-explorer-operator {
+  color: var(--text-secondary);
+}
+
+.recipe-explorer-badge {
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.recipe-explorer-badge.known {
+  background: rgba(74, 222, 128, 0.16);
+  color: var(--success);
+}
+
+.recipe-explorer-badge.hidden {
+  background: rgba(251, 191, 36, 0.16);
+  color: var(--warning);
+}
+
 .icon-editor {
   display: flex;
   flex-direction: column;
@@ -307,6 +421,16 @@
 
   .attr-key-add {
     grid-template-columns: 1fr;
+  }
+
+  .recipe-explorer-cheat-toggle {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .recipe-explorer-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
