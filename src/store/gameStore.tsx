@@ -21,6 +21,7 @@ import { saveGame, loadGame } from './saveLoad';
 import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
+const RECOVERY_FLAG = 'wondercraft_recovery_v1_done';
 
 function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): Recipe[] {
   return [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
@@ -370,6 +371,90 @@ function migrateLegacyOceanPuddleState(state: GameState): GameState {
   };
 }
 
+/** One-time recovery: re-create custom elements and re-discover everything
+ *  that was lost to the availability-pruning bug. */
+function recoverLostElements(state: GameState): GameState {
+  // Only run once
+  try {
+    if (localStorage.getItem(RECOVERY_FLAG)) return state;
+  } catch { /* proceed */ }
+
+  if (!state.bigBangDone) return state;
+
+  const coreIds = new Set(ELEMENTS.map((el) => el.id));
+  const existingCustomIds = new Set(state.customElements.map((el) => el.id));
+  const discovered = new Set(state.discoveredElements);
+  const newCustom: Element[] = [];
+  const allRec = allRecipes(state);
+
+  // Collect every element ID referenced in any recipe
+  const recipeElementIds = new Set<string>();
+  for (const r of allRec) {
+    recipeElementIds.add(r.inputA);
+    recipeElementIds.add(r.inputB);
+    recipeElementIds.add(r.output);
+  }
+
+  // For custom element IDs that exist in recipes but have no definition, create one
+  for (const id of recipeElementIds) {
+    if (!id.startsWith('custom_')) continue;
+    if (existingCustomIds.has(id)) continue;
+
+    // Derive a readable name from the id: custom_honey_pot -> Honey Pot
+    const name = id
+      .replace(/^custom_/, '')
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+    newCustom.push({
+      id,
+      name,
+      category: 'Weird',
+      description: `A rediscovered element.`,
+      tags: ['custom', 'player-made', 'recovered'],
+      discovered: false,
+      emoji: '✨',
+    });
+  }
+
+  // Re-discover: all recipe outputs whose inputs are both discoverable
+  // We do a transitive pass so chained recipes also recover
+  // Start with primordials + whatever is already discovered
+  for (const pid of PRIMORDIAL_ELEMENTS) discovered.add(pid);
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const r of allRec) {
+      if (discovered.has(r.output)) continue;
+      if (discovered.has(r.inputA) && discovered.has(r.inputB)) {
+        discovered.add(r.output);
+        changed = true;
+      }
+    }
+  }
+
+  const nextCustom = [...state.customElements, ...newCustom];
+  const nextState: GameState = {
+    ...state,
+    customElements: nextCustom,
+    discoveredElements: discovered,
+    worldInfluence: calculateWorldInfluence(
+      Array.from(discovered),
+      [...ELEMENTS, ...nextCustom],
+      state.effectOverrides,
+    ),
+    eventLog: [...state.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
+  };
+
+  try {
+    localStorage.setItem(RECOVERY_FLAG, '1');
+  } catch { /* ok */ }
+
+  return nextState;
+}
+
 const MAJOR_ELEMENT_EVENTS: Record<string, string> = {
   life: '✨ Life emerged from the primordial soup!',
   human: '👤 Humans have appeared on the world!',
@@ -506,11 +591,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'SET_SHARED_RECIPES': {
-      const nextState: GameState = {
+      const withShared: GameState = {
         ...state,
         sharedRecipes: action.recipes,
       };
-      return withAvailableElementPool(nextState, allRecipes(nextState));
+      const recovered = recoverLostElements(withShared);
+      return withAvailableElementPool(recovered, allRecipes(recovered));
     }
 
     case 'UPSERT_CUSTOM_ELEMENT': {
