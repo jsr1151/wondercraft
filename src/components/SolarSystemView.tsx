@@ -34,9 +34,9 @@ export function SolarSystemView() {
     ['planet', 'mars', 'jupiter', 'venus'].includes(id)
   );
   const hasTechThreshold = state.worldInfluence.technology >= MULTI_PLANET_TECH_THRESHOLD;
-  const creationCost = getPlanetCreationInsightCost(livePlanets.length);
+  const creationCost = unlocked ? getPlanetCreationInsightCost(livePlanets.length) : 0;
   const cosmicInsight = state.insight[PLANET_CREATION_INSIGHT_TYPE];
-  const canCreatePlanet = unlocked && cosmicInsight >= creationCost;
+  const canCreatePlanet = creationCost === 0 || cosmicInsight >= creationCost;
 
   const canDestroy = Array.from(state.discoveredElements).some((id) => DESTRUCTIVE_ELEMENT_IDS.has(id));
 
@@ -206,7 +206,7 @@ export function SolarSystemView() {
         </div>
       )}
 
-      {unlocked && !showCreateForm && (
+      {!showCreateForm && (
         <button className="solar-create-btn" onClick={() => setShowCreateForm(true)}>
           + Found New Planet
         </button>
@@ -263,7 +263,7 @@ export function SolarSystemView() {
 
           <div className="solar-create-actions">
             <button className="solar-create-confirm" onClick={handleCreate} disabled={!canCreatePlanet}>
-              Create ({creationCost.toFixed(1)} Cosmic)
+              {creationCost > 0 ? `Create (${creationCost.toFixed(1)} Cosmic)` : 'Create'}
             </button>
             <button className="solar-create-cancel" onClick={() => setShowCreateForm(false)}>Cancel</button>
           </div>

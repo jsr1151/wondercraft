@@ -1439,11 +1439,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'CREATE_PLANET': {
-      if (!isMultiPlanetUnlocked(state)) return state;
-      state = flushInsight(state);
       const livePlanetCount = state.planets.filter((planet) => !planet.destroyed).length;
-      const creationCost = getPlanetCreationInsightCost(livePlanetCount);
-      if (state.insight[PLANET_CREATION_INSIGHT_TYPE] < creationCost) {
+      const creationCost = isMultiPlanetUnlocked(state) ? getPlanetCreationInsightCost(livePlanetCount) : 0;
+      state = flushInsight(state);
+      const canAfford = creationCost === 0 || state.insight[PLANET_CREATION_INSIGHT_TYPE] >= creationCost;
+      if (!canAfford) {
         const planet = activePlanet(state);
         return updateActivePlanet(state, {
           eventLog: [
@@ -1456,7 +1456,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const newPlanet = createNewPlanet(state, action.name, action.mode, action.customElementIds);
       newPlanet.eventLog = [
         ...newPlanet.eventLog,
-        `🌠 ${creationCost.toFixed(1)} Cosmic Insight shaped this world into being.`,
+        ...(creationCost > 0 ? [`🌠 ${creationCost.toFixed(1)} Cosmic Insight shaped this world into being.`] : []),
       ];
       const planets = [...state.planets, newPlanet];
       const currentPlanet = activePlanet(state);
@@ -1465,7 +1465,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           updateActivePlanet({
             ...state,
             planets,
-            insight: spendInsight(state.insight, PLANET_CREATION_INSIGHT_TYPE, creationCost),
+            insight: creationCost > 0 ? spendInsight(state.insight, PLANET_CREATION_INSIGHT_TYPE, creationCost) : state.insight,
           }, {
             eventLog: [
               ...currentPlanet.eventLog,
