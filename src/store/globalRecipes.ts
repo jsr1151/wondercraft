@@ -1,6 +1,5 @@
 import type { MasterRecipe } from '../types';
 import bundledRecipeDoc from '../../shared/master-recipes.json';
-import { RECIPES } from '../data/recipes';
 
 const OWNER = 'jsr1151';
 const REPO = 'wondercraft';
@@ -45,10 +44,6 @@ export interface PublishGlobalRecipesResult {
   skipped: PublishSkippedRecipe[];
 }
 
-const CORE_RECIPE_OUTPUTS = new Map(
-  RECIPES.map((recipe) => [normalizePair(recipe.inputA, recipe.inputB), recipe.output])
-);
-
 function normalizePair(a: string, b: string): string {
   return [a, b].sort().join('|');
 }
@@ -61,57 +56,6 @@ function mergeRecipe(recipes: MasterRecipe[], incoming: MasterRecipe): MasterRec
 
 function mergeRecipes(recipes: MasterRecipe[], incomingRecipes: MasterRecipe[]): MasterRecipe[] {
   return incomingRecipes.reduce((nextRecipes, recipe) => mergeRecipe(nextRecipes, recipe), recipes);
-}
-
-function sanitizeGlobalRecipes(recipes: MasterRecipe[]): PublishGlobalRecipesResult {
-  const safeRecipes: MasterRecipe[] = [];
-  const seenPairs = new Set<string>();
-  const skipped: PublishSkippedRecipe[] = [];
-
-  for (const recipe of recipes) {
-    const pair = normalizePair(recipe.inputA, recipe.inputB);
-    const coreOutput = CORE_RECIPE_OUTPUTS.get(pair);
-
-    if (coreOutput && coreOutput !== recipe.output) {
-      skipped.push({
-        recipe,
-        reason: `Conflicts with core recipe ${recipe.inputA} + ${recipe.inputB} -> ${coreOutput}.`,
-      });
-      continue;
-    }
-
-    if (seenPairs.has(pair)) {
-      skipped.push({
-        recipe,
-        reason: `Duplicate shared pair ${recipe.inputA} + ${recipe.inputB}.`,
-      });
-      continue;
-    }
-
-    seenPairs.add(pair);
-    safeRecipes.push(recipe);
-  }
-
-  return {
-    recipes: safeRecipes,
-    publishedPairs: safeRecipes.map((recipe) => normalizePair(recipe.inputA, recipe.inputB)),
-    skipped,
-  };
-}
-
-function validateIncomingRecipe(recipe: MasterRecipe, existingByPair: Map<string, MasterRecipe>): string | null {
-  const pair = normalizePair(recipe.inputA, recipe.inputB);
-  const coreOutput = CORE_RECIPE_OUTPUTS.get(pair);
-  if (coreOutput && coreOutput !== recipe.output) {
-    return `Conflicts with core recipe ${recipe.inputA} + ${recipe.inputB} -> ${coreOutput}.`;
-  }
-
-  const existing = existingByPair.get(pair);
-  if (existing && existing.output !== recipe.output) {
-    return `Conflicts with existing shared recipe ${recipe.inputA} + ${recipe.inputB} -> ${existing.output}.`;
-  }
-
-  return null;
 }
 
 function parseDocument(raw: string): GlobalRecipeDoc {
@@ -171,7 +115,7 @@ export async function fetchGlobalRecipes(): Promise<MasterRecipe[]> {
       const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) continue;
       const text = await response.text();
-      const recipes = sanitizeGlobalRecipes(parseDocument(text).recipes).recipes;
+      const recipes = parseDocument(text).recipes;
       if (recipes.length > 0) {
         writeCachedRecipes(recipes);
       }
@@ -205,14 +149,7 @@ async function getRemoteDoc(token: string): Promise<{ doc: GlobalRecipeDoc; sha?
 
   const payload = (await response.json()) as GitHubContentResponse;
   const decoded = atob(payload.content.replace(/\n/g, ''));
-  const parsed = parseDocument(decoded);
-  return {
-    doc: {
-      updatedAt: parsed.updatedAt,
-      recipes: sanitizeGlobalRecipes(parsed.recipes).recipes,
-    },
-    sha: payload.sha,
-  };
+  return { doc: parseDocument(decoded), sha: payload.sha };
 }
 
 async function writeRemoteDoc(doc: GlobalRecipeDoc, token: string, message: string, sha?: string): Promise<void> {
@@ -239,17 +176,7 @@ async function writeRemoteDoc(doc: GlobalRecipeDoc, token: string, message: stri
 
 export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): Promise<PublishGlobalRecipesResult> {
   const { doc, sha } = await getRemoteDoc(token);
-  const existingByPair = new Map(doc.recipes.map((entry) => [normalizePair(entry.inputA, entry.inputB), entry]));
-  const reason = validateIncomingRecipe(recipe, existingByPair);
-  if (reason) {
-    return {
-      recipes: doc.recipes,
-      publishedPairs: [],
-      skipped: [{ recipe, reason }],
-    };
-  }
-
-  const nextRecipes = sanitizeGlobalRecipes(mergeRecipe(doc.recipes, recipe)).recipes;
+  const nextRecipes = mergeRecipe(doc.recipes, recipe);
   const nextDoc: GlobalRecipeDoc = {
     updatedAt: Date.now(),
     recipes: nextRecipes,
@@ -268,35 +195,18 @@ export async function publishGlobalRecipe(recipe: MasterRecipe, token: string): 
 export async function publishGlobalRecipes(recipes: MasterRecipe[], token: string): Promise<PublishGlobalRecipesResult> {
   const incoming = recipes.slice(0, 1200);
   const { doc, sha } = await getRemoteDoc(token);
-  const existingByPair = new Map(doc.recipes.map((entry) => [normalizePair(entry.inputA, entry.inputB), entry]));
-  const safeIncoming: MasterRecipe[] = [];
-  const skipped: PublishSkippedRecipe[] = [];
-
-  for (const recipe of incoming) {
-    const reason = validateIncomingRecipe(recipe, existingByPair);
-    if (reason) {
-      skipped.push({ recipe, reason });
-      continue;
-    }
-
-    safeIncoming.push(recipe);
-    existingByPair.set(normalizePair(recipe.inputA, recipe.inputB), recipe);
-  }
-
-  const nextRecipes = sanitizeGlobalRecipes(mergeRecipes(doc.recipes, safeIncoming).slice(0, 1200)).recipes;
+  const nextRecipes = mergeRecipes(doc.recipes, incoming).slice(0, 1200);
   const nextDoc: GlobalRecipeDoc = {
     updatedAt: Date.now(),
     recipes: nextRecipes,
   };
 
-  if (safeIncoming.length > 0 || nextRecipes.length !== doc.recipes.length) {
-    await writeRemoteDoc(nextDoc, token, `chore: bulk update global master recipes (${safeIncoming.length})`, sha);
-    writeCachedRecipes(nextRecipes);
-  }
+  await writeRemoteDoc(nextDoc, token, `chore: bulk update global master recipes (${incoming.length})`, sha);
+  writeCachedRecipes(nextRecipes);
 
   return {
     recipes: nextRecipes,
-    publishedPairs: safeIncoming.map((recipe) => normalizePair(recipe.inputA, recipe.inputB)),
-    skipped,
+    publishedPairs: incoming.map((recipe) => normalizePair(recipe.inputA, recipe.inputB)),
+    skipped: [],
   };
 }
