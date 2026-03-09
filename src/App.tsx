@@ -46,7 +46,7 @@ function GameApp() {
   const handleInsightRandomUnlock = (insightType: InsightType) =>
     dispatch({ type: 'REQUEST_RANDOM_DISCOVERY', insightType });
 
-  // Build element-id → emoji lookup for planet rendering
+  // Build element-id → icon lookup for planet rendering (emoji strings OR image URLs)
   const emojiMap = useMemo(() => {
     const map: Record<string, string> = {};
     for (const el of ELEMENTS) {
@@ -55,9 +55,9 @@ function GameApp() {
     for (const el of state.customElements) {
       if (el.emoji) map[el.id] = el.emoji;
     }
-    // Icon overrides win (skip image data URIs)
+    // Icon overrides win — include image URLs so the planet can draw them
     for (const [id, icon] of Object.entries(state.iconOverrides)) {
-      if (icon && !icon.startsWith('data:') && !icon.startsWith('http')) {
+      if (icon && icon.trim()) {
         map[id] = icon;
       }
     }

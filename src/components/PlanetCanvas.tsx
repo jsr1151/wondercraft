@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { isImageIcon } from '../utils/iconResolver';
 import type { WorldInfluence } from '../types';
 import './PlanetCanvas.css';
 
@@ -94,30 +95,40 @@ function strokeSphereBlob(
   ctx.stroke();
 }
 
-/** Draw an emoji glyph on the sphere surface with shadow + depth fade */
-function drawEmoji(
+/** Draw an icon on the sphere surface — either an image (URL/data URI) or a text emoji */
+function drawIcon(
   ctx: CanvasRenderingContext2D,
-  emoji: string,
+  icon: string,
   p: SurfacePoint,
   baseSize: number,
+  imageCache: Map<string, HTMLImageElement>,
 ) {
   if (!p.visible) return;
   const size = baseSize * p.scale;
   ctx.save();
   ctx.globalAlpha = p.alpha;
-  // Drop shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.5)';
-  ctx.shadowBlur = 4 * p.scale;
-  ctx.shadowOffsetX = 1.5 * p.scale;
-  ctx.shadowOffsetY = 1.5 * p.scale;
-  ctx.font = `${size}px serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(emoji, p.x, p.y);
-  ctx.shadowColor = 'transparent';
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
+
+  if (isImageIcon(icon)) {
+    const img = imageCache.get(icon);
+    if (img && img.complete && img.naturalWidth > 0) {
+      ctx.shadowColor = 'rgba(0,0,0,0.45)';
+      ctx.shadowBlur = 4 * p.scale;
+      ctx.shadowOffsetX = 1.5 * p.scale;
+      ctx.shadowOffsetY = 1.5 * p.scale;
+      ctx.drawImage(img, p.x - size / 2, p.y - size / 2, size, size);
+    }
+  } else {
+    // Unicode emoji
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 4 * p.scale;
+    ctx.shadowOffsetX = 1.5 * p.scale;
+    ctx.shadowOffsetY = 1.5 * p.scale;
+    ctx.font = `${size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(icon, p.x, p.y);
+  }
+
   ctx.restore();
 }
 
@@ -127,9 +138,24 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
   const wiRef = useRef(wi);
   const discoveredRef = useRef(discoveredElements);
   const emojiMapRef = useRef(emojiMap);
+  const imageCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
   wiRef.current = wi;
   discoveredRef.current = discoveredElements;
   emojiMapRef.current = emojiMap;
+
+  // Pre-load any image-based icons into the cache
+  useEffect(() => {
+    if (!emojiMap) return;
+    const cache = imageCacheRef.current;
+    for (const value of Object.values(emojiMap)) {
+      if (isImageIcon(value) && !cache.has(value)) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = value;
+        cache.set(value, img);
+      }
+    }
+  }, [emojiMap]);
 
   const waterLevel = toLevel(wi.water);
   const vegetationLevel = toLevel(wi.vegetation);
@@ -442,7 +468,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
               const ox = (tRng() - 0.5) * s * 1.2;
               const oy = (tRng() - 0.5) * s * 0.8;
               const tp: SurfacePoint = { ...p, x: p.x + ox, y: p.y + oy };
-              drawEmoji(ctx, treeEmoji, tp, 10 + fp.size * 6);
+              drawIcon(ctx, treeEmoji, tp, 10 + fp.size * 6, imageCacheRef.current);
             }
           } else {
             const tRng = seededRandom(fp.blobSeed + 200);
@@ -472,7 +498,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
           const p = projectToSphere(cx, cy, r * 0.97, fp.lon, fp.lat, phase);
           if (!p.visible) continue;
           if (mtEmoji) {
-            drawEmoji(ctx, mtEmoji, p, 22 + fp.size * 14);
+            drawIcon(ctx, mtEmoji, p, 22 + fp.size * 14, imageCacheRef.current);
           } else {
             const s = (14 + fp.size * 16) * p.scale;
             const mrng = seededRandom(fp.blobSeed);
@@ -526,7 +552,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
             glow.addColorStop(1, 'rgba(255, 40, 0, 0)');
             ctx.fillStyle = glow;
             ctx.beginPath(); ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2); ctx.fill();
-            drawEmoji(ctx, volEmoji, p, 22 + fp.size * 12);
+            drawIcon(ctx, volEmoji, p, 22 + fp.size * 12, imageCacheRef.current);
           } else {
             const s = (10 + fp.size * 12) * p.scale;
             ctx.fillStyle = `rgba(70, 45, 25, ${0.6 * p.alpha})`;
@@ -554,7 +580,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
           ctx.fillStyle = `rgba(215, 185, 115, ${0.4 * p.alpha})`;
           fillSphereBlob(ctx, p, 14 + fp.size * 18, (14 + fp.size * 18) * 0.55, fp.blobSeed, 8);
           if (desertEmoji) {
-            drawEmoji(ctx, desertEmoji, p, 16 + fp.size * 8);
+            drawIcon(ctx, desertEmoji, p, 16 + fp.size * 8, imageCacheRef.current);
           }
         }
       }
@@ -643,7 +669,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
           ctx.fillStyle = glow;
           ctx.beginPath(); ctx.arc(p.x, p.y, gr, 0, Math.PI * 2); ctx.fill();
         }
-        drawEmoji(ctx, e, p, baseSize);
+        drawIcon(ctx, e, p, baseSize, imageCacheRef.current);
       };
 
       if (has('castle'))   drawLandmarkEmoji(0, 'castle', '🏰', 28, '175,152,110');
