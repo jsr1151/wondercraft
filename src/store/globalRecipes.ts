@@ -14,6 +14,10 @@ const GLOBAL_RECIPE_CACHE_KEY = 'wondercraft_cached_shared_recipes_v1';
 /** Recipes bundled at build time — always available, even offline. */
 const BUNDLED_RECIPES: MasterRecipe[] = (bundledRecipeDoc as { recipes: MasterRecipe[] }).recipes ?? [];
 
+export function getBundledGlobalRecipes(): MasterRecipe[] {
+  return [...BUNDLED_RECIPES];
+}
+
 export const GLOBAL_RECIPE_TOKEN_KEY = 'wondercraft_global_recipe_token';
 
 interface GlobalRecipeDoc {

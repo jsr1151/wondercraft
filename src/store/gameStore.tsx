@@ -29,7 +29,7 @@ import {
   getRandomDiscoveryInsightCost,
 } from '../engine/insightEngine';
 import { saveGame, loadGame, updateElementRegistry, updateRecipeRegistry, loadElementRegistry, loadRecipeRegistry } from './saveLoad';
-import { fetchGlobalRecipes } from './globalRecipes';
+import { fetchGlobalRecipes, getBundledGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
 
@@ -430,7 +430,7 @@ function createInitialState(): GameState {
     planets: [planet],
     activePlanetIndex: 0,
     masterRecipes: [],
-    sharedRecipes: [],
+    sharedRecipes: getBundledGlobalRecipes(),
     customElements: [],
     iconOverrides: {},
     nameOverrides: {},
