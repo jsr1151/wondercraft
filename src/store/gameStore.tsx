@@ -34,7 +34,7 @@ import { saveGame, loadGame } from './saveLoad';
 import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
-const RECOVERY_FLAG = 'wondercraft_recovery_v1_done';
+const RECOVERY_FLAG = 'wondercraft_recovery_v3_done';
 
 const DESTRUCTIVE_ELEMENT_IDS = new Set([
   'nuke', 'nuclear_bomb', 'antimatter', 'black_hole', 'supernova',
@@ -849,9 +849,10 @@ function migrateLegacyOceanPuddleState(state: GameState): GameState {
 }
 
 /** One-time recovery: re-create custom elements and re-discover everything
- *  that was lost to the availability-pruning bug. */
+ *  that was lost to the availability-pruning bug.
+ *  Runs across ALL planets, not just the active one. */
 function recoverLostElements(state: GameState): GameState {
-  // Only run once
+  // Only run once per version
   try {
     if (localStorage.getItem(RECOVERY_FLAG)) return state;
   } catch { /* proceed */ }
@@ -859,8 +860,6 @@ function recoverLostElements(state: GameState): GameState {
   if (!activePlanet(state).bigBangDone) return state;
 
   const existingCustomIds = new Set(state.customElements.map((el) => el.id));
-  const planet = activePlanet(state);
-  const discovered = new Set(planet.discoveredElements);
   const newCustom: Element[] = [];
   const allRec = allRecipes(state);
 
@@ -895,35 +894,41 @@ function recoverLostElements(state: GameState): GameState {
     });
   }
 
-  // Re-discover: all recipe outputs whose inputs are both discoverable
-  // We do a transitive pass so chained recipes also recover
-  // Start with primordials + whatever is already discovered
-  for (const pid of PRIMORDIAL_ELEMENTS) discovered.add(pid);
+  const nextCustom = [...state.customElements, ...newCustom];
+  const allEls = [...ELEMENTS, ...nextCustom];
 
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const r of allRec) {
-      if (discovered.has(r.output)) continue;
-      if (discovered.has(r.inputA) && discovered.has(r.inputB)) {
-        discovered.add(r.output);
-        changed = true;
+  // Recover discoveries across ALL planets
+  const nextPlanets = state.planets.map((planet) => {
+    if (!planet.bigBangDone) return planet;
+
+    const discovered = new Set(planet.discoveredElements);
+    for (const pid of PRIMORDIAL_ELEMENTS) discovered.add(pid);
+
+    // Transitive pass: discover all outputs whose inputs are both discovered
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const r of allRec) {
+        if (discovered.has(r.output)) continue;
+        if (discovered.has(r.inputA) && discovered.has(r.inputB)) {
+          discovered.add(r.output);
+          changed = true;
+        }
       }
     }
-  }
 
-  const nextCustom = [...state.customElements, ...newCustom];
-  const nextState = updateActivePlanet({
+    return {
+      ...planet,
+      discoveredElements: discovered,
+      worldInfluence: calculateWorldInfluence(Array.from(discovered), allEls, state.effectOverrides),
+      eventLog: [...planet.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
+    };
+  });
+
+  const nextState = withActivePlanetFields({
     ...state,
+    planets: nextPlanets,
     customElements: nextCustom,
-  }, {
-    discoveredElements: discovered,
-    worldInfluence: calculateWorldInfluence(
-      Array.from(discovered),
-      [...ELEMENTS, ...nextCustom],
-      state.effectOverrides,
-    ),
-    eventLog: [...planet.eventLog, '🔧 Recovery complete — lost elements and discoveries have been restored.'],
   });
 
   try {
@@ -1443,7 +1448,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const stabilized = updateActivePlanet(migrated, {
         worldInfluence: calculateWorldInfluence(Array.from(mPlanet.discoveredElements), allElements(migrated), migrated.effectOverrides),
       });
-      return withAvailableElementPool(stabilized, allRecipes(stabilized));
+      // Do NOT prune custom elements here — shared recipes haven't loaded yet.
+      // SET_SHARED_RECIPES will run recovery + pruning once shared data arrives.
+      return stabilized;
     }
 
     case 'CREATE_PLANET': {

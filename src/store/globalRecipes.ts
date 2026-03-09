@@ -1,4 +1,5 @@
 import type { MasterRecipe } from '../types';
+import bundledRecipeDoc from '../../shared/master-recipes.json';
 
 const OWNER = 'jsr1151';
 const REPO = 'wondercraft';
@@ -7,8 +8,11 @@ const FILE_PATH = 'shared/master-recipes.json';
 
 const RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${FILE_PATH}`;
 const CONTENTS_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
-const LOCAL_URL = './shared/master-recipes.json';
+const LOCAL_URL = import.meta.env.BASE_URL + 'shared-master-recipes.json';
 const GLOBAL_RECIPE_CACHE_KEY = 'wondercraft_cached_shared_recipes_v1';
+
+/** Recipes bundled at build time — always available, even offline. */
+const BUNDLED_RECIPES: MasterRecipe[] = (bundledRecipeDoc as { recipes: MasterRecipe[] }).recipes ?? [];
 
 export const GLOBAL_RECIPE_TOKEN_KEY = 'wondercraft_global_recipe_token';
 
@@ -110,7 +114,10 @@ export async function fetchGlobalRecipes(): Promise<MasterRecipe[]> {
     }
   }
 
-  return readCachedRecipes();
+  // Last resort: built-in bundled recipes
+  const cached = readCachedRecipes();
+  if (cached.length > 0) return cached;
+  return BUNDLED_RECIPES;
 }
 
 async function getRemoteDoc(token: string): Promise<{ doc: GlobalRecipeDoc; sha?: string }> {
