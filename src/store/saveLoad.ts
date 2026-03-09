@@ -1,6 +1,20 @@
 import type { GameState, SerializableGameState, SerializablePlanetState, PlanetState } from '../types';
 
 const SAVE_KEY = 'wondercraft_save_v1';
+const BACKUP_SAVE_KEY = 'wondercraft_save_v1_backup';
+
+function countDiscoveredEntries(state: Partial<SerializableGameState> | null): number {
+  if (!state) return 0;
+  if (state.planets && state.planets.length > 0) {
+    return state.planets.reduce((sum, planet) => sum + (planet.discoveredElements?.length ?? 0), 0);
+  }
+  return state.discoveredElements?.length ?? 0;
+}
+
+function parseSave(data: string | null): Partial<SerializableGameState> | null {
+  if (!data) return null;
+  return JSON.parse(data) as SerializableGameState;
+}
 
 function serializePlanet(planet: PlanetState): SerializablePlanetState {
   return {
@@ -53,7 +67,12 @@ function serializeState(state: GameState): SerializableGameState {
 
 export function saveGame(state: GameState): void {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(serializeState(state)));
+    const nextSerialized = JSON.stringify(serializeState(state));
+    const previousSerialized = localStorage.getItem(SAVE_KEY);
+    if (previousSerialized && previousSerialized !== nextSerialized) {
+      localStorage.setItem(BACKUP_SAVE_KEY, previousSerialized);
+    }
+    localStorage.setItem(SAVE_KEY, nextSerialized);
   } catch (e) {
     console.warn('Failed to save game:', e);
   }
@@ -61,9 +80,20 @@ export function saveGame(state: GameState): void {
 
 export function loadGame(): Partial<SerializableGameState> | null {
   try {
-    const data = localStorage.getItem(SAVE_KEY);
-    if (!data) return null;
-    return JSON.parse(data) as SerializableGameState;
+    const primary = parseSave(localStorage.getItem(SAVE_KEY));
+    const backup = parseSave(localStorage.getItem(BACKUP_SAVE_KEY));
+    if (!primary) return backup;
+    if (!backup) return primary;
+
+    const primaryCount = countDiscoveredEntries(primary);
+    const backupCount = countDiscoveredEntries(backup);
+
+    if (backupCount >= primaryCount + 50 && primaryCount <= Math.floor(backupCount * 0.6)) {
+      console.warn('Primary Wondercraft save looks truncated; loading backup save instead.');
+      return backup;
+    }
+
+    return primary;
   } catch (e) {
     console.warn('Failed to load game:', e);
     return null;
@@ -72,4 +102,5 @@ export function loadGame(): Partial<SerializableGameState> | null {
 
 export function clearSave(): void {
   localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(BACKUP_SAVE_KEY);
 }

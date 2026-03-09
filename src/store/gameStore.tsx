@@ -1466,14 +1466,18 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         `🌠 ${creationCost.toFixed(1)} Cosmic Insight shaped this world into being.`,
       ];
       const planets = [...state.planets, newPlanet];
-      const newIndex = planets.length - 1;
+      const currentPlanet = activePlanet(state);
       return checkAndCompleteQuests(
         awardPlanetMilestones(
-          withActivePlanetFields({
+          updateActivePlanet({
             ...state,
             planets,
-            activePlanetIndex: newIndex,
             insight: spendInsight(state.insight, PLANET_CREATION_INSIGHT_TYPE, creationCost),
+          }, {
+            eventLog: [
+              ...currentPlanet.eventLog,
+              `🪐 Founded ${newPlanet.name}. Switch to it from the solar system when you are ready.`,
+            ],
           })
         )
       );
