@@ -1,5 +1,18 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType, PlanetState, PlanetStartMode, Quest, ProfileState } from '../types';
+import type {
+  GameState,
+  GameAction,
+  Recipe,
+  WorldEffectMap,
+  Element,
+  InsightType,
+  InsightCurrency,
+  PlanetState,
+  PlanetStartMode,
+  Quest,
+  ProfileState,
+  SerializableGameState,
+} from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
@@ -32,7 +45,16 @@ const DEFAULT_PROFILE: ProfileState = {
   xp: 0,
   completedQuestIds: [],
   activeQuestId: null,
+  discoveredRecipeKeys: [],
+  completedMilestoneIds: [],
 };
+
+const MULTI_PLANET_TECH_THRESHOLD = 25;
+const PLANET_CREATION_INSIGHT_TYPE: InsightType = 'cosmic';
+
+function getPlanetCreationInsightCost(livePlanetCount: number): number {
+  return 25 + Math.max(0, livePlanetCount - 1) * 15;
+}
 
 /** XP needed to reach a given level (1-indexed). */
 function xpForLevel(level: number): number {
@@ -67,6 +89,39 @@ function getProfileTitle(level: number): string {
   }
   return title;
 }
+
+const PLANET_MILESTONES = [
+  {
+    id: 'verdant_world',
+    title: 'Verdant World',
+    xp: 25,
+    check: (state: GameState) => activePlanet(state).worldInfluence.vegetation >= 25,
+  },
+  {
+    id: 'city_state',
+    title: 'City State',
+    xp: 25,
+    check: (state: GameState) => activePlanet(state).worldInfluence.civilization >= 25,
+  },
+  {
+    id: 'advanced_age',
+    title: 'Advanced Age',
+    xp: 25,
+    check: (state: GameState) => activePlanet(state).worldInfluence.technology >= 25,
+  },
+  {
+    id: 'multiplanet_founder',
+    title: 'Multi-Planet Founder',
+    xp: 40,
+    check: (state: GameState) => state.planets.filter((planet) => !planet.destroyed).length >= 2,
+  },
+  {
+    id: 'stellar_network',
+    title: 'Stellar Network',
+    xp: 100,
+    check: (state: GameState) => state.planets.filter((planet) => !planet.destroyed).length >= 5,
+  },
+] as const;
 
 // ---- Quest Definitions ----
 
@@ -245,6 +300,71 @@ function checkAndCompleteQuests(state: GameState): GameState {
   });
 }
 
+function awardPlanetMilestones(state: GameState): GameState {
+  const unlocked = PLANET_MILESTONES.filter(
+    (milestone) =>
+      !state.profile.completedMilestoneIds.includes(milestone.id) && milestone.check(state)
+  );
+  if (unlocked.length === 0) return state;
+
+  const planet = activePlanet(state);
+  return updateActivePlanet(
+    {
+      ...state,
+      profile: {
+        ...state.profile,
+        xp: state.profile.xp + unlocked.reduce((sum, milestone) => sum + milestone.xp, 0),
+        completedMilestoneIds: [
+          ...state.profile.completedMilestoneIds,
+          ...unlocked.map((milestone) => milestone.id),
+        ],
+      },
+    },
+    {
+      eventLog: [
+        ...planet.eventLog,
+        ...unlocked.map(
+          (milestone) => `⭐ Milestone reached: ${milestone.title}! +${milestone.xp} XP`
+        ),
+      ],
+    }
+  );
+}
+
+function normalizeProfile(profile?: Partial<ProfileState>): ProfileState {
+  return {
+    ...DEFAULT_PROFILE,
+    ...profile,
+    completedQuestIds: profile?.completedQuestIds ?? [],
+    discoveredRecipeKeys: profile?.discoveredRecipeKeys ?? [],
+    completedMilestoneIds: profile?.completedMilestoneIds ?? [],
+    activeQuestId: profile?.activeQuestId ?? null,
+  };
+}
+
+function addInsight(a: InsightCurrency, b: InsightCurrency): InsightCurrency {
+  return {
+    nature: a.nature + b.nature,
+    life: a.life + b.life,
+    civilization: a.civilization + b.civilization,
+    technology: a.technology + b.technology,
+    cosmic: a.cosmic + b.cosmic,
+    materials: a.materials + b.materials,
+    weird: a.weird + b.weird,
+    warfare: a.warfare + b.warfare,
+  };
+}
+
+function getSavedGlobalInsight(saved: Partial<SerializableGameState>): InsightCurrency {
+  if (saved.planets && saved.planets.length > 0) {
+    return saved.planets.reduce(
+      (sum, planet) => addInsight(sum, planet.insight ?? EMPTY_INSIGHT),
+      { ...EMPTY_INSIGHT }
+    );
+  }
+  return saved.insight ?? { ...EMPTY_INSIGHT };
+}
+
 function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): Recipe[] {
   return [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
 }
@@ -290,7 +410,6 @@ function withActivePlanetFields(state: GameState): GameState {
     selectedSlotB: planet.selectedSlotB,
     attemptedCombinations: planet.attemptedCombinations,
     favoriteElementIds: planet.favoriteElementIds,
-    insight: planet.insight,
     hints: planet.hints,
     lastCombinationResult: planet.lastCombinationResult,
   };
@@ -323,6 +442,7 @@ function createInitialState(): GameState {
     actsAsOverrides: {},
     effectOverrides: {},
     profile: { ...DEFAULT_PROFILE },
+    insight: { ...EMPTY_INSIGHT },
     // These will be filled by withActivePlanetFields
     seed: planet.seed,
     bigBangDone: false,
@@ -334,7 +454,6 @@ function createInitialState(): GameState {
     selectedSlotB: null,
     attemptedCombinations: new Set(),
     favoriteElementIds: new Set(),
-    insight: { ...EMPTY_INSIGHT },
     hints: [],
     lastCombinationResult: null,
   });
@@ -345,7 +464,8 @@ function isMultiPlanetUnlocked(state: GameState): boolean {
   const disc = activePlanet(state).discoveredElements;
   const hasLaunchVehicle = disc.has('rocket') || disc.has('spaceship') || disc.has('spacecraft') || disc.has('space_shuttle');
   const hasPlanet = disc.has('planet') || disc.has('mars') || disc.has('jupiter') || disc.has('venus');
-  return hasLaunchVehicle && hasPlanet;
+  const hasTechThreshold = activePlanet(state).worldInfluence.technology >= MULTI_PLANET_TECH_THRESHOLD;
+  return hasLaunchVehicle && hasPlanet && hasTechThreshold;
 }
 
 function createNewPlanet(
@@ -423,12 +543,16 @@ function discoverElementInState(state: GameState, elementId: string): GameState 
     profile: { ...state.profile, xp: state.profile.xp + xpGain },
   };
 
-  return checkAndCompleteQuests(updateActivePlanet(nextState, {
-    discoveredElements,
-    worldInfluence,
-    recentDiscoveries: [elementId, ...planet.recentDiscoveries].slice(0, 10),
-    eventLog,
-  }));
+  return checkAndCompleteQuests(
+    awardPlanetMilestones(
+      updateActivePlanet(nextState, {
+        discoveredElements,
+        worldInfluence,
+        recentDiscoveries: [elementId, ...planet.recentDiscoveries].slice(0, 10),
+        eventLog,
+      })
+    )
+  );
 }
 
 function spendInsight(
@@ -449,6 +573,7 @@ function buildCategoryHintText(
   recipes: Recipe[]
 ): string {
   const discovered = activePlanet(state).discoveredElements;
+  const profileLevel = getProfileLevel(state.profile.xp);
   const elementMap = new Map(allElements(state).map((element) => [element.id, element]));
   const targetRecipes = recipes.filter((recipe) => recipe.output === target.id);
 
@@ -464,15 +589,30 @@ function buildCategoryHintText(
 
   if (a && b && aKnown && !bKnown) {
     const bType = getElementInsightType(b, state.categoryOverrides);
+    if (profileLevel >= 8) {
+      return `Insight hint: ${target.name} comes from ${a.name} and ${b.name}.`;
+    }
+    if (profileLevel >= 5) {
+      return `Insight hint: ${target.name} pairs ${a.name} with something from ${bType ? INSIGHT_LABELS[bType] : b.category}.`;
+    }
     return `Insight hint: try combining ${a.name} with something from ${bType ? INSIGHT_LABELS[bType] : b.category}.`;
   }
 
   if (a && b && bKnown && !aKnown) {
     const aType = getElementInsightType(a, state.categoryOverrides);
+    if (profileLevel >= 8) {
+      return `Insight hint: ${target.name} comes from ${a.name} and ${b.name}.`;
+    }
+    if (profileLevel >= 5) {
+      return `Insight hint: ${target.name} pairs ${b.name} with something from ${aType ? INSIGHT_LABELS[aType] : a.category}.`;
+    }
     return `Insight hint: try combining ${b.name} with something from ${aType ? INSIGHT_LABELS[aType] : a.category}.`;
   }
 
   if (a && b && aKnown && bKnown) {
+    if (profileLevel >= 8) {
+      return `Insight hint: combine ${a.name} with ${b.name} to reach ${target.name}.`;
+    }
     const reveal = Math.random() < 0.5 ? a.name : b.name;
     return `Insight hint: this ${INSIGHT_LABELS[insightType]} discovery involves ${reveal}.`;
   }
@@ -501,7 +641,7 @@ function requestInsightHintForType(state: GameState, insightType: InsightType): 
     state.categoryOverrides
   );
   const cost = getHintInsightCost(discoveredCounts[insightType]);
-  if (planet.insight[insightType] < cost) {
+  if (state.insight[insightType] < cost) {
     return updateActivePlanet(state, {
       hints: [
         `Need ${cost.toFixed(1)} ${INSIGHT_LABELS[insightType]} Insight for a hint.`,
@@ -514,8 +654,10 @@ function requestInsightHintForType(state: GameState, insightType: InsightType): 
   const recipes = allRecipes(state);
   const hint = buildCategoryHintText(state, insightType, target, recipes);
 
-  return updateActivePlanet(state, {
-    insight: spendInsight(planet.insight, insightType, cost),
+  return updateActivePlanet({
+    ...state,
+    insight: spendInsight(state.insight, insightType, cost),
+  }, {
     hints: [hint, ...planet.hints].slice(0, 5),
     eventLog: [
       ...planet.eventLog,
@@ -847,7 +989,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
 
       const outputId = recipe.output;
+      const recipeKey = recipePairKey(recipe.inputA, recipe.inputB);
       const alreadyDiscovered = planet.discoveredElements.has(outputId);
+      const isNewRecipe = !state.profile.discoveredRecipeKeys.includes(recipeKey);
       const recipeEffects: WorldEffectMap | undefined =
         'outputWorldEffects' in recipe && recipe.outputWorldEffects
           ? (recipe.outputWorldEffects as WorldEffectMap)
@@ -875,17 +1019,34 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         newEventLog.push(MAJOR_ELEMENT_EVENTS[outputId]);
       }
 
-      const nextState = updateActivePlanet({ ...state, effectOverrides: nextOverrides }, {
-        discoveredElements: newDiscovered,
-        worldInfluence,
-        recentDiscoveries: newRecent,
-        eventLog: newEventLog,
-        attemptedCombinations,
-        selectedSlotA: null,
-        selectedSlotB: null,
-        lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
-      });
-      return withAvailableElementPool(nextState, recipes);
+      if (isNewRecipe) {
+        newEventLog.push(`📘 New recipe discovered: ${recipe.inputA} + ${recipe.inputB}. +3 XP`);
+      }
+
+      const discoveryXp = alreadyDiscovered ? 0 : 5;
+      const recipeXp = isNewRecipe ? 3 : 0;
+      const nextProfile = {
+        ...state.profile,
+        xp: state.profile.xp + discoveryXp + recipeXp,
+        discoveredRecipeKeys: isNewRecipe
+          ? [...state.profile.discoveredRecipeKeys, recipeKey]
+          : state.profile.discoveredRecipeKeys,
+      };
+
+      const nextState = updateActivePlanet(
+        { ...state, effectOverrides: nextOverrides, profile: nextProfile },
+        {
+          discoveredElements: newDiscovered,
+          worldInfluence,
+          recentDiscoveries: newRecent,
+          eventLog: newEventLog,
+          attemptedCombinations,
+          selectedSlotA: null,
+          selectedSlotB: null,
+          lastCombinationResult: { success: true, elementId: outputId, isNew: !alreadyDiscovered },
+        }
+      );
+      return checkAndCompleteQuests(awardPlanetMilestones(withAvailableElementPool(nextState, recipes)));
     }
 
     case 'ADD_MASTER_RECIPE': {
@@ -1092,16 +1253,24 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'TICK_INSIGHT': {
-      const planet = activePlanet(state);
-      if (!planet.bigBangDone) return state;
-      const gains = calculateInsightGainPerSecond(
-        planet.discoveredElements,
-        allElements(state),
-        state.categoryOverrides
+      const livePlanets = state.planets.filter((planet) => planet.bigBangDone && !planet.destroyed);
+      if (livePlanets.length === 0) return state;
+      const gains = livePlanets.reduce(
+        (sum, planet) =>
+          addInsight(
+            sum,
+            calculateInsightGainPerSecond(
+              planet.discoveredElements,
+              allElements(state),
+              state.categoryOverrides
+            )
+          ),
+        { ...EMPTY_INSIGHT }
       );
-      return updateActivePlanet(state, {
-        insight: applyInsightTick(planet.insight, gains),
-      });
+      return {
+        ...state,
+        insight: applyInsightTick(state.insight, gains),
+      };
     }
 
     case 'REQUEST_HINT': {
@@ -1128,8 +1297,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       const preferredType = (Object.keys(planet.insight) as InsightType[])
         .filter((type) => getUndiscoveredElementsByInsightType(state, type).length > 0)
-        .filter((type) => planet.insight[type] >= getHintInsightCost(discoveredCounts[type]))
-        .sort((a, b) => planet.insight[b] - planet.insight[a])[0];
+        .filter((type) => state.insight[type] >= getHintInsightCost(discoveredCounts[type]))
+        .sort((a, b) => state.insight[b] - state.insight[a])[0];
 
       if (!preferredType) {
         return updateActivePlanet(state, {
@@ -1155,7 +1324,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         state.categoryOverrides
       );
       const cost = getRandomDiscoveryInsightCost(discoveredCounts[action.insightType]);
-      if (planet.insight[action.insightType] < cost) {
+      if (state.insight[action.insightType] < cost) {
         return updateActivePlanet(state, {
           eventLog: [
             ...planet.eventLog,
@@ -1167,8 +1336,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const picked = candidates[Math.floor(Math.random() * candidates.length)];
       const discoveredState = discoverElementInState(state, picked.id);
       const discoveredPlanet = activePlanet(discoveredState);
-      return updateActivePlanet(discoveredState, {
-        insight: spendInsight(discoveredPlanet.insight, action.insightType, cost),
+      return updateActivePlanet({
+        ...discoveredState,
+        insight: spendInsight(discoveredState.insight, action.insightType, cost),
+      }, {
         eventLog: [
           ...discoveredPlanet.eventLog,
           `🧬 Spent ${cost.toFixed(1)} ${INSIGHT_LABELS[action.insightType]} Insight to discover ${picked.name}.`,
@@ -1202,7 +1373,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         categoryOverrides: saved.categoryOverrides ?? {},
         actsAsOverrides: saved.actsAsOverrides ?? {},
         effectOverrides: loadedOverrides,
-        profile: saved.profile ?? { ...DEFAULT_PROFILE },
+        profile: normalizeProfile(saved.profile),
+        insight: getSavedGlobalInsight(saved),
       };
 
       let planets: PlanetState[];
@@ -1276,10 +1448,35 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case 'CREATE_PLANET': {
       if (!isMultiPlanetUnlocked(state)) return state;
+      const livePlanetCount = state.planets.filter((planet) => !planet.destroyed).length;
+      const creationCost = getPlanetCreationInsightCost(livePlanetCount);
+      if (state.insight[PLANET_CREATION_INSIGHT_TYPE] < creationCost) {
+        const planet = activePlanet(state);
+        return updateActivePlanet(state, {
+          eventLog: [
+            ...planet.eventLog,
+            `🌠 Need ${creationCost.toFixed(1)} Cosmic Insight to create a new planet.`,
+          ],
+        });
+      }
+
       const newPlanet = createNewPlanet(state, action.name, action.mode, action.customElementIds);
+      newPlanet.eventLog = [
+        ...newPlanet.eventLog,
+        `🌠 ${creationCost.toFixed(1)} Cosmic Insight shaped this world into being.`,
+      ];
       const planets = [...state.planets, newPlanet];
       const newIndex = planets.length - 1;
-      return withActivePlanetFields({ ...state, planets, activePlanetIndex: newIndex });
+      return checkAndCompleteQuests(
+        awardPlanetMilestones(
+          withActivePlanetFields({
+            ...state,
+            planets,
+            activePlanetIndex: newIndex,
+            insight: spendInsight(state.insight, PLANET_CREATION_INSIGHT_TYPE, creationCost),
+          })
+        )
+      );
     }
 
     case 'SWITCH_PLANET': {
@@ -1368,6 +1565,7 @@ interface GameContextType {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export { isMultiPlanetUnlocked, getProfileLevel, getProfileTitle, QUESTS, DESTRUCTIVE_ELEMENT_IDS };
+export { getPlanetCreationInsightCost, PLANET_CREATION_INSIGHT_TYPE, MULTI_PLANET_TECH_THRESHOLD };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const GameContext = createContext<GameContextType | null>(null);

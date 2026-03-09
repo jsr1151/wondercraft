@@ -46,7 +46,7 @@ function serializeState(state: GameState): SerializableGameState {
     // Legacy fields (from active planet)
     attemptedCombinations: Array.from(activePlanet.attemptedCombinations),
     favoriteElementIds: Array.from(activePlanet.favoriteElementIds),
-    insight: activePlanet.insight,
+    insight: state.insight,
     hints: activePlanet.hints,
   };
 }

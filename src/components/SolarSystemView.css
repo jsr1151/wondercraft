@@ -13,6 +13,55 @@
   margin-bottom: 10px;
 }
 
+.solar-system-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.72rem;
+}
+
+.solar-system-cost,
+.solar-system-stock {
+  color: rgba(200, 200, 255, 0.65);
+}
+
+.solar-unlock-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(100, 180, 255, 0.18);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.solar-unlock-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #d5d5ff;
+  margin-bottom: 6px;
+}
+
+.solar-unlock-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.solar-unlock-check {
+  font-size: 0.74rem;
+  color: rgba(255, 190, 120, 0.85);
+}
+
+.solar-unlock-check.met {
+  color: rgba(120, 220, 160, 0.9);
+}
+
+.solar-prelaunch-note {
+  font-size: 0.75rem;
+  color: rgba(200, 200, 255, 0.55);
+  margin-bottom: 8px;
+}
+
 .solar-system-title {
   font-size: 0.95rem;
   font-weight: 600;
@@ -147,6 +196,7 @@
 
 .solar-create-modes {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -183,6 +233,11 @@
   font-size: 0.8rem;
 }
 
+.solar-create-confirm:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .solar-create-confirm:hover {
   background: rgba(100, 180, 255, 0.3);
 }
@@ -200,6 +255,43 @@
 
 .solar-create-cancel:hover {
   background: rgba(255, 100, 100, 0.2);
+}
+
+.solar-create-warning {
+  margin: 0;
+  font-size: 0.72rem;
+  color: rgba(255, 170, 120, 0.8);
+}
+
+.solar-custom-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.solar-custom-title {
+  font-size: 0.74rem;
+  color: rgba(200, 200, 255, 0.65);
+}
+
+.solar-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.solar-custom-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.73rem;
+  color: rgba(220, 220, 255, 0.75);
+}
+
+.solar-custom-option input {
+  accent-color: #64b4ff;
 }
 
 /* Destroyed planet styles */

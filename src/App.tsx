@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { InsightType } from './types';
-import { GameProvider } from './store/gameStore';
+import { GameProvider, getProfileLevel } from './store/gameStore';
 import { useGame } from './store/useGame';
 import { BigBang } from './components/BigBang';
 import { PlanetCanvas } from './components/PlanetCanvas';
@@ -74,6 +74,7 @@ function GameApp() {
   const activePlanetName = state.planets[state.activePlanetIndex]?.name ?? 'Genesis';
 
   const discoveredCount = state.discoveredElements.size;
+  const profileLevel = getProfileLevel(state.profile.xp);
 
   return (
     <div className="app">
@@ -94,6 +95,7 @@ function GameApp() {
           <PlanetCanvas
             worldInfluence={state.worldInfluence}
             seed={state.seed}
+            profileLevel={profileLevel}
             discoveredElements={state.discoveredElements}
             emojiMap={emojiMap}
           />

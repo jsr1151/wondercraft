@@ -6,6 +6,7 @@ import './PlanetCanvas.css';
 interface PlanetCanvasProps {
   worldInfluence: WorldInfluence;
   seed: number;
+  profileLevel?: number;
   discoveredElements?: Set<string>;
   emojiMap?: Record<string, string>;
 }
@@ -132,7 +133,7 @@ function drawIcon(
   ctx.restore();
 }
 
-export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emojiMap }: PlanetCanvasProps) {
+export function PlanetCanvas({ worldInfluence: wi, seed, profileLevel = 1, discoveredElements, emojiMap }: PlanetCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const wiRef = useRef(wi);
@@ -176,6 +177,16 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
     if (waterLevel > 0.42 || vegetationLevel > 0.32) return 'Awakening Biosphere';
     return 'Barren Frontier';
   })();
+
+  const decorationTier = profileLevel >= 12
+    ? 'cosmos'
+    : profileLevel >= 8
+      ? 'sage'
+      : profileLevel >= 5
+        ? 'alchemist'
+        : profileLevel >= 3
+          ? 'apprentice'
+          : 'starter';
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -973,7 +984,7 @@ export function PlanetCanvas({ worldInfluence: wi, seed, discoveredElements, emo
   }, [seed]);
 
   return (
-    <div className="planet-container">
+    <div className={`planet-container planet-tier-${decorationTier}`}>
       <canvas ref={canvasRef} width={520} height={520} className="planet-canvas" />
       <div className="planet-label">Your World: {worldStage}</div>
       <div className="planet-metrics" aria-label="World influence levels">

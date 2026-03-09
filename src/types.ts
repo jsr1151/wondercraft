@@ -125,6 +125,8 @@ export interface ProfileState {
   xp: number;
   completedQuestIds: string[];
   activeQuestId: string | null;
+  discoveredRecipeKeys: string[];
+  completedMilestoneIds: string[];
 }
 
 export interface GameState {
@@ -141,6 +143,7 @@ export interface GameState {
   actsAsOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
   profile: ProfileState;
+  insight: InsightCurrency;
   // Convenience accessors (derived from active planet)
   seed: number;
   bigBangDone: boolean;
@@ -152,7 +155,6 @@ export interface GameState {
   selectedSlotB: string | null;
   attemptedCombinations: Set<string>;
   favoriteElementIds: Set<string>;
-  insight: InsightCurrency;
   hints: string[];
   lastCombinationResult: { success: boolean; elementId?: string; isNew?: boolean } | null;
 }
@@ -217,6 +219,8 @@ export interface SerializableProfileState {
   xp: number;
   completedQuestIds: string[];
   activeQuestId: string | null;
+  discoveredRecipeKeys: string[];
+  completedMilestoneIds: string[];
 }
 
 export interface SerializableGameState {
