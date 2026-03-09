@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType, PlanetState, PlanetStartMode } from '../types';
+import type { GameState, GameAction, Recipe, WorldEffectMap, Element, InsightType, PlanetState, PlanetStartMode, Quest, ProfileState } from '../types';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
@@ -22,6 +22,228 @@ import { fetchGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
 const RECOVERY_FLAG = 'wondercraft_recovery_v1_done';
+
+const DESTRUCTIVE_ELEMENT_IDS = new Set([
+  'nuke', 'nuclear_bomb', 'antimatter', 'black_hole', 'supernova',
+  'asteroid', 'meteor', 'doomsday', 'apocalypse', 'gamma_ray_burst',
+]);
+
+const DEFAULT_PROFILE: ProfileState = {
+  xp: 0,
+  completedQuestIds: [],
+  activeQuestId: null,
+};
+
+/** XP needed to reach a given level (1-indexed). */
+function xpForLevel(level: number): number {
+  return Math.floor(100 * Math.pow(1.5, level - 1));
+}
+
+function getProfileLevel(xp: number): number {
+  let level = 1;
+  let needed = xpForLevel(level);
+  while (xp >= needed) {
+    xp -= needed;
+    level++;
+    needed = xpForLevel(level);
+  }
+  return level;
+}
+
+const PROFILE_TITLES: Record<number, string> = {
+  1: 'Dabbler',
+  3: 'Apprentice',
+  5: 'Alchemist',
+  8: 'Sage',
+  12: 'World Shaper',
+  16: 'Cosmos Architect',
+  20: 'Omniscient',
+};
+
+function getProfileTitle(level: number): string {
+  let title = 'Dabbler';
+  for (const [lvl, t] of Object.entries(PROFILE_TITLES)) {
+    if (level >= Number(lvl)) title = t;
+  }
+  return title;
+}
+
+// ---- Quest Definitions ----
+
+const QUESTS: Quest[] = [
+  // Discovery quests
+  {
+    id: 'discover_25',
+    title: 'Curious Mind',
+    description: 'Discover 25 elements on a single planet.',
+    type: 'discovery',
+    xpReward: 50,
+    badge: '🔍',
+    check: { kind: 'total_discoveries', count: 25 },
+  },
+  {
+    id: 'discover_50',
+    title: 'Prolific Explorer',
+    description: 'Discover 50 elements on a single planet.',
+    type: 'discovery',
+    xpReward: 120,
+    badge: '🧭',
+    check: { kind: 'total_discoveries', count: 50 },
+  },
+  {
+    id: 'discover_100',
+    title: 'Master Alchemist',
+    description: 'Discover 100 elements on a single planet.',
+    type: 'discovery',
+    xpReward: 300,
+    badge: '⚗️',
+    check: { kind: 'total_discoveries', count: 100 },
+  },
+  {
+    id: 'discover_200',
+    title: 'Encyclopedist',
+    description: 'Discover 200 elements on a single planet.',
+    type: 'discovery',
+    xpReward: 600,
+    badge: '📚',
+    check: { kind: 'total_discoveries', count: 200 },
+  },
+  // Planet quests
+  {
+    id: 'green_world',
+    title: 'Garden World',
+    description: 'Create a planet with vegetation influence above 50.',
+    type: 'planet',
+    xpReward: 100,
+    badge: '🌿',
+    check: { kind: 'planet_influence', field: 'vegetation', min: 50 },
+  },
+  {
+    id: 'polluted_world',
+    title: 'Industrial Wasteland',
+    description: 'Create a planet with pollution influence above 40.',
+    type: 'planet',
+    xpReward: 80,
+    badge: '🏭',
+    check: { kind: 'planet_influence', field: 'pollution', min: 40 },
+  },
+  {
+    id: 'tech_world',
+    title: 'Digital Frontier',
+    description: 'Create a planet with technology influence above 50.',
+    type: 'planet',
+    xpReward: 120,
+    badge: '💻',
+    check: { kind: 'planet_influence', field: 'technology', min: 50 },
+  },
+  {
+    id: 'magic_world',
+    title: 'Enchanted Realm',
+    description: 'Create a planet with magic influence above 30.',
+    type: 'planet',
+    xpReward: 150,
+    badge: '✨',
+    check: { kind: 'planet_influence', field: 'magic', min: 30 },
+  },
+  // Civilization quests
+  {
+    id: 'founded_city',
+    title: 'City Founder',
+    description: 'Discover the City element.',
+    type: 'civilization',
+    xpReward: 60,
+    badge: '🏙️',
+    check: { kind: 'discover_all', elementIds: ['city'] },
+  },
+  {
+    id: 'build_kingdom',
+    title: 'Kingdom Builder',
+    description: 'Discover Kingdom and Castle.',
+    type: 'civilization',
+    xpReward: 100,
+    badge: '👑',
+    check: { kind: 'discover_all', elementIds: ['kingdom', 'castle'] },
+  },
+  // Multi-planet quests
+  {
+    id: 'two_planets',
+    title: 'Colonizer',
+    description: 'Own 2 or more planets.',
+    type: 'planet',
+    xpReward: 200,
+    badge: '🪐',
+    check: { kind: 'planet_count', min: 2 },
+  },
+  {
+    id: 'five_planets',
+    title: 'Solar Architect',
+    description: 'Own 5 or more planets.',
+    type: 'planet',
+    xpReward: 500,
+    badge: '☀️',
+    check: { kind: 'planet_count', min: 5 },
+  },
+  // Chaos quests
+  {
+    id: 'destroy_a_planet',
+    title: 'World Breaker',
+    description: 'Destroy a planet.',
+    type: 'chaos',
+    xpReward: 250,
+    badge: '💥',
+    check: { kind: 'destroy_planet' },
+  },
+];
+
+function isQuestComplete(quest: Quest, state: GameState): boolean {
+  const planet = activePlanet(state);
+  const c = quest.check;
+  switch (c.kind) {
+    case 'discover_all':
+      return c.elementIds.every((id) => planet.discoveredElements.has(id));
+    case 'discover_count': {
+      const elems = allElements(state);
+      let count = 0;
+      for (const el of elems) {
+        if (planet.discoveredElements.has(el.id) && (el.category === c.category || (state.categoryOverrides[el.id] ?? '') === c.category)) count++;
+      }
+      return count >= c.count;
+    }
+    case 'planet_influence':
+      return (planet.worldInfluence[c.field] ?? 0) >= c.min;
+    case 'planet_count':
+      return state.planets.filter((p) => !p.destroyed).length >= c.min;
+    case 'destroy_planet':
+      return state.planets.some((p) => p.destroyed);
+    case 'total_discoveries':
+      return planet.discoveredElements.size >= c.count;
+  }
+}
+
+function checkAndCompleteQuests(state: GameState): GameState {
+  const { profile } = state;
+  if (!profile.activeQuestId) return state;
+  const quest = QUESTS.find((q) => q.id === profile.activeQuestId);
+  if (!quest) return state;
+  if (profile.completedQuestIds.includes(quest.id)) return state;
+  if (!isQuestComplete(quest, state)) return state;
+
+  const planet = activePlanet(state);
+  return updateActivePlanet({
+    ...state,
+    profile: {
+      ...profile,
+      xp: profile.xp + quest.xpReward,
+      completedQuestIds: [...profile.completedQuestIds, quest.id],
+      activeQuestId: null,
+    },
+  }, {
+    eventLog: [
+      ...planet.eventLog,
+      `🏆 Quest complete: ${quest.title}! +${quest.xpReward} XP${quest.badge ? ' ' + quest.badge : ''}`,
+    ],
+  });
+}
 
 function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): Recipe[] {
   return [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
@@ -100,6 +322,7 @@ function createInitialState(): GameState {
     categoryOverrides: {},
     actsAsOverrides: {},
     effectOverrides: {},
+    profile: { ...DEFAULT_PROFILE },
     // These will be filled by withActivePlanetFields
     seed: planet.seed,
     bigBangDone: false,
@@ -193,12 +416,19 @@ function discoverElementInState(state: GameState, elementId: string): GameState 
     eventLog.push(MAJOR_ELEMENT_EVENTS[elementId]);
   }
 
-  return updateActivePlanet(state, {
+  // Award XP for new discoveries
+  const xpGain = 5;
+  const nextState = {
+    ...state,
+    profile: { ...state.profile, xp: state.profile.xp + xpGain },
+  };
+
+  return checkAndCompleteQuests(updateActivePlanet(nextState, {
     discoveredElements,
     worldInfluence,
     recentDiscoveries: [elementId, ...planet.recentDiscoveries].slice(0, 10),
     eventLog,
-  });
+  }));
 }
 
 function spendInsight(
@@ -972,6 +1202,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         categoryOverrides: saved.categoryOverrides ?? {},
         actsAsOverrides: saved.actsAsOverrides ?? {},
         effectOverrides: loadedOverrides,
+        profile: saved.profile ?? { ...DEFAULT_PROFILE },
       };
 
       let planets: PlanetState[];
@@ -1064,6 +1295,67 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return withActivePlanetFields({ ...state, planets });
     }
 
+    case 'DESTROY_PLANET': {
+      if (action.index < 0 || action.index >= state.planets.length) return state;
+      const target = state.planets[action.index];
+      if (target.destroyed) return state;
+
+      // Check that player has a destructive element on the current planet
+      const disc = activePlanet(state).discoveredElements;
+      const hasDestructive = Array.from(disc).some((id) => DESTRUCTIVE_ELEMENT_IDS.has(id));
+      if (!hasDestructive) return state;
+
+      const planets = [...state.planets];
+      planets[action.index] = { ...target, destroyed: true };
+
+      // If destroying all planets, reset
+      const livePlanets = planets.filter((p) => !p.destroyed);
+      if (livePlanets.length === 0) {
+        return createInitialState();
+      }
+
+      // If destroyed the active planet, switch to first live planet
+      let newIndex = state.activePlanetIndex;
+      if (newIndex === action.index) {
+        newIndex = planets.findIndex((p) => !p.destroyed);
+      }
+
+      const planet = activePlanet(state);
+      const nextState = withActivePlanetFields({
+        ...state,
+        planets,
+        activePlanetIndex: newIndex,
+        profile: {
+          ...state.profile,
+          xp: state.profile.xp + 50,
+        },
+      });
+      return checkAndCompleteQuests(updateActivePlanet(nextState, {
+        eventLog: [...planet.eventLog, `💥 Planet "${target.name}" has been destroyed!`],
+      }));
+    }
+
+    case 'GAIN_XP': {
+      return {
+        ...state,
+        profile: { ...state.profile, xp: state.profile.xp + action.amount },
+      };
+    }
+
+    case 'START_QUEST': {
+      const quest = QUESTS.find((q) => q.id === action.questId);
+      if (!quest) return state;
+      if (state.profile.completedQuestIds.includes(action.questId)) return state;
+      return {
+        ...state,
+        profile: { ...state.profile, activeQuestId: action.questId },
+      };
+    }
+
+    case 'CHECK_QUESTS': {
+      return checkAndCompleteQuests(state);
+    }
+
     default:
       return state;
   }
@@ -1075,7 +1367,7 @@ interface GameContextType {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { isMultiPlanetUnlocked };
+export { isMultiPlanetUnlocked, getProfileLevel, getProfileTitle, QUESTS, DESTRUCTIVE_ELEMENT_IDS };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const GameContext = createContext<GameContextType | null>(null);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGame } from '../store/useGame';
-import { isMultiPlanetUnlocked } from '../store/gameStore';
+import { isMultiPlanetUnlocked, DESTRUCTIVE_ELEMENT_IDS } from '../store/gameStore';
 import type { PlanetStartMode } from '../types';
 import './SolarSystemView.css';
 
@@ -11,9 +11,12 @@ export function SolarSystemView() {
   const [startMode, setStartMode] = useState<PlanetStartMode>('basic4');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
+  const [confirmDestroyIndex, setConfirmDestroyIndex] = useState<number | null>(null);
 
   const unlocked = isMultiPlanetUnlocked(state);
   if (!unlocked && state.planets.length <= 1) return null;
+
+  const canDestroy = Array.from(state.discoveredElements).some((id) => DESTRUCTIVE_ELEMENT_IDS.has(id));
 
   const handleCreate = () => {
     const name = newName.trim() || `Planet ${state.planets.length + 1}`;
@@ -41,8 +44,18 @@ export function SolarSystemView() {
 
       <div className="solar-system-planets">
         {state.planets.map((planet, index) => {
-          if (planet.destroyed) return null;
           const isActive = index === state.activePlanetIndex;
+          if (planet.destroyed) {
+            return (
+              <div key={index} className="solar-planet-card destroyed">
+                <div className="solar-planet-orb destroyed-orb" />
+                <div className="solar-planet-info">
+                  <span className="solar-planet-name destroyed-name">{planet.name}</span>
+                  <span className="solar-planet-elements">💀 Destroyed</span>
+                </div>
+              </div>
+            );
+          }
           return (
             <div
               key={index}
@@ -79,10 +92,32 @@ export function SolarSystemView() {
                 <span className="solar-planet-elements">{planet.discoveredElements.size} elements</span>
               </div>
               {isActive && <span className="solar-planet-active-badge">●</span>}
+              {canDestroy && state.planets.filter(p => !p.destroyed).length > 1 && (
+                <button
+                  className="solar-planet-destroy-btn"
+                  title="Destroy this planet"
+                  onClick={(e) => { e.stopPropagation(); setConfirmDestroyIndex(index); }}
+                >
+                  💥
+                </button>
+              )}
             </div>
           );
         })}
       </div>
+
+      {confirmDestroyIndex !== null && (
+        <div className="solar-destroy-confirm">
+          <p>⚠️ Destroy <strong>{state.planets[confirmDestroyIndex]?.name}</strong>?</p>
+          <p className="solar-destroy-warn">This cannot be undone. The planet will appear as a dead world.</p>
+          <div className="solar-create-actions">
+            <button className="solar-destroy-yes" onClick={() => { dispatch({ type: 'DESTROY_PLANET', index: confirmDestroyIndex }); setConfirmDestroyIndex(null); }}>
+              Destroy
+            </button>
+            <button className="solar-create-cancel" onClick={() => setConfirmDestroyIndex(null)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
       {unlocked && !showCreateForm && (
         <button className="solar-create-btn" onClick={() => setShowCreateForm(true)}>

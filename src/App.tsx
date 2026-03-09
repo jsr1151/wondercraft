@@ -15,6 +15,8 @@ import { MasterRecipeLab } from './components/MasterRecipeLab';
 import { EmojiAtlas } from './components/EmojiAtlas';
 import { UntriedCombosSidebar } from './components/UntriedCombosSidebar';
 import { SolarSystemView } from './components/SolarSystemView';
+import { ProfilePanel } from './components/ProfilePanel';
+import { QuestPanel } from './components/QuestPanel';
 import './App.css';
 
 interface CollapsiblePanelProps {
@@ -105,6 +107,12 @@ function GameApp() {
               onRequestHint={handleInsightHint}
               onRequestRandomDiscovery={handleInsightRandomUnlock}
             />
+          </CollapsiblePanel>
+          <CollapsiblePanel title="Profile" defaultOpen>
+            <ProfilePanel />
+          </CollapsiblePanel>
+          <CollapsiblePanel title="Quests" defaultOpen>
+            <QuestPanel />
           </CollapsiblePanel>
         </div>
         <div className="app-right">

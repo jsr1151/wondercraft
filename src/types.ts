@@ -100,6 +100,33 @@ export interface PlanetState {
   destroyed: boolean;
 }
 
+export type QuestType = 'discovery' | 'planet' | 'civilization' | 'chaos';
+export type QuestStatus = 'available' | 'active' | 'completed';
+
+export interface Quest {
+  id: string;
+  title: string;
+  description: string;
+  type: QuestType;
+  xpReward: number;
+  badge?: string;
+  check: QuestCheck;
+}
+
+export type QuestCheck =
+  | { kind: 'discover_all'; elementIds: string[] }
+  | { kind: 'discover_count'; category: string; count: number }
+  | { kind: 'planet_influence'; field: string; min: number }
+  | { kind: 'planet_count'; min: number }
+  | { kind: 'destroy_planet' }
+  | { kind: 'total_discoveries'; count: number };
+
+export interface ProfileState {
+  xp: number;
+  completedQuestIds: string[];
+  activeQuestId: string | null;
+}
+
 export interface GameState {
   planets: PlanetState[];
   activePlanetIndex: number;
@@ -113,6 +140,7 @@ export interface GameState {
   categoryOverrides: Record<string, ElementCategory>;
   actsAsOverrides: Record<string, string>;
   effectOverrides: Record<string, WorldEffectMap>;
+  profile: ProfileState;
   // Convenience accessors (derived from active planet)
   seed: number;
   bigBangDone: boolean;
@@ -163,7 +191,11 @@ export type GameAction =
   | { type: 'LOAD_STATE'; state: Partial<SerializableGameState> }
   | { type: 'CREATE_PLANET'; name: string; mode: PlanetStartMode; customElementIds?: string[] }
   | { type: 'SWITCH_PLANET'; index: number }
-  | { type: 'RENAME_PLANET'; index: number; name: string };
+  | { type: 'RENAME_PLANET'; index: number; name: string }
+  | { type: 'DESTROY_PLANET'; index: number }
+  | { type: 'GAIN_XP'; amount: number; reason: string }
+  | { type: 'START_QUEST'; questId: string }
+  | { type: 'CHECK_QUESTS' };
 
 export interface SerializablePlanetState {
   name: string;
@@ -181,10 +213,17 @@ export interface SerializablePlanetState {
   destroyed: boolean;
 }
 
+export interface SerializableProfileState {
+  xp: number;
+  completedQuestIds: string[];
+  activeQuestId: string | null;
+}
+
 export interface SerializableGameState {
   // Multi-planet format
   planets?: SerializablePlanetState[];
   activePlanetIndex?: number;
+  profile?: SerializableProfileState;
   // Legacy single-planet fields (for backward compat)
   seed: number;
   bigBangDone: boolean;

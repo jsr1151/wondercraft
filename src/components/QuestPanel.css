@@ -1,0 +1,138 @@
+.quest-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quest-active {
+  background: rgba(100, 180, 255, 0.08);
+  border: 1px solid rgba(100, 180, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.quest-active-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.quest-badge {
+  font-size: 1rem;
+}
+
+.quest-active-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c8c8ff;
+  flex: 1;
+}
+
+.quest-type-tag {
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(100, 180, 255, 0.15);
+  color: rgba(100, 180, 255, 0.8);
+  text-transform: capitalize;
+}
+
+.quest-desc {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(200, 200, 255, 0.6);
+  line-height: 1.3;
+}
+
+.quest-reward {
+  font-size: 0.7rem;
+  color: #ffd700;
+}
+
+.quest-prompt {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(200, 200, 255, 0.5);
+}
+
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quest-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.quest-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.quest-item-badge {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.quest-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.quest-item-title {
+  font-size: 0.78rem;
+  color: #d0d0ff;
+}
+
+.quest-item-desc {
+  font-size: 0.65rem;
+  color: rgba(200, 200, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quest-item-reward {
+  font-size: 0.7rem;
+  color: #ffd700;
+  flex-shrink: 0;
+}
+
+.quest-completed {
+  margin-top: 4px;
+}
+
+.quest-completed-header {
+  font-size: 0.72rem;
+  color: rgba(200, 200, 255, 0.4);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.quest-completed-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.quest-completed-badge {
+  font-size: 0.85rem;
+  cursor: default;
+}
+
+.quest-all-done {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #ffd700;
+  text-align: center;
+}

@@ -201,3 +201,70 @@
 .solar-create-cancel:hover {
   background: rgba(255, 100, 100, 0.2);
 }
+
+/* Destroyed planet styles */
+.solar-planet-card.destroyed {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.destroyed-orb {
+  background: radial-gradient(circle at 35% 35%, #555, #222) !important;
+  box-shadow: none !important;
+}
+
+.destroyed-name {
+  text-decoration: line-through;
+  color: rgba(200, 200, 255, 0.4) !important;
+}
+
+/* Destroy button */
+.solar-planet-destroy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  padding: 2px 4px;
+  flex-shrink: 0;
+}
+
+.solar-planet-destroy-btn:hover {
+  opacity: 1;
+}
+
+/* Destroy confirmation */
+.solar-destroy-confirm {
+  background: rgba(180, 40, 40, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.solar-destroy-confirm p {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  color: #ffaaaa;
+}
+
+.solar-destroy-warn {
+  font-size: 0.75rem !important;
+  color: rgba(255, 150, 150, 0.6) !important;
+}
+
+.solar-destroy-yes {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(220, 50, 50, 0.3);
+  color: #ff6666;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.solar-destroy-yes:hover {
+  background: rgba(220, 50, 50, 0.5);
+}

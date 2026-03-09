@@ -26,6 +26,7 @@ function serializeState(state: GameState): SerializableGameState {
     // Multi-planet fields
     planets: state.planets.map(serializePlanet),
     activePlanetIndex: state.activePlanetIndex,
+    profile: state.profile,
     // Legacy fields (from active planet, for backward compat)
     seed: activePlanet.seed,
     bigBangDone: activePlanet.bigBangDone,
