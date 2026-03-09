@@ -1,0 +1,3361 @@
+{
+  "updatedAt": 1773081106590,
+  "recipes": [
+    {
+      "id": "m_1773076094646_kgltpw",
+      "inputA": "earth",
+      "inputB": "earth",
+      "output": "mountain",
+      "createdAt": 1773076094646,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1773076115160_9dkywl",
+      "inputA": "water",
+      "inputB": "custom_puddle",
+      "output": "custom_pond",
+      "createdAt": 1773076115160,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076133002_72iqx5",
+      "inputA": "custom_puddle",
+      "inputB": "custom_puddle",
+      "output": "custom_pond",
+      "createdAt": 1773076133002,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076148642_apgdmf",
+      "inputA": "custom_pond",
+      "inputB": "water",
+      "output": "lake",
+      "createdAt": 1773076148642,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076156148_ta67dq",
+      "inputA": "custom_pond",
+      "inputB": "custom_pond",
+      "output": "lake",
+      "createdAt": 1773076156148,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076167564_bulxfa",
+      "inputA": "lake",
+      "inputB": "water",
+      "output": "ocean",
+      "createdAt": 1773076167564,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076178830_nqjxrv",
+      "inputA": "lake",
+      "inputB": "lake",
+      "output": "ocean",
+      "createdAt": 1773076178830,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076190734_kqcsyo",
+      "inputA": "custom_pond",
+      "inputB": "lake",
+      "output": "ocean",
+      "createdAt": 1773076190734,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1773076200598_8vao5n",
+      "inputA": "custom_pond",
+      "inputB": "custom_puddle",
+      "output": "lake",
+      "createdAt": 1773076200598,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1773076375208_ihcvwl",
+      "inputA": "air",
+      "inputB": "air",
+      "output": "atmosphere",
+      "createdAt": 1773076375208,
+      "outputWorldEffects": {
+        "atmosphere": 3,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773076911058_fipr03",
+      "inputA": "sun",
+      "inputB": "custom_puddle",
+      "output": "rainbow",
+      "createdAt": 1773076911058,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773076923326_34h0ym",
+      "inputA": "custom_puddle",
+      "inputB": "air",
+      "output": "cloud",
+      "createdAt": 1773076923326,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773076943876_qi6935",
+      "inputA": "mountain",
+      "inputB": "fire",
+      "output": "volcano",
+      "createdAt": 1773076943876,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1773076969744_khogek",
+      "inputA": "mountain",
+      "inputB": "air",
+      "output": "stone",
+      "createdAt": 1773076969744,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773076983211_eiztnl",
+      "inputA": "atmosphere",
+      "inputB": "energy",
+      "output": "wind",
+      "createdAt": 1773076983211,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773076989808_u4wmhj",
+      "inputA": "atmosphere",
+      "inputB": "water",
+      "output": "cloud",
+      "createdAt": 1773076989808,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077011179_v36v8v",
+      "inputA": "energy",
+      "inputB": "mud",
+      "output": "life",
+      "createdAt": 1773077011179,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1773077020642_39lz7v",
+      "inputA": "steam",
+      "inputB": "air",
+      "output": "cloud",
+      "createdAt": 1773077020642,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077128264_3joig9",
+      "inputA": "earth",
+      "inputB": "dust",
+      "output": "sand",
+      "createdAt": 1773077128264,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077332541_1ga7bg",
+      "inputA": "sun",
+      "inputB": "fire",
+      "output": "custom_heatwave",
+      "createdAt": 1773077332541
+    },
+    {
+      "id": "m_1773077433915_tnqnz7",
+      "inputA": "sun",
+      "inputB": "sun",
+      "output": "custom_supernova",
+      "createdAt": 1773077433915
+    },
+    {
+      "id": "m_1773077566121_zen79l",
+      "inputA": "steam",
+      "inputB": "steam",
+      "output": "cloud",
+      "createdAt": 1773077566121,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077577809_6kkp8t",
+      "inputA": "steam",
+      "inputB": "sun",
+      "output": "rainbow",
+      "createdAt": 1773077577809,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773077697382_f63jau",
+      "inputA": "fire",
+      "inputB": "mud",
+      "output": "brick",
+      "createdAt": 1773077697382
+    },
+    {
+      "id": "m_1773077704941_67bt0c",
+      "inputA": "mud",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773077704941,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077711576_zn18bz",
+      "inputA": "air",
+      "inputB": "mud",
+      "output": "dust",
+      "createdAt": 1773077711576,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773077718821_qyzfhn",
+      "inputA": "earth",
+      "inputB": "mud",
+      "output": "clay",
+      "createdAt": 1773077718821,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077784221_ildcvg",
+      "inputA": "dust",
+      "inputB": "fire",
+      "output": "ash",
+      "createdAt": 1773077784221
+    },
+    {
+      "id": "m_1773077791481_zq1ibm",
+      "inputA": "dust",
+      "inputB": "dust",
+      "output": "sand",
+      "createdAt": 1773077791481,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077800206_pj8egr",
+      "inputA": "dust",
+      "inputB": "water",
+      "output": "mud",
+      "createdAt": 1773077800206
+    },
+    {
+      "id": "m_1773077851869_ykxajx",
+      "inputA": "dust",
+      "inputB": "air",
+      "output": "custom_sandstorm",
+      "createdAt": 1773077851869,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773077899532_0us84y",
+      "inputA": "fire",
+      "inputB": "custom_puddle",
+      "output": "steam",
+      "createdAt": 1773077899532,
+      "outputWorldEffects": {
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1773077908328_mhxt6y",
+      "inputA": "earth",
+      "inputB": "custom_puddle",
+      "output": "mud",
+      "createdAt": 1773077908328
+    },
+    {
+      "id": "m_1773078040295_d2fkjo",
+      "inputA": "earth",
+      "inputB": "mountain",
+      "output": "stone",
+      "createdAt": 1773078040295,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1773078088147_8dorug",
+      "inputA": "mountain",
+      "inputB": "mountain",
+      "output": "custom_mountain_2",
+      "createdAt": 1773078088147,
+      "outputWorldEffects": {
+        "earthy": 2
+      }
+    },
+    {
+      "id": "m_1772983511127_vh8j6e",
+      "inputA": "custom_farmer",
+      "inputB": "custom_turbine",
+      "output": "custom_wind_farm",
+      "createdAt": 1772983511127,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772983632877_excz1h",
+      "inputA": "custom_alloy",
+      "inputB": "custom_pond",
+      "output": "custom_fountain",
+      "createdAt": 1772983632877
+    },
+    {
+      "id": "m_1772983732309_ogfoj4",
+      "inputA": "custom_camp",
+      "inputB": "custom_jet",
+      "output": "custom_hangar",
+      "createdAt": 1772983732309
+    },
+    {
+      "id": "m_1772983859493_emtkam",
+      "inputA": "clay",
+      "inputB": "sun",
+      "output": "custom_adobe",
+      "createdAt": 1772983859493
+    },
+    {
+      "id": "m_1772983919973_2kyeda",
+      "inputA": "custom_motor",
+      "inputB": "custom_website",
+      "output": "custom_cryptocurrency",
+      "createdAt": 1772983919973
+    },
+    {
+      "id": "m_1772984027373_qp3di3",
+      "inputA": "custom_pottery",
+      "inputB": "custom_website",
+      "output": "custom_amazon",
+      "createdAt": 1772984027373
+    },
+    {
+      "id": "m_1772984044062_7dhv1g",
+      "inputA": "custom_airport",
+      "inputB": "lava",
+      "output": "ash",
+      "createdAt": 1772984044062
+    },
+    {
+      "id": "m_1772984057635_93q9xs",
+      "inputA": "custom_hotwheels",
+      "inputB": "custom_machine",
+      "output": "custom_car",
+      "createdAt": 1772984057635
+    },
+    {
+      "id": "m_1772984218181_iz51e2",
+      "inputA": "custom_bucket",
+      "inputB": "custom_troll",
+      "output": "custom_trap",
+      "createdAt": 1772984218181
+    },
+    {
+      "id": "m_1772984288168_tvpqzm",
+      "inputA": "custom_bee",
+      "inputB": "custom_ceramic",
+      "output": "custom_honey_pot",
+      "createdAt": 1772984288168
+    },
+    {
+      "id": "m_1772984460665_fkm0ae",
+      "inputA": "custom_cactus",
+      "inputB": "obsidian",
+      "output": "custom_needle",
+      "createdAt": 1772984460665
+    },
+    {
+      "id": "m_1772984819767_65hqa8",
+      "inputA": "tree",
+      "inputB": "custom_bucket",
+      "output": "custom_maple_syrup",
+      "createdAt": 1772984819767
+    },
+    {
+      "id": "m_1772984831709_jg566u",
+      "inputA": "tree",
+      "inputB": "custom_heat_pack",
+      "output": "custom_maple_syrup",
+      "createdAt": 1772984831709
+    },
+    {
+      "id": "m_1772984854629_wn2h57",
+      "inputA": "custom_pump",
+      "inputB": "custom_oar",
+      "output": "custom_drain",
+      "createdAt": 1772984854629,
+      "outputWorldEffects": {
+        "water": -5
+      }
+    },
+    {
+      "id": "m_1772984871595_3tt6a6",
+      "inputA": "custom_flood",
+      "inputB": "tool",
+      "output": "custom_drain",
+      "createdAt": 1772984871595,
+      "outputWorldEffects": {
+        "water": -5
+      }
+    },
+    {
+      "id": "m_1772984879469_ughqsm",
+      "inputA": "custom_pump",
+      "inputB": "water",
+      "output": "custom_drain",
+      "createdAt": 1772984879469,
+      "outputWorldEffects": {
+        "water": -5
+      }
+    },
+    {
+      "id": "m_1772984901025_rko8ib",
+      "inputA": "custom_website",
+      "inputB": "custom_oven",
+      "output": "custom_cookie",
+      "createdAt": 1772984901025
+    },
+    {
+      "id": "m_1772984913015_fpdedg",
+      "inputA": "custom_field",
+      "inputB": "custom_turbine",
+      "output": "custom_wind_farm",
+      "createdAt": 1772984913015,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772984921447_x09b24",
+      "inputA": "farm",
+      "inputB": "custom_turbine",
+      "output": "custom_wind_farm",
+      "createdAt": 1772984921447,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772984931563_8z0zc6",
+      "inputA": "farm",
+      "inputB": "custom_windmill",
+      "output": "custom_turbine",
+      "createdAt": 1772984931563,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772984957367_gtmzzm",
+      "inputA": "custom_pond",
+      "inputB": "custom_pump",
+      "output": "custom_fountain",
+      "createdAt": 1772984957367
+    },
+    {
+      "id": "m_1772984964531_cgc1mi",
+      "inputA": "custom_statue",
+      "inputB": "water",
+      "output": "custom_fountain",
+      "createdAt": 1772984964531
+    },
+    {
+      "id": "m_1772984972344_xubdah",
+      "inputA": "custom_statue",
+      "inputB": "custom_pump",
+      "output": "custom_fountain",
+      "createdAt": 1772984972344
+    },
+    {
+      "id": "m_1772984980878_xnj6ug",
+      "inputA": "custom_garden",
+      "inputB": "custom_pump",
+      "output": "custom_fountain",
+      "createdAt": 1772984980878
+    },
+    {
+      "id": "m_1772984989425_fexk8a",
+      "inputA": "custom_airport",
+      "inputB": "tool",
+      "output": "custom_hangar",
+      "createdAt": 1772984989425
+    },
+    {
+      "id": "m_1772984997363_d33nsp",
+      "inputA": "airplane",
+      "inputB": "custom_house",
+      "output": "custom_hangar",
+      "createdAt": 1772984997363
+    },
+    {
+      "id": "m_1772985007667_brlsy5",
+      "inputA": "custom_airport",
+      "inputB": "custom_house",
+      "output": "custom_hangar",
+      "createdAt": 1772985007667
+    },
+    {
+      "id": "m_1772985016924_z2j3a2",
+      "inputA": "custom_helicopter",
+      "inputB": "custom_house",
+      "output": "custom_hangar",
+      "createdAt": 1772985016924
+    },
+    {
+      "id": "m_1772985033111_4sjzn8",
+      "inputA": "mud",
+      "inputB": "sun",
+      "output": "custom_adobe",
+      "createdAt": 1772985033111
+    },
+    {
+      "id": "m_1772985041653_wcbhnu",
+      "inputA": "clay",
+      "inputB": "custom_heat_pack",
+      "output": "custom_adobe",
+      "createdAt": 1772985041653
+    },
+    {
+      "id": "m_1772985079169_x0tgzu",
+      "inputA": "brick",
+      "inputB": "mud",
+      "output": "custom_adobe",
+      "createdAt": 1772985079169
+    },
+    {
+      "id": "m_1772985086667_ni7uo6",
+      "inputA": "sun",
+      "inputB": "brick",
+      "output": "custom_adobe",
+      "createdAt": 1772985086667
+    },
+    {
+      "id": "m_1772985100599_1b1hax",
+      "inputA": "computer",
+      "inputB": "custom_minecart",
+      "output": "custom_cryptocurrency",
+      "createdAt": 1772985100599
+    },
+    {
+      "id": "m_1772985129230_bf0wzb",
+      "inputA": "tool",
+      "inputB": "custom_monster",
+      "output": "custom_trap",
+      "createdAt": 1772985129230
+    },
+    {
+      "id": "m_1772985156707_dz3vfh",
+      "inputA": "custom_bee",
+      "inputB": "custom_pottery",
+      "output": "custom_honey_pot",
+      "createdAt": 1772985156707
+    },
+    {
+      "id": "m_1772985164856_r6c4l1",
+      "inputA": "custom_bee",
+      "inputB": "clay",
+      "output": "custom_honey_pot",
+      "createdAt": 1772985164856
+    },
+    {
+      "id": "m_1772985172542_yeb85w",
+      "inputA": "custom_bee",
+      "inputB": "custom_bucket",
+      "output": "custom_honey_pot",
+      "createdAt": 1772985172542
+    },
+    {
+      "id": "m_1772985196525_f9ig9u",
+      "inputA": "custom_cactus",
+      "inputB": "custom_blade",
+      "output": "custom_needle",
+      "createdAt": 1772985196525
+    },
+    {
+      "id": "m_1772985425717_9hg81m",
+      "inputA": "seed",
+      "inputB": "custom_field",
+      "output": "wheat",
+      "createdAt": 1772985425717,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772985435627_7sj0ss",
+      "inputA": "seed",
+      "inputB": "farm",
+      "output": "wheat",
+      "createdAt": 1772985435627,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772985444459_bjg6ii",
+      "inputA": "plant",
+      "inputB": "custom_field",
+      "output": "wheat",
+      "createdAt": 1772985444459,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772985476679_zigrqd",
+      "inputA": "plant",
+      "inputB": "sunlight",
+      "output": "wheat",
+      "createdAt": 1772985476679,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772985772608_52jikh",
+      "inputA": "custom_house",
+      "inputB": "custom_house",
+      "output": "village",
+      "createdAt": 1772985772608,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985790944_jfbnzk",
+      "inputA": "farm",
+      "inputB": "custom_house",
+      "output": "village",
+      "createdAt": 1772985790944,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985804140_e4xukq",
+      "inputA": "custom_house",
+      "inputB": "human",
+      "output": "village",
+      "createdAt": 1772985804140,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985835286_ovfiwy",
+      "inputA": "village",
+      "inputB": "village",
+      "output": "city",
+      "createdAt": 1772985835286,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1772985898606_4o7dpm",
+      "inputA": "village",
+      "inputB": "tool",
+      "output": "market",
+      "createdAt": 1772985898606,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985907154_4eb4om",
+      "inputA": "village",
+      "inputB": "human",
+      "output": "market",
+      "createdAt": 1772985907154,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985915670_j43r03",
+      "inputA": "city",
+      "inputB": "human",
+      "output": "market",
+      "createdAt": 1772985915670,
+      "outputWorldEffects": {
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772985971263_qw778t",
+      "inputA": "stone",
+      "inputB": "wheel",
+      "output": "road",
+      "createdAt": 1772985971263
+    },
+    {
+      "id": "m_1772985986260_6cugad",
+      "inputA": "bridge",
+      "inputB": "earth",
+      "output": "road",
+      "createdAt": 1772985986260
+    },
+    {
+      "id": "m_1772986289908_0m4sj1",
+      "inputA": "custom_field",
+      "inputB": "custom_windmill",
+      "output": "custom_wind_farm",
+      "createdAt": 1772986289908,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772921279500_ujjv9m",
+      "inputA": "plant",
+      "inputB": "earth",
+      "output": "tree",
+      "createdAt": 1772921279500,
+      "outputWorldEffects": {
+        "vegetation": 3
+      }
+    },
+    {
+      "id": "m_1772921378105_crphg0",
+      "inputA": "tree",
+      "inputB": "tool",
+      "output": "custom_wood",
+      "createdAt": 1772921378105
+    },
+    {
+      "id": "m_1772921532242_j1h027",
+      "inputA": "custom_wood",
+      "inputB": "fire",
+      "output": "custom_campfire",
+      "createdAt": 1772921532242
+    },
+    {
+      "id": "m_1772921627207_thqucq",
+      "inputA": "custom_campfire",
+      "inputB": "stone",
+      "output": "fire_pit",
+      "createdAt": 1772921627207,
+      "outputWorldEffects": {
+        "brightness": 1
+      }
+    },
+    {
+      "id": "m_1772921706848_u4nz24",
+      "inputA": "custom_campfire",
+      "inputB": "human",
+      "output": "custom_camp",
+      "createdAt": 1772921706848,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1772921743099_fdyclw",
+      "inputA": "fire",
+      "inputB": "stone",
+      "output": "lava",
+      "createdAt": 1772921743099,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1772921922883_oi6pyn",
+      "inputA": "mountain",
+      "inputB": "tool",
+      "output": "custom_ore",
+      "createdAt": 1772921922883
+    },
+    {
+      "id": "m_1772922050222_4yybgj",
+      "inputA": "earth",
+      "inputB": "fire_pit",
+      "output": "custom_kiln",
+      "createdAt": 1772922050222
+    },
+    {
+      "id": "m_1772922105524_kaedz5",
+      "inputA": "custom_kiln",
+      "inputB": "stone",
+      "output": "brick",
+      "createdAt": 1772922105524
+    },
+    {
+      "id": "m_1772922156870_kfyrot",
+      "inputA": "brick",
+      "inputB": "brick",
+      "output": "custom_house",
+      "createdAt": 1772922156870
+    },
+    {
+      "id": "m_1772922296503_okp4cu",
+      "inputA": "brick",
+      "inputB": "electricity",
+      "output": "custom_oven",
+      "createdAt": 1772922296503,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1772922373191_drkbdh",
+      "inputA": "brick",
+      "inputB": "fire",
+      "output": "custom_fireplace",
+      "createdAt": 1772922373191,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      }
+    },
+    {
+      "id": "m_1772922408209_gcb4ih",
+      "inputA": "brick",
+      "inputB": "life",
+      "output": "custom_house",
+      "createdAt": 1772922408209,
+      "outputWorldEffects": {
+        "civilization": 5
+      }
+    },
+    {
+      "id": "m_1772922494059_lgjxi1",
+      "inputA": "brick",
+      "inputB": "tool",
+      "output": "custom_wall",
+      "createdAt": 1772922494059
+    },
+    {
+      "id": "m_1772924883369_wzru6b",
+      "inputA": "electricity",
+      "inputB": "custom_wire",
+      "output": "custom_network",
+      "createdAt": 1772924883369
+    },
+    {
+      "id": "m_1772924957191_8jt3am",
+      "inputA": "computer",
+      "inputB": "custom_wire",
+      "output": "internet",
+      "createdAt": 1772924957191,
+      "outputWorldEffects": {
+        "technology": 8
+      }
+    },
+    {
+      "id": "m_1772925001834_jnnvzh",
+      "inputA": "custom_network",
+      "inputB": "computer",
+      "output": "internet",
+      "createdAt": 1772925001834,
+      "outputWorldEffects": {
+        "technology": 8
+      }
+    },
+    {
+      "id": "m_1772925082843_kz1stk",
+      "inputA": "metal",
+      "inputB": "electricity",
+      "output": "computer",
+      "createdAt": 1772925082843,
+      "outputWorldEffects": {
+        "technology": 5
+      }
+    },
+    {
+      "id": "m_1772925197697_zd42i6",
+      "inputA": "electricity",
+      "inputB": "internet",
+      "output": "custom_wi_fi",
+      "createdAt": 1772925197697
+    },
+    {
+      "id": "m_1772926525793_mtpl5a",
+      "inputA": "plant",
+      "inputB": "tool",
+      "output": "medicine",
+      "createdAt": 1772926525793,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772928031635_0y0ap6",
+      "inputA": "medicine",
+      "inputB": "electricity",
+      "output": "custom_defibrillator",
+      "createdAt": 1772928031635
+    },
+    {
+      "id": "m_1772928184879_b9v8tq",
+      "inputA": "bird",
+      "inputB": "life",
+      "output": "custom_egg",
+      "createdAt": 1772928184879
+    },
+    {
+      "id": "m_1772928210502_jpb3lv",
+      "inputA": "animal",
+      "inputB": "life",
+      "output": "custom_egg",
+      "createdAt": 1772928210502
+    },
+    {
+      "id": "m_1772928279392_u9mtel",
+      "inputA": "plant",
+      "inputB": "mud",
+      "output": "swamp",
+      "createdAt": 1772928279392,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772928358373_ajxzr9",
+      "inputA": "custom_egg",
+      "inputB": "swamp",
+      "output": "reptile",
+      "createdAt": 1772928358373,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772928481801_phcign",
+      "inputA": "reptile",
+      "inputB": "electricity",
+      "output": "custom_electric_eel",
+      "createdAt": 1772928481801,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772928579413_g121n2",
+      "inputA": "electricity",
+      "inputB": "tree",
+      "output": "custom_christmas_tree",
+      "createdAt": 1772928579413
+    },
+    {
+      "id": "m_1772928755868_x7z0az",
+      "inputA": "electricity",
+      "inputB": "wheel",
+      "output": "custom_motor",
+      "createdAt": 1772928755868
+    },
+    {
+      "id": "m_1772928876654_g76vw3",
+      "inputA": "fire",
+      "inputB": "internet",
+      "output": "custom_firefox",
+      "createdAt": 1772928876654,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      }
+    },
+    {
+      "id": "m_1772929069569_j74ecd",
+      "inputA": "fire",
+      "inputB": "medicine",
+      "output": "custom_heat_pack",
+      "createdAt": 1772929069569
+    },
+    {
+      "id": "m_1772929148371_9caa2w",
+      "inputA": "fire",
+      "inputB": "custom_ore",
+      "output": "metal",
+      "createdAt": 1772929148371
+    },
+    {
+      "id": "m_1772929256662_4urc32",
+      "inputA": "reptile",
+      "inputB": "fire",
+      "output": "custom_dragon",
+      "createdAt": 1772929256662
+    },
+    {
+      "id": "m_1772929319328_6mldbn",
+      "inputA": "tree",
+      "inputB": "fire",
+      "output": "custom_charcoal",
+      "createdAt": 1772929319328
+    },
+    {
+      "id": "m_1772929398026_y6vwbw",
+      "inputA": "human",
+      "inputB": "internet",
+      "output": "custom_social_media",
+      "createdAt": 1772929398026,
+      "outputWorldEffects": {
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1772929588046_3a0io0",
+      "inputA": "custom_wood",
+      "inputB": "tool",
+      "output": "custom_paper",
+      "createdAt": 1772929588046
+    },
+    {
+      "id": "m_1772929698985_0u9pd4",
+      "inputA": "custom_paper",
+      "inputB": "human",
+      "output": "custom_writing",
+      "createdAt": 1772929698985
+    },
+    {
+      "id": "m_1772930005703_zvk1b7",
+      "inputA": "custom_paper",
+      "inputB": "custom_paper",
+      "output": "custom_book",
+      "createdAt": 1772930005703
+    },
+    {
+      "id": "m_1772930030064_sxlpjy",
+      "inputA": "custom_paper",
+      "inputB": "custom_writing",
+      "output": "custom_book",
+      "createdAt": 1772930030064
+    },
+    {
+      "id": "m_1772930307904_gnojqx",
+      "inputA": "custom_book",
+      "inputB": "human",
+      "output": "knowledge",
+      "createdAt": 1772930307904
+    },
+    {
+      "id": "m_1772930388990_nervga",
+      "inputA": "human",
+      "inputB": "knowledge",
+      "output": "custom_scientist",
+      "createdAt": 1772930388990
+    },
+    {
+      "id": "m_1772930433129_8bco27",
+      "inputA": "internet",
+      "inputB": "life",
+      "output": "custom_social_media",
+      "createdAt": 1772930433129,
+      "outputWorldEffects": {
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1772930530532_sz818j",
+      "inputA": "internet",
+      "inputB": "tool",
+      "output": "custom_website",
+      "createdAt": 1772930530532
+    },
+    {
+      "id": "m_1772930595084_x3ibqs",
+      "inputA": "lava",
+      "inputB": "life",
+      "output": "custom_phoenix",
+      "createdAt": 1772930595084
+    },
+    {
+      "id": "m_1772930605363_d7ywia",
+      "inputA": "lava",
+      "inputB": "mountain",
+      "output": "volcano",
+      "createdAt": 1772930605363,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1772930690806_f5afvs",
+      "inputA": "lava",
+      "inputB": "tool",
+      "output": "custom_forge",
+      "createdAt": 1772930690806
+    },
+    {
+      "id": "m_1772930908387_jtqhex",
+      "inputA": "obsidian",
+      "inputB": "electricity",
+      "output": "custom_television",
+      "createdAt": 1772930908387
+    },
+    {
+      "id": "m_1772930992900_cey0x4",
+      "inputA": "obsidian",
+      "inputB": "fire",
+      "output": "custom_blade",
+      "createdAt": 1772930992900
+    },
+    {
+      "id": "m_1772931334614_5wohdx",
+      "inputA": "life",
+      "inputB": "lightning",
+      "output": "custom_monster",
+      "createdAt": 1772931334614
+    },
+    {
+      "id": "m_1772931411750_wvld0g",
+      "inputA": "life",
+      "inputB": "medicine",
+      "output": "custom_health",
+      "createdAt": 1772931411750
+    },
+    {
+      "id": "m_1772931427279_wjm9w9",
+      "inputA": "life",
+      "inputB": "metal",
+      "output": "custom_cyborg",
+      "createdAt": 1772931427279
+    },
+    {
+      "id": "m_1772931476256_c05c7c",
+      "inputA": "life",
+      "inputB": "mountain",
+      "output": "custom_goat",
+      "createdAt": 1772931476256
+    },
+    {
+      "id": "m_1772931546699_ylrj3f",
+      "inputA": "life",
+      "inputB": "mud",
+      "output": "custom_worm",
+      "createdAt": 1772931546699
+    },
+    {
+      "id": "m_1772931656383_cglija",
+      "inputA": "life",
+      "inputB": "obsidian",
+      "output": "custom_dragon_egg",
+      "createdAt": 1772931656383
+    },
+    {
+      "id": "m_1772931687831_tqlz8m",
+      "inputA": "life",
+      "inputB": "plant",
+      "output": "flower",
+      "createdAt": 1772931687831,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772931699874_00tt96",
+      "inputA": "life",
+      "inputB": "ocean",
+      "output": "custom_frog",
+      "createdAt": 1772931699874
+    },
+    {
+      "id": "m_1772931716542_vo0m27",
+      "inputA": "life",
+      "inputB": "rain",
+      "output": "plant",
+      "createdAt": 1772931716542,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1772931743450_bo2v9l",
+      "inputA": "life",
+      "inputB": "robot",
+      "output": "custom_cyborg",
+      "createdAt": 1772931743450
+    },
+    {
+      "id": "m_1772931872991_mgut9n",
+      "inputA": "life",
+      "inputB": "salt",
+      "output": "custom_vitamin",
+      "createdAt": 1772931872991
+    },
+    {
+      "id": "m_1772931920167_ofcm4q",
+      "inputA": "life",
+      "inputB": "sand",
+      "output": "custom_cactus",
+      "createdAt": 1772931920167
+    },
+    {
+      "id": "m_1772931933446_61ugvk",
+      "inputA": "life",
+      "inputB": "seed",
+      "output": "plant",
+      "createdAt": 1772931933446,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1772931946063_gn90mz",
+      "inputA": "life",
+      "inputB": "solar_panel",
+      "output": "custom_sunflower",
+      "createdAt": 1772931946063,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "vegetation": 1,
+        "heat": 0,
+        "life": 0
+      }
+    },
+    {
+      "id": "m_1772932092442_ssjaof",
+      "inputA": "life",
+      "inputB": "steam",
+      "output": "custom_breath",
+      "createdAt": 1772932092442
+    },
+    {
+      "id": "m_1772932134268_54ll02",
+      "inputA": "life",
+      "inputB": "stone",
+      "output": "custom_golem",
+      "createdAt": 1772932134268
+    },
+    {
+      "id": "m_1772932148835_cil5f4",
+      "inputA": "life",
+      "inputB": "storm",
+      "output": "custom_thunderbird",
+      "createdAt": 1772932148835,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1772932164348_7ilgz8",
+      "inputA": "life",
+      "inputB": "tool",
+      "output": "human",
+      "createdAt": 1772932164348,
+      "outputWorldEffects": {
+        "civilization": 2,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772932247018_92rzah",
+      "inputA": "life",
+      "inputB": "tornado",
+      "output": "custom_flying_cow",
+      "createdAt": 1772932247018
+    },
+    {
+      "id": "m_1772932310415_rb3sys",
+      "inputA": "life",
+      "inputB": "tree",
+      "output": "custom_treant",
+      "createdAt": 1772932310415
+    },
+    {
+      "id": "m_1772932327117_i02c3f",
+      "inputA": "life",
+      "inputB": "volcano",
+      "output": "custom_dragon",
+      "createdAt": 1772932327117
+    },
+    {
+      "id": "m_1772932365072_ipt58n",
+      "inputA": "life",
+      "inputB": "water",
+      "output": "fish",
+      "createdAt": 1772932365072,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772932439530_j1nw6z",
+      "inputA": "life",
+      "inputB": "wheel",
+      "output": "custom_bicycle",
+      "createdAt": 1772932439530
+    },
+    {
+      "id": "m_1772932452254_lgjglm",
+      "inputA": "life",
+      "inputB": "wind",
+      "output": "bird",
+      "createdAt": 1772932452254
+    },
+    {
+      "id": "m_1772933035215_88ike2",
+      "inputA": "electricity",
+      "inputB": "flower",
+      "output": "custom_sunflower",
+      "createdAt": 1772933035215,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "vegetation": 1,
+        "heat": 0,
+        "life": 0
+      }
+    },
+    {
+      "id": "m_1772933279203_uiv2fg",
+      "inputA": "fire",
+      "inputB": "flower",
+      "output": "custom_fire_flower",
+      "createdAt": 1772933279203,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      }
+    },
+    {
+      "id": "m_1772933350874_3mqpzc",
+      "inputA": "flower",
+      "inputB": "life",
+      "output": "custom_bee",
+      "createdAt": 1772933350874
+    },
+    {
+      "id": "m_1772933441594_j4gkj0",
+      "inputA": "flower",
+      "inputB": "plant",
+      "output": "custom_garden",
+      "createdAt": 1772933441594,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772933482546_sdopas",
+      "inputA": "flower",
+      "inputB": "tool",
+      "output": "custom_bouquet",
+      "createdAt": 1772933482546
+    },
+    {
+      "id": "m_1772934024383_6cezat",
+      "inputA": "fish",
+      "inputB": "earth",
+      "output": "custom_fossil",
+      "createdAt": 1772934024384
+    },
+    {
+      "id": "m_1772934039381_dfk98t",
+      "inputA": "electricity",
+      "inputB": "fish",
+      "output": "custom_electric_eel",
+      "createdAt": 1772934039381,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772934168764_gpbcs4",
+      "inputA": "fish",
+      "inputB": "fire",
+      "output": "custom_cooked_fish",
+      "createdAt": 1772934168764
+    },
+    {
+      "id": "m_1772934226207_w5ukfc",
+      "inputA": "fish",
+      "inputB": "ocean",
+      "output": "custom_goldfish",
+      "createdAt": 1772934226207
+    },
+    {
+      "id": "m_1772934269216_mjk0d8",
+      "inputA": "fish",
+      "inputB": "tool",
+      "output": "custom_fishing_rod",
+      "createdAt": 1772934269216,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772934400177_dj8o03",
+      "inputA": "lightning",
+      "inputB": "metal",
+      "output": "electricity",
+      "createdAt": 1772934400177,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772934883053_y6uig8",
+      "inputA": "lightning",
+      "inputB": "tool",
+      "output": "custom_tesla_coil",
+      "createdAt": 1772934883053
+    },
+    {
+      "id": "m_1772935176754_vzen1x",
+      "inputA": "water",
+      "inputB": "custom_machine",
+      "output": "custom_pump",
+      "createdAt": 1772935176754
+    },
+    {
+      "id": "m_1772935190156_fjkz6u",
+      "inputA": "mammal",
+      "inputB": "tool",
+      "output": "human",
+      "createdAt": 1772935190156,
+      "outputWorldEffects": {
+        "civilization": 2,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772935238259_e05j5w",
+      "inputA": "medicine",
+      "inputB": "tool",
+      "output": "custom_syringe",
+      "createdAt": 1772935238259
+    },
+    {
+      "id": "m_1772935319303_g8d361",
+      "inputA": "metal",
+      "inputB": "metal",
+      "output": "custom_alloy",
+      "createdAt": 1772935319303
+    },
+    {
+      "id": "m_1772935386965_yo1kws",
+      "inputA": "metal",
+      "inputB": "tool",
+      "output": "custom_weapon",
+      "createdAt": 1772935386965
+    },
+    {
+      "id": "m_1772935447538_25odf9",
+      "inputA": "metal",
+      "inputB": "wheel",
+      "output": "custom_car",
+      "createdAt": 1772935447538
+    },
+    {
+      "id": "m_1772935520168_nf0ucn",
+      "inputA": "mountain",
+      "inputB": "water",
+      "output": "river",
+      "createdAt": 1772935520169,
+      "outputWorldEffects": {
+        "water": 2,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772935601540_3qpja7",
+      "inputA": "mud",
+      "inputB": "steam",
+      "output": "clay",
+      "createdAt": 1772935601540,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1772935617276_89d5pm",
+      "inputA": "mud",
+      "inputB": "tool",
+      "output": "brick",
+      "createdAt": 1772935617276
+    },
+    {
+      "id": "m_1772935627143_px6sxi",
+      "inputA": "mud",
+      "inputB": "water",
+      "output": "swamp",
+      "createdAt": 1772935627143,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772935655295_452hir",
+      "inputA": "obsidian",
+      "inputB": "tool",
+      "output": "custom_blade",
+      "createdAt": 1772935655295
+    },
+    {
+      "id": "m_1772935820765_39cpxs",
+      "inputA": "river",
+      "inputB": "electricity",
+      "output": "custom_dam",
+      "createdAt": 1772935820765,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1772935836054_mge1hp",
+      "inputA": "fire",
+      "inputB": "river",
+      "output": "steam",
+      "createdAt": 1772935836054,
+      "outputWorldEffects": {
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772935847774_56stkp",
+      "inputA": "life",
+      "inputB": "river",
+      "output": "fish",
+      "createdAt": 1772935847774,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772935962011_tel3uu",
+      "inputA": "clay",
+      "inputB": "electricity",
+      "output": "custom_ceramic",
+      "createdAt": 1772935962011
+    },
+    {
+      "id": "m_1772935972218_nf08kv",
+      "inputA": "clay",
+      "inputB": "fire",
+      "output": "brick",
+      "createdAt": 1772935972218
+    },
+    {
+      "id": "m_1772935980139_o2n2w3",
+      "inputA": "clay",
+      "inputB": "life",
+      "output": "custom_golem",
+      "createdAt": 1772935980139
+    },
+    {
+      "id": "m_1772936040016_dszak7",
+      "inputA": "clay",
+      "inputB": "stone",
+      "output": "custom_statue",
+      "createdAt": 1772936040016
+    },
+    {
+      "id": "m_1772936096286_yurva8",
+      "inputA": "clay",
+      "inputB": "tool",
+      "output": "custom_pottery",
+      "createdAt": 1772936096286
+    },
+    {
+      "id": "m_1772936217038_fbcwwx",
+      "inputA": "plant",
+      "inputB": "plant",
+      "output": "custom_garden",
+      "createdAt": 1772936217038,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772936259330_hnjeuq",
+      "inputA": "plant",
+      "inputB": "ocean",
+      "output": "custom_lily_pad",
+      "createdAt": 1772936259330,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772936293486_263vas",
+      "inputA": "plant",
+      "inputB": "stone",
+      "output": "moss",
+      "createdAt": 1772936293486,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772936375099_vzjn3u",
+      "inputA": "plant",
+      "inputB": "water",
+      "output": "custom_algae",
+      "createdAt": 1772936375099,
+      "outputWorldEffects": {
+        "water": 2,
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1772936386811_lrxl60",
+      "inputA": "plant",
+      "inputB": "custom_wood",
+      "output": "tree",
+      "createdAt": 1772936386811,
+      "outputWorldEffects": {
+        "vegetation": 3
+      }
+    },
+    {
+      "id": "m_1772936456168_twmb4q",
+      "inputA": "electricity",
+      "inputB": "moss",
+      "output": "battery",
+      "createdAt": 1772936456168,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772936548105_es2me0",
+      "inputA": "fire",
+      "inputB": "moss",
+      "output": "custom_peat",
+      "createdAt": 1772936548105
+    },
+    {
+      "id": "m_1772936635884_n17xau",
+      "inputA": "life",
+      "inputB": "moss",
+      "output": "forest",
+      "createdAt": 1772936635884,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772936709599_1smzrd",
+      "inputA": "moss",
+      "inputB": "tool",
+      "output": "custom_sponge",
+      "createdAt": 1772936709599
+    },
+    {
+      "id": "m_1772936869083_hn6dj6",
+      "inputA": "electricity",
+      "inputB": "forest",
+      "output": "custom_forest_fire",
+      "createdAt": 1772936869083,
+      "outputWorldEffects": {
+        "vegetation": -5,
+        "ruin": 5
+      }
+    },
+    {
+      "id": "m_1772936890359_nj950l",
+      "inputA": "fire",
+      "inputB": "forest",
+      "output": "custom_forest_fire",
+      "createdAt": 1772936890359,
+      "outputWorldEffects": {
+        "vegetation": -5,
+        "ruin": 5
+      }
+    },
+    {
+      "id": "m_1772936901911_pwdbig",
+      "inputA": "forest",
+      "inputB": "life",
+      "output": "animal",
+      "createdAt": 1772936901911,
+      "outputWorldEffects": {
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772936946843_vm4qde",
+      "inputA": "forest",
+      "inputB": "rain",
+      "output": "custom_rainforest",
+      "createdAt": 1772936946843,
+      "outputWorldEffects": {
+        "water": 1
+      }
+    },
+    {
+      "id": "m_1772936998579_dceuy3",
+      "inputA": "forest",
+      "inputB": "tool",
+      "output": "custom_chainsaw",
+      "createdAt": 1772936998579
+    },
+    {
+      "id": "m_1772937234053_2n1o34",
+      "inputA": "ocean",
+      "inputB": "storm",
+      "output": "custom_flood",
+      "createdAt": 1772937234053
+    },
+    {
+      "id": "m_1772937300892_vtxgz8",
+      "inputA": "ocean",
+      "inputB": "sun",
+      "output": "rainbow",
+      "createdAt": 1772937300892,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1772937351518_ly4ddb",
+      "inputA": "ocean",
+      "inputB": "tool",
+      "output": "custom_bucket",
+      "createdAt": 1772937351518
+    },
+    {
+      "id": "m_1772937363518_w1f8iy",
+      "inputA": "ocean",
+      "inputB": "water",
+      "output": "custom_pond",
+      "createdAt": 1772937363518,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1772937454482_cvv3c5",
+      "inputA": "rain",
+      "inputB": "seed",
+      "output": "plant",
+      "createdAt": 1772937454482,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1772937463890_i8phro",
+      "inputA": "rain",
+      "inputB": "sunlight",
+      "output": "rainbow",
+      "createdAt": 1772937463890,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1772937509436_s8lxw4",
+      "inputA": "rain",
+      "inputB": "tool",
+      "output": "custom_umbrella",
+      "createdAt": 1772937509436
+    },
+    {
+      "id": "m_1772937561277_6s3s69",
+      "inputA": "reptile",
+      "inputB": "tool",
+      "output": "custom_leather",
+      "createdAt": 1772937561277
+    },
+    {
+      "id": "m_1772937612413_mvyhyl",
+      "inputA": "river",
+      "inputB": "tool",
+      "output": "bridge",
+      "createdAt": 1772937612413,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772937621851_kxseol",
+      "inputA": "river",
+      "inputB": "water",
+      "output": "custom_flood",
+      "createdAt": 1772937621851
+    },
+    {
+      "id": "m_1772937735814_nriehx",
+      "inputA": "bridge",
+      "inputB": "electricity",
+      "output": "custom_power_line",
+      "createdAt": 1772937735814
+    },
+    {
+      "id": "m_1772937824061_8q451h",
+      "inputA": "bridge",
+      "inputB": "fire",
+      "output": "ruin",
+      "createdAt": 1772937824061,
+      "outputWorldEffects": {
+        "civilization": -1,
+        "ruin": 3
+      }
+    },
+    {
+      "id": "m_1772937876144_1uaq6g",
+      "inputA": "bridge",
+      "inputB": "life",
+      "output": "custom_troll",
+      "createdAt": 1772937876144
+    },
+    {
+      "id": "m_1772937891694_fnue5p",
+      "inputA": "bridge",
+      "inputB": "tool",
+      "output": "custom_dam",
+      "createdAt": 1772937891694,
+      "outputWorldEffects": {
+        "water": 2
+      }
+    },
+    {
+      "id": "m_1772937971551_t3v2ek",
+      "inputA": "robot",
+      "inputB": "tool",
+      "output": "custom_machine",
+      "createdAt": 1772937971551
+    },
+    {
+      "id": "m_1772938015393_dr0ov4",
+      "inputA": "salt",
+      "inputB": "tool",
+      "output": "custom_shaker",
+      "createdAt": 1772938015393
+    },
+    {
+      "id": "m_1772938107079_wrcuh7",
+      "inputA": "sand",
+      "inputB": "sun",
+      "output": "desert",
+      "createdAt": 1772938107079,
+      "outputWorldEffects": {
+        "water": -1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1772938119516_d8kcg5",
+      "inputA": "sand",
+      "inputB": "tool",
+      "output": "glass",
+      "createdAt": 1772938119516
+    },
+    {
+      "id": "m_1772938200786_a3xy47",
+      "inputA": "seed",
+      "inputB": "tool",
+      "output": "custom_field",
+      "createdAt": 1772938200786
+    },
+    {
+      "id": "m_1772938215831_f85y2p",
+      "inputA": "solar_panel",
+      "inputB": "tool",
+      "output": "battery",
+      "createdAt": 1772938215831,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772938247382_y01ho2",
+      "inputA": "steam",
+      "inputB": "tool",
+      "output": "engine",
+      "createdAt": 1772938247382,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772940124322_yh03so",
+      "inputA": "salt",
+      "inputB": "water",
+      "output": "ocean",
+      "createdAt": 1772940124322,
+      "outputWorldEffects": {
+        "water": 5
+      }
+    },
+    {
+      "id": "m_1772940185630_tdpagd",
+      "inputA": "water",
+      "inputB": "water",
+      "output": "custom_puddle",
+      "createdAt": 1772940185630
+    },
+    {
+      "id": "m_1772940241498_4l3bf4",
+      "inputA": "desert",
+      "inputB": "electricity",
+      "output": "solar_panel",
+      "createdAt": 1772940241498,
+      "outputWorldEffects": {
+        "pollution": -1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772940259694_p5plk4",
+      "inputA": "desert",
+      "inputB": "fire",
+      "output": "drought",
+      "createdAt": 1772940259694,
+      "outputWorldEffects": {
+        "water": -5,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1772940335991_q55pma",
+      "inputA": "desert",
+      "inputB": "rain",
+      "output": "custom_oasis",
+      "createdAt": 1772940335991,
+      "outputWorldEffects": {
+        "water": 2,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1772940443923_jtj9v1",
+      "inputA": "desert",
+      "inputB": "tool",
+      "output": "custom_pyramid",
+      "createdAt": 1772940443923
+    },
+    {
+      "id": "m_1772940471308_qyg0er",
+      "inputA": "desert",
+      "inputB": "life",
+      "output": "reptile",
+      "createdAt": 1772940471308,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772940891995_nb1u09",
+      "inputA": "air",
+      "inputB": "engine",
+      "output": "custom_propeller",
+      "createdAt": 1772940891995
+    },
+    {
+      "id": "m_1772940971579_23aahr",
+      "inputA": "animal",
+      "inputB": "engine",
+      "output": "custom_vehicle",
+      "createdAt": 1772940971579
+    },
+    {
+      "id": "m_1772941055172_wq8auf",
+      "inputA": "battery",
+      "inputB": "engine",
+      "output": "custom_motor",
+      "createdAt": 1772941055172
+    },
+    {
+      "id": "m_1772941090923_n7jne1",
+      "inputA": "bird",
+      "inputB": "engine",
+      "output": "airplane",
+      "createdAt": 1772941090923,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "civilization": 1,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772941120421_jxhya3",
+      "inputA": "boat",
+      "inputB": "engine",
+      "output": "custom_speed_boat",
+      "createdAt": 1772941120421
+    },
+    {
+      "id": "m_1772941151648_llw7qg",
+      "inputA": "brick",
+      "inputB": "engine",
+      "output": "factory",
+      "createdAt": 1772941151648,
+      "outputWorldEffects": {
+        "pollution": 3,
+        "civilization": 2,
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772941291732_jbnb8f",
+      "inputA": "bridge",
+      "inputB": "engine",
+      "output": "custom_drawbridge",
+      "createdAt": 1772941291732
+    },
+    {
+      "id": "m_1772941346660_j47tom",
+      "inputA": "clay",
+      "inputB": "engine",
+      "output": "custom_pottery_wheel",
+      "createdAt": 1772941346660
+    },
+    {
+      "id": "m_1772941398657_s2nfny",
+      "inputA": "cloud",
+      "inputB": "engine",
+      "output": "custom_jet",
+      "createdAt": 1772941398657
+    },
+    {
+      "id": "m_1772941436293_8lww16",
+      "inputA": "computer",
+      "inputB": "engine",
+      "output": "custom_machine",
+      "createdAt": 1772941436293
+    },
+    {
+      "id": "m_1772941445569_s7di4j",
+      "inputA": "copper",
+      "inputB": "engine",
+      "output": "custom_machine",
+      "createdAt": 1772941445569
+    },
+    {
+      "id": "m_1772941495881_pqthvc",
+      "inputA": "desert",
+      "inputB": "engine",
+      "output": "custom_land_rover",
+      "createdAt": 1772941495881
+    },
+    {
+      "id": "m_1772941531269_mvdh79",
+      "inputA": "earth",
+      "inputB": "engine",
+      "output": "custom_tractor",
+      "createdAt": 1772941531269
+    },
+    {
+      "id": "m_1772941545761_xq7u75",
+      "inputA": "electricity",
+      "inputB": "engine",
+      "output": "custom_machine",
+      "createdAt": 1772941545761
+    },
+    {
+      "id": "m_1772941611343_sycp7m",
+      "inputA": "engine",
+      "inputB": "fire",
+      "output": "custom_explosion",
+      "createdAt": 1772941611343,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      }
+    },
+    {
+      "id": "m_1772941663154_ze9e3a",
+      "inputA": "engine",
+      "inputB": "fish",
+      "output": "custom_submarine",
+      "createdAt": 1772941663154
+    },
+    {
+      "id": "m_1772941775109_6clf1r",
+      "inputA": "engine",
+      "inputB": "flower",
+      "output": "custom_perfume",
+      "createdAt": 1772941775109
+    },
+    {
+      "id": "m_1772941815071_po0m33",
+      "inputA": "engine",
+      "inputB": "forest",
+      "output": "custom_sawmill",
+      "createdAt": 1772941815071
+    },
+    {
+      "id": "m_1772941861099_x0btex",
+      "inputA": "engine",
+      "inputB": "human",
+      "output": "custom_driver",
+      "createdAt": 1772941861099
+    },
+    {
+      "id": "m_1772941875053_wlk3oe",
+      "inputA": "engine",
+      "inputB": "internet",
+      "output": "custom_website",
+      "createdAt": 1772941875053
+    },
+    {
+      "id": "m_1772941904672_dbid2z",
+      "inputA": "engine",
+      "inputB": "lava",
+      "output": "rocket",
+      "createdAt": 1772941904672,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772941918733_7gibff",
+      "inputA": "engine",
+      "inputB": "life",
+      "output": "robot",
+      "createdAt": 1772941918733,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772941931392_5nv9bh",
+      "inputA": "engine",
+      "inputB": "lightning",
+      "output": "custom_tesla_coil",
+      "createdAt": 1772941931392
+    },
+    {
+      "id": "m_1772941962746_4se5ij",
+      "inputA": "engine",
+      "inputB": "mammal",
+      "output": "custom_vehicle",
+      "createdAt": 1772941962746
+    },
+    {
+      "id": "m_1772942001292_7i5z6n",
+      "inputA": "engine",
+      "inputB": "medicine",
+      "output": "custom_ambulance",
+      "createdAt": 1772942001292
+    },
+    {
+      "id": "m_1772942014790_8lerlb",
+      "inputA": "engine",
+      "inputB": "metal",
+      "output": "custom_machine",
+      "createdAt": 1772942014790
+    },
+    {
+      "id": "m_1772942058829_e96vs6",
+      "inputA": "engine",
+      "inputB": "moss",
+      "output": "custom_lawn_mower",
+      "createdAt": 1772942058829
+    },
+    {
+      "id": "m_1772942109653_e8z0nk",
+      "inputA": "engine",
+      "inputB": "mountain",
+      "output": "custom_train",
+      "createdAt": 1772942109653
+    },
+    {
+      "id": "m_1772942151361_1lsbku",
+      "inputA": "engine",
+      "inputB": "mud",
+      "output": "custom_bulldozer",
+      "createdAt": 1772942151361
+    },
+    {
+      "id": "m_1772942165181_ljszj5",
+      "inputA": "engine",
+      "inputB": "obsidian",
+      "output": "custom_blade",
+      "createdAt": 1772942165181
+    },
+    {
+      "id": "m_1772942229939_q0yu34",
+      "inputA": "engine",
+      "inputB": "ocean",
+      "output": "custom_ship",
+      "createdAt": 1772942229939
+    },
+    {
+      "id": "m_1772942320990_c451ep",
+      "inputA": "engine",
+      "inputB": "plant",
+      "output": "custom_fuel",
+      "createdAt": 1772942320990
+    },
+    {
+      "id": "m_1772942374860_e77dru",
+      "inputA": "engine",
+      "inputB": "rain",
+      "output": "custom_sprinkler",
+      "createdAt": 1772942374860
+    },
+    {
+      "id": "m_1772942431542_51kvyj",
+      "inputA": "engine",
+      "inputB": "reptile",
+      "output": "custom_godzilla",
+      "createdAt": 1772942431542
+    },
+    {
+      "id": "m_1772942442940_xce0xk",
+      "inputA": "engine",
+      "inputB": "river",
+      "output": "boat",
+      "createdAt": 1772942442940,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772942484892_zxo2ey",
+      "inputA": "engine",
+      "inputB": "robot",
+      "output": "custom_transformer",
+      "createdAt": 1772942484892
+    },
+    {
+      "id": "m_1772942572641_zgv6vj",
+      "inputA": "engine",
+      "inputB": "salt",
+      "output": "custom_rust",
+      "createdAt": 1772942572641
+    },
+    {
+      "id": "m_1772942605669_0o19ey",
+      "inputA": "engine",
+      "inputB": "sand",
+      "output": "custom_land_rover",
+      "createdAt": 1772942605669
+    },
+    {
+      "id": "m_1772942658645_6epvwr",
+      "inputA": "engine",
+      "inputB": "seed",
+      "output": "custom_combine",
+      "createdAt": 1772942658645
+    },
+    {
+      "id": "m_1772942673795_8sfrxi",
+      "inputA": "engine",
+      "inputB": "solar_panel",
+      "output": "custom_solar_cell",
+      "createdAt": 1772942673795,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772942683893_e0twvv",
+      "inputA": "engine",
+      "inputB": "steam",
+      "output": "custom_train",
+      "createdAt": 1772942683893
+    },
+    {
+      "id": "m_1772942699742_wboixo",
+      "inputA": "engine",
+      "inputB": "stone",
+      "output": "custom_drill",
+      "createdAt": 1772942699742
+    },
+    {
+      "id": "m_1772942708564_2j18e6",
+      "inputA": "engine",
+      "inputB": "storm",
+      "output": "custom_turbine",
+      "createdAt": 1772942708564,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772942716345_g4y996",
+      "inputA": "engine",
+      "inputB": "tool",
+      "output": "custom_machine",
+      "createdAt": 1772942716345
+    },
+    {
+      "id": "m_1772942777165_k02ebg",
+      "inputA": "engine",
+      "inputB": "tornado",
+      "output": "custom_helicopter",
+      "createdAt": 1772942777165
+    },
+    {
+      "id": "m_1772942790888_48tbnh",
+      "inputA": "engine",
+      "inputB": "tree",
+      "output": "custom_chainsaw",
+      "createdAt": 1772942790888
+    },
+    {
+      "id": "m_1772942823274_pzjd6y",
+      "inputA": "engine",
+      "inputB": "volcano",
+      "output": "rocket",
+      "createdAt": 1772942823274,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772942833654_5ks2bv",
+      "inputA": "engine",
+      "inputB": "water",
+      "output": "custom_pump",
+      "createdAt": 1772942833654
+    },
+    {
+      "id": "m_1772942842732_wspx0n",
+      "inputA": "engine",
+      "inputB": "wheel",
+      "output": "custom_car",
+      "createdAt": 1772942842732
+    },
+    {
+      "id": "m_1772942852854_ln9s1s",
+      "inputA": "engine",
+      "inputB": "wind",
+      "output": "custom_turbine",
+      "createdAt": 1772942852854,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772942976730_7w33b8",
+      "inputA": "airplane",
+      "inputB": "electricity",
+      "output": "custom_jet",
+      "createdAt": 1772942976730
+    },
+    {
+      "id": "m_1772942987375_kcp59n",
+      "inputA": "airplane",
+      "inputB": "engine",
+      "output": "custom_helicopter",
+      "createdAt": 1772942987375
+    },
+    {
+      "id": "m_1772942999651_p3t6ql",
+      "inputA": "airplane",
+      "inputB": "fire",
+      "output": "custom_explosion",
+      "createdAt": 1772942999651,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      }
+    },
+    {
+      "id": "m_1772943046554_2mtqig",
+      "inputA": "airplane",
+      "inputB": "life",
+      "output": "custom_pilot",
+      "createdAt": 1772943046554
+    },
+    {
+      "id": "m_1772943176041_qteh1s",
+      "inputA": "airplane",
+      "inputB": "tool",
+      "output": "custom_airport",
+      "createdAt": 1772943176041,
+      "outputWorldEffects": {
+        "air": 3,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772943414152_wksawt",
+      "inputA": "electricity",
+      "inputB": "factory",
+      "output": "custom_power_plant",
+      "createdAt": 1772943414152,
+      "outputWorldEffects": {
+        "pollution": 3,
+        "civilization": 2,
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772943429708_aomi1w",
+      "inputA": "engine",
+      "inputB": "engine",
+      "output": "custom_machine",
+      "createdAt": 1772943429708
+    },
+    {
+      "id": "m_1772943468541_ybz3g5",
+      "inputA": "engine",
+      "inputB": "factory",
+      "output": "custom_conveyor_belt",
+      "createdAt": 1772943468541
+    },
+    {
+      "id": "m_1772943651772_ftxmcj",
+      "inputA": "computer",
+      "inputB": "rocket",
+      "output": "custom_space_ship",
+      "createdAt": 1772943651772,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772943698271_jjkbsy",
+      "inputA": "electricity",
+      "inputB": "rocket",
+      "output": "satellite",
+      "createdAt": 1772943698271,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772943791924_d87378",
+      "inputA": "satellite",
+      "inputB": "electricity",
+      "output": "custom_gps",
+      "createdAt": 1772943791924,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772944107986_totxx8",
+      "inputA": "engine",
+      "inputB": "rocket",
+      "output": "custom_space_ship",
+      "createdAt": 1772944107986,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772944168051_ezco3p",
+      "inputA": "engine",
+      "inputB": "satellite",
+      "output": "custom_gps",
+      "createdAt": 1772944168051,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772944279547_8ih2zq",
+      "inputA": "factory",
+      "inputB": "fire",
+      "output": "custom_forge",
+      "createdAt": 1772944279547
+    },
+    {
+      "id": "m_1772944330359_8akv5i",
+      "inputA": "factory",
+      "inputB": "life",
+      "output": "custom_worker",
+      "createdAt": 1772944330359
+    },
+    {
+      "id": "m_1772944354088_f8fc79",
+      "inputA": "factory",
+      "inputB": "robot",
+      "output": "custom_machine",
+      "createdAt": 1772944354088
+    },
+    {
+      "id": "m_1772944364296_qx5wtd",
+      "inputA": "factory",
+      "inputB": "tool",
+      "output": "custom_conveyor_belt",
+      "createdAt": 1772944364296
+    },
+    {
+      "id": "m_1772944439114_9jwgoj",
+      "inputA": "fire",
+      "inputB": "rocket",
+      "output": "custom_explosion",
+      "createdAt": 1772944439114,
+      "outputWorldEffects": {
+        "brightness": 5,
+        "heat": 5
+      }
+    },
+    {
+      "id": "m_1772944502681_0wmlg3",
+      "inputA": "fire",
+      "inputB": "satellite",
+      "output": "custom_meteor",
+      "createdAt": 1772944502681
+    },
+    {
+      "id": "m_1772944548876_4j0280",
+      "inputA": "life",
+      "inputB": "rocket",
+      "output": "custom_astronaut",
+      "createdAt": 1772944548876
+    },
+    {
+      "id": "m_1772944716688_h4z9h7",
+      "inputA": "life",
+      "inputB": "satellite",
+      "output": "custom_alien",
+      "createdAt": 1772944716688
+    },
+    {
+      "id": "m_1772944733316_7g65bl",
+      "inputA": "rocket",
+      "inputB": "tool",
+      "output": "custom_space_ship",
+      "createdAt": 1772944733316,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772944767974_h6teqq",
+      "inputA": "satellite",
+      "inputB": "tool",
+      "output": "custom_satellite_dish",
+      "createdAt": 1772944767974,
+      "outputWorldEffects": {
+        "technology": 3
+      }
+    },
+    {
+      "id": "m_1772944943210_km5pc0",
+      "inputA": "steam",
+      "inputB": "water",
+      "output": "cloud",
+      "createdAt": 1772944943210,
+      "outputWorldEffects": {
+        "air": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772944987613_tfwykx",
+      "inputA": "stone",
+      "inputB": "stone",
+      "output": "custom_boulder",
+      "createdAt": 1772944987613
+    },
+    {
+      "id": "m_1772944999226_s9w0z1",
+      "inputA": "stone",
+      "inputB": "tool",
+      "output": "custom_statue",
+      "createdAt": 1772944999226
+    },
+    {
+      "id": "m_1772945008344_4hme2g",
+      "inputA": "stone",
+      "inputB": "water",
+      "output": "sand",
+      "createdAt": 1772945008344,
+      "outputWorldEffects": {
+        "earthy": 1
+      }
+    },
+    {
+      "id": "m_1772945022672_lvfp4p",
+      "inputA": "storm",
+      "inputB": "tool",
+      "output": "custom_tesla_coil",
+      "createdAt": 1772945022672
+    },
+    {
+      "id": "m_1772945030074_cv7189",
+      "inputA": "sun",
+      "inputB": "water",
+      "output": "rainbow",
+      "createdAt": 1772945030074,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1772945080405_ggl4m1",
+      "inputA": "tool",
+      "inputB": "tool",
+      "output": "custom_workshop",
+      "createdAt": 1772945080405
+    },
+    {
+      "id": "m_1772945093641_dnfrdw",
+      "inputA": "tool",
+      "inputB": "tornado",
+      "output": "custom_drill",
+      "createdAt": 1772945093641
+    },
+    {
+      "id": "m_1772945103010_flhdm7",
+      "inputA": "tool",
+      "inputB": "volcano",
+      "output": "custom_forge",
+      "createdAt": 1772945103010
+    },
+    {
+      "id": "m_1772945156580_inap1t",
+      "inputA": "tool",
+      "inputB": "wheel",
+      "output": "custom_minecart",
+      "createdAt": 1772945156580
+    },
+    {
+      "id": "m_1772945209103_lrf4ci",
+      "inputA": "tool",
+      "inputB": "wind",
+      "output": "custom_windmill",
+      "createdAt": 1772945209103,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772945219534_c1owge",
+      "inputA": "tree",
+      "inputB": "tree",
+      "output": "forest",
+      "createdAt": 1772945219534,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772946241099_l2p5qo",
+      "inputA": "custom_farmer",
+      "inputB": "custom_heat_pack",
+      "output": "custom_green_house",
+      "createdAt": 1772946241099,
+      "outputWorldEffects": {
+        "vegetation": 2,
+        "civilization": 2
+      }
+    },
+    {
+      "id": "m_1772946339885_zwzuai",
+      "inputA": "custom_thunderbird",
+      "inputB": "custom_wall",
+      "output": "custom_bird_cage",
+      "createdAt": 1772946339885
+    },
+    {
+      "id": "m_1772946366504_azh16p",
+      "inputA": "custom_field",
+      "inputB": "custom_vehicle",
+      "output": "custom_tractor",
+      "createdAt": 1772946366504
+    },
+    {
+      "id": "m_1772946406281_i6j9zw",
+      "inputA": "engine",
+      "inputB": "custom_titanic",
+      "output": "custom_iceberg",
+      "createdAt": 1772946406281,
+      "outputWorldEffects": {
+        "cold": 2
+      }
+    },
+    {
+      "id": "m_1772946451761_56bi0b",
+      "inputA": "custom_firefox",
+      "inputB": "custom_machine",
+      "output": "custom_website",
+      "createdAt": 1772946451761
+    },
+    {
+      "id": "m_1772946527680_ha4fkj",
+      "inputA": "boat",
+      "inputB": "custom_oasis",
+      "output": "island",
+      "createdAt": 1772946527680,
+      "outputWorldEffects": {
+        "water": 1,
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1772946612016_17cfko",
+      "inputA": "computer",
+      "inputB": "custom_helicopter",
+      "output": "custom_drone",
+      "createdAt": 1772946612016
+    },
+    {
+      "id": "m_1772946788167_0a0awj",
+      "inputA": "custom_fire_flower",
+      "inputB": "custom_submarine",
+      "output": "custom_torpedo",
+      "createdAt": 1772946788167
+    },
+    {
+      "id": "m_1772946873202_yvmivq",
+      "inputA": "battery",
+      "inputB": "salt",
+      "output": "custom_chemical_fire",
+      "createdAt": 1772946873202,
+      "outputWorldEffects": {
+        "heat": 2,
+        "pollution": 2,
+        "ruin": 2
+      }
+    },
+    {
+      "id": "m_1772946954489_89qfao",
+      "inputA": "custom_monster",
+      "inputB": "solar_panel",
+      "output": "custom_audrey_ii",
+      "createdAt": 1772946954489
+    },
+    {
+      "id": "m_1772946993462_z0x3tb",
+      "inputA": "plant",
+      "inputB": "custom_sprinkler",
+      "output": "custom_garden",
+      "createdAt": 1772946993462,
+      "outputWorldEffects": {
+        "vegetation": 4
+      }
+    },
+    {
+      "id": "m_1772947046586_y8u65k",
+      "inputA": "custom_firewall",
+      "inputB": "custom_land_rover",
+      "output": "custom_cyber_truck",
+      "createdAt": 1772947046586
+    },
+    {
+      "id": "m_1772947109022_jetdia",
+      "inputA": "dust",
+      "inputB": "custom_turbine",
+      "output": "custom_dust_devil",
+      "createdAt": 1772947109022,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1772947147602_4le9x4",
+      "inputA": "dust",
+      "inputB": "tornado",
+      "output": "custom_dust_devil",
+      "createdAt": 1772947147603,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1772981572039_0nv8d7",
+      "inputA": "custom_propeller",
+      "inputB": "custom_torpedo",
+      "output": "custom_submarine",
+      "createdAt": 1772981572039
+    },
+    {
+      "id": "m_1772982977729_w23oln",
+      "inputA": "custom_bucket",
+      "inputB": "forest",
+      "output": "custom_maple_syrup",
+      "createdAt": 1772982977729
+    },
+    {
+      "id": "m_1772983078934_ssiq5y",
+      "inputA": "custom_drill",
+      "inputB": "custom_oar",
+      "output": "custom_propeller",
+      "createdAt": 1772983078934
+    },
+    {
+      "id": "m_1772983132197_s0rnqk",
+      "inputA": "custom_flood",
+      "inputB": "custom_pump",
+      "output": "custom_drain",
+      "createdAt": 1772983132197,
+      "outputWorldEffects": {
+        "water": -5
+      }
+    },
+    {
+      "id": "m_1772983268573_vtjo5v",
+      "inputA": "internet",
+      "inputB": "custom_oven",
+      "output": "custom_cookie",
+      "createdAt": 1772983268573
+    },
+    {
+      "id": "m_1772904730102_grijo6",
+      "inputA": "animal",
+      "inputB": "electricity",
+      "output": "custom_electric_eel",
+      "createdAt": 1772904730102
+    },
+    {
+      "id": "m_1772904852606_ejaabv",
+      "inputA": "animal",
+      "inputB": "fire",
+      "output": "custom_meat",
+      "createdAt": 1772904852606,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772904972912_oltbw6",
+      "inputA": "animal",
+      "inputB": "rain",
+      "output": "custom_frog",
+      "createdAt": 1772904972912
+    },
+    {
+      "id": "m_1772905049785_wbytih",
+      "inputA": "animal",
+      "inputB": "tool",
+      "output": "human",
+      "createdAt": 1772905049785,
+      "outputWorldEffects": {
+        "civilization": 2,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772905170337_8l9kkm",
+      "inputA": "human",
+      "inputB": "earth",
+      "output": "custom_farmer",
+      "createdAt": 1772905170337,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772905248698_m04d5v",
+      "inputA": "human",
+      "inputB": "electricity",
+      "output": "energy",
+      "createdAt": 1772905248698
+    },
+    {
+      "id": "m_1772905322590_t448wo",
+      "inputA": "electricity",
+      "inputB": "life",
+      "output": "custom_electric_eel",
+      "createdAt": 1772905322590,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772905438004_heu52r",
+      "inputA": "mammal",
+      "inputB": "electricity",
+      "output": "custom_platypus",
+      "createdAt": 1772905438004,
+      "outputWorldEffects": {
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772905569910_frc6sh",
+      "inputA": "plant",
+      "inputB": "electricity",
+      "output": "custom_sunflower",
+      "createdAt": 1772905569910,
+      "outputWorldEffects": {
+        "brightness": 10,
+        "heat": 3,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1772905705828_05z0oj",
+      "inputA": "electricity",
+      "inputB": "ocean",
+      "output": "electricity",
+      "createdAt": 1772905705828,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772905741140_peyiv7",
+      "inputA": "electricity",
+      "inputB": "rain",
+      "output": "storm",
+      "createdAt": 1772905741140,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1772905862838_08n19n",
+      "inputA": "electricity",
+      "inputB": "salt",
+      "output": "battery",
+      "createdAt": 1772905862838,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772906014475_u3rd9d",
+      "inputA": "electricity",
+      "inputB": "sand",
+      "output": "custom_petrified_lightning",
+      "createdAt": 1772906014475
+    },
+    {
+      "id": "m_1772906123564_wxbfrs",
+      "inputA": "electricity",
+      "inputB": "seed",
+      "output": "life",
+      "createdAt": 1772906123564,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1772906205637_48t5vk",
+      "inputA": "electricity",
+      "inputB": "steam",
+      "output": "custom_machine",
+      "createdAt": 1772906205637
+    },
+    {
+      "id": "m_1772906330156_n6ebnc",
+      "inputA": "electricity",
+      "inputB": "stone",
+      "output": "custom_quartz",
+      "createdAt": 1772906330156
+    },
+    {
+      "id": "m_1772906432832_szj81k",
+      "inputA": "electricity",
+      "inputB": "storm",
+      "output": "hurricane",
+      "createdAt": 1772906432832,
+      "outputWorldEffects": {
+        "water": 1,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772906549051_t6tn38",
+      "inputA": "electricity",
+      "inputB": "tool",
+      "output": "custom_drill",
+      "createdAt": 1772906549051
+    },
+    {
+      "id": "m_1772906597264_u58idy",
+      "inputA": "electricity",
+      "inputB": "tornado",
+      "output": "storm",
+      "createdAt": 1772906597264,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1772911691920_skyb6e",
+      "inputA": "electricity",
+      "inputB": "volcano",
+      "output": "custom_firestorm",
+      "createdAt": 1772911691920,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 2,
+        "heat": 2,
+        "ruin": 5
+      }
+    },
+    {
+      "id": "m_1772911763601_ndjr6u",
+      "inputA": "electricity",
+      "inputB": "water",
+      "output": "storm",
+      "createdAt": 1772911763601,
+      "outputWorldEffects": {
+        "water": 1,
+        "air": 1,
+        "ruin": 1
+      }
+    },
+    {
+      "id": "m_1772911837835_9xcffn",
+      "inputA": "battery",
+      "inputB": "electricity",
+      "output": "electricity",
+      "createdAt": 1772911837835,
+      "outputWorldEffects": {
+        "brightness": 2,
+        "technology": 2
+      }
+    },
+    {
+      "id": "m_1772912199202_t8qnu3",
+      "inputA": "fire",
+      "inputB": "battery",
+      "output": "custom_chemical_fire",
+      "createdAt": 1772912199202,
+      "outputWorldEffects": {
+        "heat": 2,
+        "pollution": 2,
+        "ruin": 2
+      }
+    },
+    {
+      "id": "m_1772912343921_nn18nz",
+      "inputA": "battery",
+      "inputB": "life",
+      "output": "custom_artificial_intelligence",
+      "createdAt": 1772912343921
+    },
+    {
+      "id": "m_1772912453208_l23xec",
+      "inputA": "battery",
+      "inputB": "tool",
+      "output": "custom_drill",
+      "createdAt": 1772912453208
+    },
+    {
+      "id": "m_1772912622086_t7b3u4",
+      "inputA": "custom_machine",
+      "inputB": "glass",
+      "output": "computer",
+      "createdAt": 1772912622086,
+      "outputWorldEffects": {
+        "technology": 5
+      }
+    },
+    {
+      "id": "m_1772912891973_gb7qce",
+      "inputA": "computer",
+      "inputB": "fire",
+      "output": "custom_firewall",
+      "createdAt": 1772912891973,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "heat": 2
+      }
+    },
+    {
+      "id": "m_1772913017508_9chgsz",
+      "inputA": "computer",
+      "inputB": "human",
+      "output": "custom_nerd",
+      "createdAt": 1772913017508
+    },
+    {
+      "id": "m_1772913107245_mfgf50",
+      "inputA": "computer",
+      "inputB": "life",
+      "output": "custom_cyborg",
+      "createdAt": 1772913107245
+    },
+    {
+      "id": "m_1772913194420_dbu5k7",
+      "inputA": "computer",
+      "inputB": "robot",
+      "output": "custom_artificial_intelligence",
+      "createdAt": 1772913194420
+    },
+    {
+      "id": "m_1772915704126_f0kuxu",
+      "inputA": "computer",
+      "inputB": "tool",
+      "output": "custom_printer",
+      "createdAt": 1772915704126
+    },
+    {
+      "id": "m_1772915768710_6c03hc",
+      "inputA": "electricity",
+      "inputB": "robot",
+      "output": "custom_artificial_intelligence",
+      "createdAt": 1772915768710
+    },
+    {
+      "id": "m_1772915813512_fr9lla",
+      "inputA": "electricity",
+      "inputB": "wind",
+      "output": "custom_turbine",
+      "createdAt": 1772915813512,
+      "outputWorldEffects": {
+        "air": 2,
+        "atmosphere": 1
+      }
+    },
+    {
+      "id": "m_1772915835951_lixifv",
+      "inputA": "electricity",
+      "inputB": "solar_panel",
+      "output": "battery",
+      "createdAt": 1772915835951,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772916110846_liif7l",
+      "inputA": "fire",
+      "inputB": "human",
+      "output": "custom_firefighter",
+      "createdAt": 1772916110846,
+      "outputWorldEffects": {
+        "brightness": 0,
+        "heat": 0
+      }
+    },
+    {
+      "id": "m_1772916229558_ntewal",
+      "inputA": "fire",
+      "inputB": "life",
+      "output": "custom_phoenix",
+      "createdAt": 1772916229558
+    },
+    {
+      "id": "m_1772916266602_3yfhoc",
+      "inputA": "fire",
+      "inputB": "mammal",
+      "output": "custom_meat",
+      "createdAt": 1772916266602,
+      "outputWorldEffects": {
+        "technology": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1772916374376_6vckxi",
+      "inputA": "fire",
+      "inputB": "robot",
+      "output": "custom_terminator",
+      "createdAt": 1772916374376
+    },
+    {
+      "id": "m_1772916499422_l1nsl6",
+      "inputA": "fire",
+      "inputB": "solar_panel",
+      "output": "custom_solar_cell",
+      "createdAt": 1772916499422,
+      "outputWorldEffects": {
+        "technology": 1
+      }
+    },
+    {
+      "id": "m_1772916543554_1drvwt",
+      "inputA": "fire",
+      "inputB": "storm",
+      "output": "custom_firestorm",
+      "createdAt": 1772916543554,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 2,
+        "heat": 2,
+        "ruin": 5
+      }
+    },
+    {
+      "id": "m_1772916643275_l5oymi",
+      "inputA": "fire",
+      "inputB": "tool",
+      "output": "custom_lighter",
+      "createdAt": 1772916643275,
+      "outputWorldEffects": {
+        "heat": 1
+      }
+    },
+    {
+      "id": "m_1772916682594_elib62",
+      "inputA": "fire",
+      "inputB": "tornado",
+      "output": "custom_firestorm",
+      "createdAt": 1772916682594,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 2,
+        "heat": 2,
+        "ruin": 5
+      }
+    },
+    {
+      "id": "m_1772916732042_2gk6wp",
+      "inputA": "fire",
+      "inputB": "volcano",
+      "output": "lava",
+      "createdAt": 1772916732042,
+      "outputWorldEffects": {
+        "heat": 3
+      }
+    },
+    {
+      "id": "m_1772916864130_6f6zd6",
+      "inputA": "fire",
+      "inputB": "wind",
+      "output": "custom_heatwave",
+      "createdAt": 1772916864130
+    },
+    {
+      "id": "m_1772918500242_d6lhto",
+      "inputA": "human",
+      "inputB": "plant",
+      "output": "custom_gardener",
+      "createdAt": 1772918500242
+    },
+    {
+      "id": "m_1772918563819_rc531i",
+      "inputA": "human",
+      "inputB": "stone",
+      "output": "tool",
+      "createdAt": 1772918563819
+    },
+    {
+      "id": "m_1772918580387_84h1ev",
+      "inputA": "human",
+      "inputB": "tool",
+      "output": "wheel",
+      "createdAt": 1772918580387
+    },
+    {
+      "id": "m_1772918693372_iegaxt",
+      "inputA": "fire",
+      "inputB": "wheel",
+      "output": "custom_hotwheels",
+      "createdAt": 1772918693372
+    },
+    {
+      "id": "m_1772918788662_93dwqp",
+      "inputA": "human",
+      "inputB": "water",
+      "output": "custom_swimmer",
+      "createdAt": 1772918788662
+    },
+    {
+      "id": "m_1772918927308_cfmlqc",
+      "inputA": "water",
+      "inputB": "tool",
+      "output": "boat",
+      "createdAt": 1772918927308,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1772919021102_b2s1ay",
+      "inputA": "boat",
+      "inputB": "electricity",
+      "output": "custom_speed_boat",
+      "createdAt": 1772919021102
+    },
+    {
+      "id": "m_1772919116920_9rlfpm",
+      "inputA": "fire",
+      "inputB": "boat",
+      "output": "custom_tugboat",
+      "createdAt": 1772919116920
+    },
+    {
+      "id": "m_1772920723853_sprua3",
+      "inputA": "boat",
+      "inputB": "life",
+      "output": "custom_lifeboat",
+      "createdAt": 1772920723853,
+      "outputWorldEffects": {
+        "life": 5
+      }
+    },
+    {
+      "id": "m_1772920842401_insvvc",
+      "inputA": "boat",
+      "inputB": "stone",
+      "output": "custom_titanic",
+      "createdAt": 1772920842401
+    },
+    {
+      "id": "m_1772920985127_cmy1e3",
+      "inputA": "boat",
+      "inputB": "tool",
+      "output": "custom_oar",
+      "createdAt": 1772920985127
+    },
+    {
+      "id": "m_1772921215082_r64ehf",
+      "inputA": "seed",
+      "inputB": "earth",
+      "output": "plant",
+      "createdAt": 1772921215082,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    }
+  ]
+}
