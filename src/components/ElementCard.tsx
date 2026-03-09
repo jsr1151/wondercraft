@@ -1,48 +1,39 @@
+import { memo } from 'react';
 import type { Element } from '../types';
-import { useGame } from '../store/useGame';
 import { ElementIcon } from './ElementIcon';
-import { resolveElementCategory } from '../utils/categoryResolver';
-import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './ElementCard.css';
 
 interface ElementCardProps {
   element: Element;
   compact?: boolean;
-  onDelete?: (elementId: string) => void;
+  resolvedName: string;
+  resolvedDescription: string;
+  resolvedCategory: string;
+  iconOverrides: Record<string, string>;
+  isSelectedA: boolean;
+  isSelectedB: boolean;
+  onSelect: (elementId: string) => void;
+  onDelete?: (element: Element) => void;
   isFavorite?: boolean;
   onToggleFavorite?: (elementId: string) => void;
 }
 
-export function ElementCard({
+export const ElementCard = memo(function ElementCard({
   element,
   compact = false,
+  resolvedName,
+  resolvedDescription,
+  resolvedCategory,
+  iconOverrides,
+  isSelectedA,
+  isSelectedB,
+  onSelect,
   onDelete,
   isFavorite = false,
   onToggleFavorite,
 }: ElementCardProps) {
-  const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, iconOverrides, nameOverrides } = state;
-  const category = resolveElementCategory(element, state.categoryOverrides);
-
-  const isSelectedA = selectedSlotA === element.id;
-  const isSelectedB = selectedSlotB === element.id;
-
   const handleClick = () => {
-    if (isSelectedA && !selectedSlotB) {
-      dispatch({ type: 'SELECT_SLOT_B', elementId: element.id });
-    } else if (isSelectedA && isSelectedB) {
-      dispatch({ type: 'SELECT_SLOT_B', elementId: null });
-    } else if (isSelectedA) {
-      dispatch({ type: 'SELECT_SLOT_A', elementId: null });
-    } else if (isSelectedB) {
-      dispatch({ type: 'SELECT_SLOT_B', elementId: null });
-    } else if (!selectedSlotA) {
-      dispatch({ type: 'SELECT_SLOT_A', elementId: element.id });
-    } else if (!selectedSlotB) {
-      dispatch({ type: 'SELECT_SLOT_B', elementId: element.id });
-    } else {
-      dispatch({ type: 'SELECT_SLOT_A', elementId: element.id });
-    }
+    onSelect(element.id);
   };
 
   const handleDragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
@@ -65,7 +56,7 @@ export function ElementCard({
         onClick={handleClick}
         draggable
         onDragStart={handleDragStart}
-        title={`${resolveElementName(element, nameOverrides)}: ${resolveElementDescription(element, state.descriptionOverrides)}`}
+        title={`${resolvedName}: ${resolvedDescription}`}
       >
         <ElementIcon
           element={element}
@@ -73,7 +64,7 @@ export function ElementCard({
           className="element-emoji"
           imageClassName="element-emoji-image"
         />
-        <span className="element-name-compact">{resolveElementName(element, nameOverrides)}</span>
+        <span className="element-name-compact">{resolvedName}</span>
       </div>
     );
   }
@@ -84,7 +75,7 @@ export function ElementCard({
       onClick={handleClick}
       draggable
       onDragStart={handleDragStart}
-      title={resolveElementDescription(element, state.descriptionOverrides)}
+      title={resolvedDescription}
     >
       <ElementIcon
         element={element}
@@ -92,8 +83,8 @@ export function ElementCard({
         className="element-emoji"
         imageClassName="element-emoji-image"
       />
-      <span className="element-name">{resolveElementName(element, nameOverrides)}</span>
-      <span className="element-category">{category}</span>
+      <span className="element-name">{resolvedName}</span>
+      <span className="element-category">{resolvedCategory}</span>
       {onToggleFavorite && (
         <button
           type="button"
@@ -113,7 +104,7 @@ export function ElementCard({
           className="element-delete"
           onClick={(event) => {
             event.stopPropagation();
-            onDelete(element.id);
+            onDelete(element);
           }}
           title="Delete element from discovered collection"
         >
@@ -122,4 +113,4 @@ export function ElementCard({
       )}
     </div>
   );
-}
+});

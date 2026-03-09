@@ -176,6 +176,7 @@ export type GameAction =
   | { type: 'BIG_BANG' }
   | { type: 'SELECT_SLOT_A'; elementId: string | null }
   | { type: 'SELECT_SLOT_B'; elementId: string | null }
+  | { type: 'TOGGLE_SELECT_ELEMENT'; elementId: string }
   | { type: 'TRY_COMBINE' }
   | { type: 'ADD_MASTER_RECIPE'; recipe: MasterRecipe }
   | { type: 'REMOVE_MASTER_RECIPE'; recipeId: string }

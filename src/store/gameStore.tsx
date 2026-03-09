@@ -32,6 +32,7 @@ import { saveGame, loadGame, updateElementRegistry, updateRecipeRegistry, loadEl
 import { fetchGlobalRecipes, getBundledGlobalRecipes } from './globalRecipes';
 
 const PRIMORDIAL_ELEMENTS = ['fire', 'water', 'earth', 'air'];
+const CORE_ELEMENT_IDS = new Set(ELEMENTS.map((element) => element.id));
 
 const DESTRUCTIVE_ELEMENT_IDS = new Set([
   'nuke', 'nuclear_bomb', 'antimatter', 'black_hole', 'supernova',
@@ -367,7 +368,137 @@ function allRecipes(state: Pick<GameState, 'masterRecipes' | 'sharedRecipes'>): 
 }
 
 function allElements(state: Pick<GameState, 'customElements'>) {
-  return [...ELEMENTS, ...state.customElements];
+  const seen = new Set<string>();
+  return [...ELEMENTS, ...state.customElements].filter((element) => {
+    if (seen.has(element.id)) return false;
+    seen.add(element.id);
+    return true;
+  });
+}
+
+function normalizeElementLabel(value: string | undefined | null): string {
+  return value?.trim().toLowerCase() ?? '';
+}
+
+function createUniqueElementName(baseName: string, usedNames: Set<string>): string {
+  const base = baseName.trim() || 'Custom Element';
+  let candidate = base;
+  let index = 2;
+
+  while (usedNames.has(normalizeElementLabel(candidate))) {
+    candidate = `${base} Copy ${index++}`;
+  }
+
+  return candidate;
+}
+
+function sanitizeCustomElements(customElements: Element[]): Element[] {
+  const usedIds = new Set<string>();
+  const usedNames = new Set<string>(ELEMENTS.map((element) => normalizeElementLabel(element.name)).filter(Boolean));
+  const sanitized: Element[] = [];
+
+  for (const element of customElements) {
+    if (usedIds.has(element.id) || CORE_ELEMENT_IDS.has(element.id)) {
+      continue;
+    }
+
+    usedIds.add(element.id);
+    const normalizedName = normalizeElementLabel(element.name);
+    const nextName = !normalizedName || usedNames.has(normalizedName)
+      ? createUniqueElementName(element.name, usedNames)
+      : element.name.trim();
+
+    usedNames.add(normalizeElementLabel(nextName));
+    sanitized.push(nextName === element.name ? element : { ...element, name: nextName });
+  }
+
+  return sanitized;
+}
+
+function sanitizeNameOverrides(
+  elements: Element[],
+  nameOverrides: Record<string, string>
+): Record<string, string> {
+  const elementIds = new Set(elements.map((element) => element.id));
+  const usedNames = new Set<string>(
+    elements.map((element) => normalizeElementLabel(element.name)).filter(Boolean)
+  );
+  const sanitized: Record<string, string> = {};
+
+  for (const [elementId, rawName] of Object.entries(nameOverrides)) {
+    if (!elementIds.has(elementId)) continue;
+
+    const nextName = rawName.trim();
+    const normalizedName = normalizeElementLabel(nextName);
+    if (!normalizedName) continue;
+
+    const element = elements.find((entry) => entry.id === elementId);
+    if (!element) continue;
+
+    const ownBaseName = normalizeElementLabel(element.name);
+    if (normalizedName === ownBaseName) continue;
+    if (usedNames.has(normalizedName)) continue;
+
+    sanitized[elementId] = nextName;
+    usedNames.add(normalizedName);
+  }
+
+  return sanitized;
+}
+
+function sanitizeElementMetadata(
+  customElements: Element[],
+  nameOverrides: Record<string, string>
+): { customElements: Element[]; nameOverrides: Record<string, string> } {
+  const sanitizedCustomElements = sanitizeCustomElements(customElements);
+  const sanitizedNameOverrides = sanitizeNameOverrides(
+    [...ELEMENTS, ...sanitizedCustomElements],
+    nameOverrides
+  );
+  return {
+    customElements: sanitizedCustomElements,
+    nameOverrides: sanitizedNameOverrides,
+  };
+}
+
+function prependRecentDiscovery(elementId: string, recentDiscoveries: string[]): string[] {
+  return [elementId, ...recentDiscoveries.filter((id) => id !== elementId)].slice(0, 10);
+}
+
+function sanitizeRecentDiscoveries(
+  recentDiscoveries: string[],
+  discoveredElements: Set<string>,
+  elements: Element[]
+): string[] {
+  const validIds = new Set(elements.map((element) => element.id));
+  const seen = new Set<string>();
+
+  return recentDiscoveries.filter((id) => {
+    if (seen.has(id)) return false;
+    if (!discoveredElements.has(id)) return false;
+    if (!validIds.has(id)) return false;
+    seen.add(id);
+    return true;
+  }).slice(0, 10);
+}
+
+function canApplyNameOverride(
+  state: GameState,
+  elementId: string,
+  requestedName: string
+): boolean {
+  const normalizedRequestedName = normalizeElementLabel(requestedName);
+  if (!normalizedRequestedName) return false;
+
+  for (const element of allElements(state)) {
+    if (element.id === elementId) continue;
+    if (normalizeElementLabel(element.name) === normalizedRequestedName) return false;
+
+    const overrideName = normalizeElementLabel(state.nameOverrides[element.id]);
+    if (overrideName === normalizedRequestedName) return false;
+  }
+
+  return true;
 }
 
 function createInitialPlanet(name: string = 'Genesis'): PlanetState {
@@ -458,11 +589,11 @@ function createInitialState(): GameState {
 }
 
 /** Check whether multi-planet is unlocked (has Rocket/Spaceship + Planet + tech threshold). */
-function isMultiPlanetUnlocked(state: GameState): boolean {
-  const disc = activePlanet(state).discoveredElements;
+function isMultiPlanetUnlocked(state: Pick<GameState, 'discoveredElements' | 'worldInfluence'>): boolean {
+  const disc = state.discoveredElements;
   const hasLaunchVehicle = disc.has('rocket') || disc.has('spaceship') || disc.has('spacecraft') || disc.has('space_shuttle');
   const hasPlanet = disc.has('planet') || disc.has('mars') || disc.has('jupiter') || disc.has('venus');
-  const hasTechThreshold = activePlanet(state).worldInfluence.technology >= MULTI_PLANET_TECH_THRESHOLD;
+  const hasTechThreshold = state.worldInfluence.technology >= MULTI_PLANET_TECH_THRESHOLD;
   return hasLaunchVehicle && hasPlanet && hasTechThreshold;
 }
 
@@ -546,7 +677,7 @@ function discoverElementInState(state: GameState, elementId: string): GameState 
       updateActivePlanet(nextState, {
         discoveredElements,
         worldInfluence,
-        recentDiscoveries: [elementId, ...planet.recentDiscoveries].slice(0, 10),
+        recentDiscoveries: prependRecentDiscovery(elementId, planet.recentDiscoveries),
         eventLog,
       })
     )
@@ -565,7 +696,9 @@ function spendInsight(
 }
 
 /** Compute insight accumulated since last flush without touching state. */
-function computeAccumulatedInsight(state: GameState): InsightCurrency {
+function computeAccumulatedInsight(
+  state: Pick<GameState, 'insightLastTickAt' | 'planets' | 'insight' | 'customElements' | 'categoryOverrides' | 'effectOverrides'>
+): InsightCurrency {
   const elapsed = (Date.now() - state.insightLastTickAt) / 1000;
   if (elapsed <= 0) return state.insight;
   const livePlanets = state.planets.filter((p) => p.bigBangDone && !p.destroyed);
@@ -921,7 +1054,7 @@ function recoverLostElements(state: GameState): GameState {
 
     newCustom.push({
       id,
-      name,
+      name: createUniqueElementName(name, new Set(allElements(state).map((element) => normalizeElementLabel(element.name)).filter(Boolean))),
       category: 'Weird',
       description: `A rediscovered element.`,
       tags: ['custom', 'player-made', 'recovered'],
@@ -931,13 +1064,15 @@ function recoverLostElements(state: GameState): GameState {
   }
 
   const nextCustom = [...state.customElements, ...newCustom];
+  const sanitized = sanitizeElementMetadata(nextCustom, state.nameOverrides);
 
   // Skip state update if nothing changed
   if (newCustom.length === 0) return state;
 
   const nextState = withActivePlanetFields({
     ...state,
-    customElements: nextCustom,
+    customElements: sanitized.customElements,
+    nameOverrides: sanitized.nameOverrides,
     actsAsOverrides: nextActsAsOverrides,
   });
 
@@ -980,6 +1115,38 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'SELECT_SLOT_B':
       return updateActivePlanet(state, { selectedSlotB: action.elementId, lastCombinationResult: null });
 
+    case 'TOGGLE_SELECT_ELEMENT': {
+      const planet = activePlanet(state);
+      const { selectedSlotA, selectedSlotB } = planet;
+      const { elementId } = action;
+
+      if (selectedSlotA === elementId && !selectedSlotB) {
+        return updateActivePlanet(state, { selectedSlotB: elementId, lastCombinationResult: null });
+      }
+
+      if (selectedSlotA === elementId && selectedSlotB === elementId) {
+        return updateActivePlanet(state, { selectedSlotB: null, lastCombinationResult: null });
+      }
+
+      if (selectedSlotA === elementId) {
+        return updateActivePlanet(state, { selectedSlotA: null, lastCombinationResult: null });
+      }
+
+      if (selectedSlotB === elementId) {
+        return updateActivePlanet(state, { selectedSlotB: null, lastCombinationResult: null });
+      }
+
+      if (!selectedSlotA) {
+        return updateActivePlanet(state, { selectedSlotA: elementId, lastCombinationResult: null });
+      }
+
+      if (!selectedSlotB) {
+        return updateActivePlanet(state, { selectedSlotB: elementId, lastCombinationResult: null });
+      }
+
+      return updateActivePlanet(state, { selectedSlotA: elementId, lastCombinationResult: null });
+    }
+
     case 'TRY_COMBINE': {
       const planet = activePlanet(state);
       const { selectedSlotA, selectedSlotB } = planet;
@@ -1021,7 +1188,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       
       const newRecent = alreadyDiscovered
         ? planet.recentDiscoveries
-        : [outputId, ...planet.recentDiscoveries].slice(0, 10);
+        : prependRecentDiscovery(outputId, planet.recentDiscoveries);
       
       const worldInfluence = calculateWorldInfluence(Array.from(newDiscovered), allElements(state), nextOverrides);
       
@@ -1109,7 +1276,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         sharedRecipes: action.recipes,
       };
       const recovered = recoverLostElements(withShared);
-      return withAvailableElementPool(recovered, allRecipes(recovered));
+      const sanitized = sanitizeElementMetadata(recovered.customElements, recovered.nameOverrides);
+      return withAvailableElementPool({
+        ...recovered,
+        customElements: sanitized.customElements,
+        nameOverrides: sanitized.nameOverrides,
+      }, allRecipes(recovered));
     }
 
     case 'UPSERT_CUSTOM_ELEMENT': {
@@ -1121,12 +1293,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         nextCustomElements.push(action.element);
       }
 
+      const sanitized = sanitizeElementMetadata(nextCustomElements, state.nameOverrides);
+
       const planet = activePlanet(state);
       return updateActivePlanet({
         ...state,
-        customElements: nextCustomElements,
+        customElements: sanitized.customElements,
+        nameOverrides: sanitized.nameOverrides,
       }, {
-        worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), [...ELEMENTS, ...nextCustomElements], state.effectOverrides),
+        worldInfluence: calculateWorldInfluence(Array.from(planet.discoveredElements), [...ELEMENTS, ...sanitized.customElements], state.effectOverrides),
       });
     }
 
@@ -1150,6 +1325,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case 'SET_NAME_OVERRIDE': {
+      if (!canApplyNameOverride(state, action.elementId, action.name)) {
+        return state;
+      }
+
       return {
         ...state,
         nameOverrides: {
@@ -1365,7 +1544,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const savedCustom = saved.customElements ?? [];
       const customMap = new Map(registryElements.map((el) => [el.id, el]));
       for (const el of savedCustom) customMap.set(el.id, el);
-      const customElements = Array.from(customMap.values());
+      const rawCustomElements = Array.from(customMap.values());
 
       const savedRecipes = saved.masterRecipes ?? [];
       // Only fall back to registry if save has NO recipes at all
@@ -1374,6 +1553,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         : loadRecipeRegistry();
 
       const loadedOverrides = saved.effectOverrides ?? {};
+      const sanitizedMetadata = sanitizeElementMetadata(rawCustomElements, saved.nameOverrides ?? {});
+      const customElements = sanitizedMetadata.customElements;
 
       // Build global fields
       const globalFields = {
@@ -1381,7 +1562,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         customElements,
         sharedRecipes: state.sharedRecipes,
         iconOverrides: saved.iconOverrides ?? {},
-        nameOverrides: saved.nameOverrides ?? {},
+        nameOverrides: sanitizedMetadata.nameOverrides,
         descriptionOverrides: saved.descriptionOverrides ?? {},
         categoryOverrides: saved.categoryOverrides ?? {},
         actsAsOverrides: saved.actsAsOverrides ?? {},
@@ -1397,6 +1578,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         // Multi-planet save format
         planets = saved.planets.map((sp) => {
           const disc = new Set<string>(sp.discoveredElements ?? []);
+          const availableElements = [...ELEMENTS, ...customElements];
           return {
             name: sp.name ?? 'Genesis',
             seed: sp.seed ?? Math.floor(Math.random() * 0xffffffff),
@@ -1404,7 +1586,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             bigBangDone: sp.bigBangDone ?? false,
             discoveredElements: disc,
             worldInfluence: sp.worldInfluence ?? { ...DEFAULT_WORLD_INFLUENCE },
-            recentDiscoveries: sp.recentDiscoveries ?? [],
+            recentDiscoveries: sanitizeRecentDiscoveries(sp.recentDiscoveries ?? [], disc, availableElements),
             eventLog: sp.eventLog ?? [],
             selectedSlotA: null,
             selectedSlotB: null,
@@ -1421,7 +1603,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       } else {
         // Legacy single-planet save format — migrate to planets array
         const discovered = new Set<string>(saved.discoveredElements ?? []);
-        const computedInfluence = calculateWorldInfluence(Array.from(discovered), [...ELEMENTS, ...customElements], loadedOverrides);
+        const availableElements = [...ELEMENTS, ...customElements];
+        const computedInfluence = calculateWorldInfluence(Array.from(discovered), availableElements, loadedOverrides);
         const worldInfluence = { ...computedInfluence, ...(saved.worldInfluence ?? {}) };
         planets = [{
           name: 'Genesis',
@@ -1430,7 +1613,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           bigBangDone: saved.bigBangDone ?? false,
           discoveredElements: discovered,
           worldInfluence,
-          recentDiscoveries: saved.recentDiscoveries ?? [],
+          recentDiscoveries: sanitizeRecentDiscoveries(saved.recentDiscoveries ?? [], discovered, availableElements),
           eventLog: saved.eventLog ?? [],
           selectedSlotA: null,
           selectedSlotB: null,
@@ -1579,10 +1762,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
-interface GameContextType {
-  state: GameState;
-  dispatch: React.Dispatch<GameAction>;
-}
+type GameSelectionState = Pick<GameState, 'selectedSlotA' | 'selectedSlotB' | 'lastCombinationResult'>;
+type GameDataState = Omit<GameState, keyof GameSelectionState>;
 
 // eslint-disable-next-line react-refresh/only-export-components
 export { isMultiPlanetUnlocked, getProfileLevel, getProfileTitle, QUESTS, DESTRUCTIVE_ELEMENT_IDS };
@@ -1590,10 +1771,22 @@ export { getPlanetCreationInsightCost, PLANET_CREATION_INSIGHT_TYPE, MULTI_PLANE
 export { computeAccumulatedInsight };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const GameContext = createContext<GameContextType | null>(null);
+export const GameDataContext = createContext<GameDataState | null>(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const GameSelectionContext = createContext<GameSelectionState | null>(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const GameDispatchContext = createContext<React.Dispatch<GameAction> | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, undefined, createInitialState);
+  const { selectedSlotA, selectedSlotB, lastCombinationResult, ...gameDataState } = state;
+  const dataContextValue = React.useMemo(() => gameDataState, [gameDataState]);
+  const selectionContextValue = React.useMemo(
+    () => ({ selectedSlotA, selectedSlotB, lastCombinationResult }),
+    [selectedSlotA, selectedSlotB, lastCombinationResult]
+  );
+  const latestStateRef = React.useRef(state);
+  latestStateRef.current = state;
 
   useEffect(() => {
     const saved = loadGame();
@@ -1616,7 +1809,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (state.bigBangDone) {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
       saveTimerRef.current = setTimeout(() => {
-        const flushed = flushInsight(state);
+        const flushed = flushInsight(latestStateRef.current);
         saveGame(flushed);
         // Append-only registry: custom elements and recipes never lost
         updateElementRegistry(flushed.customElements);
@@ -1624,14 +1817,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       }, 2000);
     }
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
-  }, [state]);
+  }, [dataContextValue, state.bigBangDone]);
 
   // Insight accumulates lazily — no timer dispatch needed.
   // Flush happens on-demand when insight is spent.
 
   return (
-    <GameContext.Provider value={{ state, dispatch }}>
-      {children}
-    </GameContext.Provider>
+    <GameDispatchContext.Provider value={dispatch}>
+      <GameSelectionContext.Provider value={selectionContextValue}>
+        <GameDataContext.Provider value={dataContextValue}>
+          {children}
+        </GameDataContext.Provider>
+      </GameSelectionContext.Provider>
+    </GameDispatchContext.Provider>
   );
 }

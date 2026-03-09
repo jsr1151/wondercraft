@@ -1,14 +1,16 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useGame } from '../store/useGame';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useGameData, useGameDispatch, useGameSelection } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { ElementCard } from './ElementCard';
 import { DEFAULT_ELEMENT_CATEGORIES, type ElementCategory } from '../types';
-import { hasElementCategory, resolveElementCategories } from '../utils/categoryResolver';
-import { resolveElementName } from '../utils/nameResolver';
+import { hasElementCategory, resolveElementCategories, resolveElementCategory } from '../utils/categoryResolver';
+import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './ElementCollection.css';
 
 export function ElementCollection() {
-  const { state, dispatch } = useGame();
+  const state = useGameData();
+  const { selectedSlotA, selectedSlotB } = useGameSelection();
+  const dispatch = useGameDispatch();
   const [activeCategory, setActiveCategory] = useState<ElementCategory | 'All'>('All');
   const [search, setSearch] = useState('');
   const allElements = useMemo(
@@ -66,6 +68,20 @@ export function ElementCollection() {
     }
   }, [isActiveCategoryAvailable]);
 
+  const handleSelect = useCallback((elementId: string) => {
+    dispatch({ type: 'TOGGLE_SELECT_ELEMENT', elementId });
+  }, [dispatch]);
+
+  const handleToggleFavorite = useCallback((elementId: string) => {
+    dispatch({ type: 'TOGGLE_FAVORITE', elementId });
+  }, [dispatch]);
+
+  const handleDelete = useCallback((element: typeof filteredElements[number]) => {
+    if (confirm(`Delete ${resolveElementName(element, state.nameOverrides)}?`)) {
+      dispatch({ type: 'DELETE_ELEMENT', elementId: element.id });
+    }
+  }, [dispatch, state.nameOverrides]);
+
   return (
     <div className="element-collection">
       <div className="collection-header">
@@ -97,13 +113,16 @@ export function ElementCollection() {
             <ElementCard
               key={e.id}
               element={e}
+              resolvedName={resolveElementName(e, state.nameOverrides)}
+              resolvedDescription={resolveElementDescription(e, state.descriptionOverrides)}
+              resolvedCategory={resolveElementCategory(e, state.categoryOverrides)}
+              iconOverrides={state.iconOverrides}
+              isSelectedA={selectedSlotA === e.id}
+              isSelectedB={selectedSlotB === e.id}
+              onSelect={handleSelect}
               isFavorite={state.favoriteElementIds.has(e.id)}
-              onToggleFavorite={(elementId) => dispatch({ type: 'TOGGLE_FAVORITE', elementId })}
-              onDelete={(elementId) => {
-                if (confirm(`Delete ${resolveElementName(e, state.nameOverrides)}?`)) {
-                  dispatch({ type: 'DELETE_ELEMENT', elementId });
-                }
-              }}
+              onToggleFavorite={handleToggleFavorite}
+              onDelete={handleDelete}
             />
           ))
         )}

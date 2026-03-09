@@ -1,9 +1,9 @@
-import { useGame } from '../store/useGame';
+import { useGameData } from '../store/useGame';
 import { getProfileLevel, getProfileTitle } from '../store/gameStore';
 import './ProfilePanel.css';
 
 export function ProfilePanel() {
-  const { state } = useGame();
+  const state = useGameData();
   const { profile } = state;
   const level = getProfileLevel(profile.xp);
   const title = getProfileTitle(level);

@@ -1,5 +1,5 @@
 import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
-import { useGame } from '../store/useGame';
+import { useGameData, useGameDispatch, useGameSelection } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
@@ -59,8 +59,10 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 }
 
 export function CraftingArea() {
-  const { state, dispatch } = useGame();
-  const { selectedSlotA, selectedSlotB, lastCombinationResult, iconOverrides, effectOverrides, nameOverrides, descriptionOverrides, categoryOverrides, actsAsOverrides } = state;
+  const state = useGameData();
+  const dispatch = useGameDispatch();
+  const { selectedSlotA, selectedSlotB, lastCombinationResult } = useGameSelection();
+  const { iconOverrides, effectOverrides, nameOverrides, descriptionOverrides, categoryOverrides, actsAsOverrides } = state;
   const allElements = [...ELEMENTS, ...state.customElements];
   const elementMap = useMemo(() => new Map(allElements.map((element) => [element.id, element])), [allElements]);
   const effectiveRecipes = useMemo(

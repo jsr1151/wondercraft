@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { InsightCurrency, InsightType } from '../types';
 import { computeAccumulatedInsight } from '../store/gameStore';
-import { useGame } from '../store/useGame';
+import { useGameData } from '../store/useGame';
 import './InsightPanel.css';
 
 interface InsightPanelProps {
@@ -32,7 +32,7 @@ const INSIGHT_LABELS: Record<InsightType, string> = {
 };
 
 export function InsightPanel({ onRequestHint, onRequestRandomDiscovery }: InsightPanelProps) {
-  const { state } = useGame();
+  const state = useGameData();
   const [displayInsight, setDisplayInsight] = useState<InsightCurrency>(() => computeAccumulatedInsight(state));
 
   // Refresh the display every second using a local timer — no game state dispatch needed

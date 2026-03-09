@@ -1,11 +1,11 @@
-import { useGame } from '../store/useGame';
+import { useGameData } from '../store/useGame';
 import { ELEMENTS } from '../data/elements';
 import { ElementIcon } from './ElementIcon';
 import { resolveElementDescription, resolveElementName } from '../utils/nameResolver';
 import './RecentDiscoveries.css';
 
 export function RecentDiscoveries() {
-  const { state } = useGame();
+  const state = useGameData();
   const allElements = [...ELEMENTS, ...state.customElements];
   const recent = state.recentDiscoveries
     .map(id => allElements.find(e => e.id === id))

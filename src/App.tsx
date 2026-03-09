@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { InsightType } from './types';
 import { GameProvider, getProfileLevel } from './store/gameStore';
-import { useGame } from './store/useGame';
+import { useGameData, useGameDispatch } from './store/useGame';
 import { BigBang } from './components/BigBang';
 import { PlanetCanvas } from './components/PlanetCanvas';
 import { ELEMENTS } from './data/elements';
@@ -36,7 +36,8 @@ function CollapsiblePanel({ title, children, defaultOpen = true }: CollapsiblePa
 }
 
 function GameApp() {
-  const { state, dispatch } = useGame();
+  const state = useGameData();
+  const dispatch = useGameDispatch();
 
   const handleBigBang = () => dispatch({ type: 'BIG_BANG' });
   const handleReset = () => {

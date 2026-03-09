@@ -1,6 +1,6 @@
 import { useMemo, useState, type ChangeEventHandler, type ClipboardEventHandler, type DragEvent } from 'react';
 import { ELEMENTS } from '../data/elements';
-import { useGame } from '../store/useGame';
+import { useGameData, useGameDispatch } from '../store/useGame';
 import { GLOBAL_RECIPE_TOKEN_KEY, fetchGlobalRecipes, publishGlobalRecipe, publishGlobalRecipes } from '../store/globalRecipes';
 import { DEFAULT_ELEMENT_CATEGORIES, type Element, type MasterRecipe, type WorldEffectMap } from '../types';
 import { parseElementCategories, resolveElementCategory } from '../utils/categoryResolver';
@@ -57,7 +57,8 @@ function buildAttrDraft(worldEffects: WorldEffectMap = {}): Record<string, strin
 }
 
 export function MasterRecipeLab() {
-  const { state, dispatch } = useGame();
+  const state = useGameData();
+  const dispatch = useGameDispatch();
   const [inputA, setInputA] = useState('');
   const [inputB, setInputB] = useState('');
   const [output, setOutput] = useState('');

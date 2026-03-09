@@ -1,9 +1,10 @@
-import { useGame } from '../store/useGame';
+import { useGameData, useGameDispatch } from '../store/useGame';
 import { QUESTS } from '../store/gameStore';
 import './QuestPanel.css';
 
 export function QuestPanel() {
-  const { state, dispatch } = useGame();
+  const state = useGameData();
+  const dispatch = useGameDispatch();
   const { profile } = state;
 
   const activeQuest = QUESTS.find((q) => q.id === profile.activeQuestId);

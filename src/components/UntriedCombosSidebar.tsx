@@ -3,7 +3,7 @@ import { ELEMENTS } from '../data/elements';
 import { RECIPES } from '../data/recipes';
 import { findRecipe } from '../engine/recipeEngine';
 import { resolveActsAsElementId } from '../engine/actingAs';
-import { useGame } from '../store/useGame';
+import { useGameData } from '../store/useGame';
 import { resolveElementIcon } from '../utils/iconResolver';
 import { resolveElementName } from '../utils/nameResolver';
 import './UntriedCombosSidebar.css';
@@ -29,14 +29,22 @@ function escapeCsvCell(value: string): string {
 }
 
 export function UntriedCombosSidebar() {
-  const { state } = useGame();
+  const state = useGameData();
   const [open, setOpen] = useState(false);
   const [elementsOpen, setElementsOpen] = useState(false);
   const [mode, setMode] = useState<'untried' | 'no-output'>('untried');
-  const allRecipes = [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES];
-  const allElements = [...ELEMENTS, ...state.customElements];
+  const allRecipes = useMemo(
+    () => [...state.masterRecipes, ...state.sharedRecipes, ...RECIPES],
+    [state.masterRecipes, state.sharedRecipes]
+  );
+  const allElements = useMemo(
+    () => [...ELEMENTS, ...state.customElements],
+    [state.customElements]
+  );
 
   const uniqueElements = useMemo(() => {
+    if (!elementsOpen) return [];
+
     const seen = new Set<string>();
     const unique = allElements.filter((element) => {
       if (seen.has(element.id)) return false;
@@ -45,9 +53,18 @@ export function UntriedCombosSidebar() {
     });
 
     return unique.sort((a, b) => resolveElementName(a, state.nameOverrides).localeCompare(resolveElementName(b, state.nameOverrides)));
-  }, [allElements, state.nameOverrides]);
+  }, [allElements, elementsOpen, state.nameOverrides]);
 
   const { untriedTotal, untriedVisible, noOutputTotal, noOutputVisible } = useMemo(() => {
+    if (!open) {
+      return {
+        untriedTotal: 0,
+        untriedVisible: [],
+        noOutputTotal: 0,
+        noOutputVisible: [],
+      };
+    }
+
     const discovered = allElements
       .filter((element) => state.discoveredElements.has(element.id))
       .sort((a, b) => resolveElementName(a, state.nameOverrides).localeCompare(resolveElementName(b, state.nameOverrides)));
@@ -103,6 +120,7 @@ export function UntriedCombosSidebar() {
   }, [
     allElements,
     allRecipes,
+    open,
     state.discoveredElements,
     state.attemptedCombinations,
     state.iconOverrides,

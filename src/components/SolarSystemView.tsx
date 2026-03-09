@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ELEMENTS } from '../data/elements';
-import { useGame } from '../store/useGame';
+import { useGameData, useGameDispatch } from '../store/useGame';
 import {
   isMultiPlanetUnlocked,
   DESTRUCTIVE_ELEMENT_IDS,
@@ -12,7 +12,8 @@ import './SolarSystemView.css';
 const PRIMORDIAL_ELEMENT_IDS = new Set(['fire', 'water', 'earth', 'air']);
 
 export function SolarSystemView() {
-  const { state, dispatch } = useGame();
+  const state = useGameData();
+  const dispatch = useGameDispatch();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [startMode, setStartMode] = useState<PlanetStartMode>('basic4');

@@ -1,9 +1,9 @@
 import { useRef, useEffect } from 'react';
-import { useGame } from '../store/useGame';
+import { useGameData } from '../store/useGame';
 import './EventLog.css';
 
 export function EventLog() {
-  const { state } = useGame();
+  const state = useGameData();
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
