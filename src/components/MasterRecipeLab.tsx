@@ -233,6 +233,32 @@ export function MasterRecipeLab() {
     return outputWorldEffects;
   };
 
+  const buildPublishedOutputElement = (
+    outputId: string,
+    outputDisplayName: string,
+    normalizedCategory: string,
+    outputWorldEffects: WorldEffectMap,
+    inputALabel: string,
+    inputBLabel: string
+  ) => {
+    if (!outputId.startsWith('custom_')) return undefined;
+
+    const existing = allElements.find((element) => element.id === outputId);
+    const actsAsElement = findElementByNameOrId(outputActsAs, allElements, state.nameOverrides);
+    const emoji = outputIcon.trim() || resolveElementIconRaw(existing, state.iconOverrides) || existing?.emoji || '✨';
+
+    return {
+      id: outputId,
+      name: outputName.trim() || existing?.name || outputDisplayName,
+      category: outputCategory.trim() || existing?.category || normalizedCategory,
+      description: outputDescription.trim() || existing?.description || `A new element born from ${inputALabel} + ${inputBLabel}.`,
+      tags: existing?.tags?.length ? existing.tags : ['custom', 'player-made'],
+      emoji,
+      worldEffects: Object.keys(outputWorldEffects).length > 0 ? outputWorldEffects : existing?.worldEffects,
+      actsAsElementId: actsAsElement?.id && actsAsElement.id !== outputId ? actsAsElement.id : state.actsAsOverrides[outputId],
+    };
+  };
+
   const applyOutputEdits = (outputId: string, baseCategory: string, normalizedCategory: string) => {
     const outputWorldEffects = collectOutputWorldEffects();
 
@@ -348,6 +374,7 @@ export function MasterRecipeLab() {
       output: outputId,
       createdAt: Date.now(),
       outputWorldEffects: Object.keys(outputWorldEffects).length > 0 ? outputWorldEffects : undefined,
+      outputElement: buildPublishedOutputElement(outputId, outputDisplayName, normalizedCategory, outputWorldEffects, inputA.trim(), inputB.trim()),
     };
 
     dispatch({ type: 'ADD_MASTER_RECIPE', recipe });
@@ -359,14 +386,16 @@ export function MasterRecipeLab() {
         try {
           setSaving(true);
           localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
-          await publishGlobalRecipe(recipe, token.trim());
-          const synced = await fetchGlobalRecipes();
+          const result = await publishGlobalRecipe(recipe, token.trim());
+          const synced = result.recipes.length > 0 ? result.recipes : await fetchGlobalRecipes();
           const sharedPairs = new Set(synced.map((entry) => recipePairKey(entry.inputA, entry.inputB)));
           const publishedPair = recipePairKey(recipe.inputA, recipe.inputB);
           dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
-          if (sharedPairs.has(publishedPair)) {
+          if (result.publishedPairs.includes(publishedPair) && sharedPairs.has(publishedPair)) {
             dispatch({ type: 'REMOVE_LOCAL_RECIPES_BY_PAIR', pairs: [publishedPair] });
             setStatus('Recipe published globally and removed from local duplicates.');
+          } else if (result.skipped.length > 0) {
+            setStatus(`Global publish blocked. Kept local recipe: ${result.skipped[0].reason}`);
           } else {
             setStatus('Recipe saved locally and published globally.');
           }
@@ -413,21 +442,21 @@ export function MasterRecipeLab() {
       setSaving(true);
       localStorage.setItem(GLOBAL_RECIPE_TOKEN_KEY, token.trim());
       const localRecipes = [...state.masterRecipes];
-      await publishGlobalRecipes(state.masterRecipes, token.trim());
-      const synced = await fetchGlobalRecipes();
+      const result = await publishGlobalRecipes(state.masterRecipes, token.trim());
+      const synced = result.recipes.length > 0 ? result.recipes : await fetchGlobalRecipes();
       const sharedPairs = new Set(synced.map((recipe) => recipePairKey(recipe.inputA, recipe.inputB)));
-      const publishedPairs = Array.from(new Set(localRecipes
-        .map((recipe) => recipePairKey(recipe.inputA, recipe.inputB))
-        .filter((pair) => sharedPairs.has(pair))));
+      const publishedPairs = Array.from(new Set(result.publishedPairs.filter((pair) => sharedPairs.has(pair))));
       dispatch({ type: 'SET_SHARED_RECIPES', recipes: synced });
       if (publishedPairs.length > 0) {
         dispatch({ type: 'REMOVE_LOCAL_RECIPES_BY_PAIR', pairs: publishedPairs });
       }
       const unpublishedCount = localRecipes.length - publishedPairs.length;
       setStatus(
-        unpublishedCount > 0
-          ? `Published ${publishedPairs.length} local recipes globally. Kept ${unpublishedCount} local recipes that were not confirmed in global.`
-          : `Published ${publishedPairs.length} local recipes globally and cleared local duplicates.`
+        result.skipped.length > 0
+          ? `Published ${publishedPairs.length} local recipes globally. Kept ${result.skipped.length} blocked recipes local.`
+          : unpublishedCount > 0
+            ? `Published ${publishedPairs.length} local recipes globally. Kept ${unpublishedCount} local recipes that were not confirmed in global.`
+            : `Published ${publishedPairs.length} local recipes globally and cleared local duplicates.`
       );
     } catch (error) {
       setStatus(`Bulk global publish failed: ${errorMessage(error)}.`);

@@ -66,9 +66,21 @@ export interface Recipe {
   ordered?: boolean;
 }
 
+export interface PublishedElementSnapshot {
+  id: string;
+  name: string;
+  category: ElementCategory;
+  description: string;
+  tags: string[];
+  emoji?: string;
+  worldEffects?: WorldEffectMap;
+  actsAsElementId?: string;
+}
+
 export interface MasterRecipe extends Recipe {
   createdAt: number;
   outputWorldEffects?: WorldEffectMap;
+  outputElement?: PublishedElementSnapshot;
 }
 
 export interface EmojiAtlasEntry {

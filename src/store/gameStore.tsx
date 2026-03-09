@@ -875,6 +875,7 @@ function recoverLostElements(state: GameState): GameState {
   const existingCustomIds = new Set(state.customElements.map((el) => el.id));
   const newCustom: Element[] = [];
   const allRec = allRecipes(state);
+  const nextActsAsOverrides = { ...state.actsAsOverrides };
 
   // Collect every element ID referenced in any recipe
   const recipeElementIds = new Set<string>();
@@ -888,6 +889,28 @@ function recoverLostElements(state: GameState): GameState {
   for (const id of recipeElementIds) {
     if (!id.startsWith('custom_')) continue;
     if (existingCustomIds.has(id)) continue;
+
+    const recipeWithPublishedElement = allRec.find(
+      (recipe) => recipe.output === id && 'outputElement' in recipe
+    ) as (Recipe & { outputElement?: Element & { actsAsElementId?: string } }) | undefined;
+    const publishedElement = recipeWithPublishedElement?.outputElement;
+
+    if (publishedElement) {
+      newCustom.push({
+        id: publishedElement.id,
+        name: publishedElement.name,
+        category: publishedElement.category,
+        description: publishedElement.description,
+        tags: publishedElement.tags,
+        discovered: false,
+        emoji: publishedElement.emoji,
+        worldEffects: publishedElement.worldEffects,
+      });
+      if (publishedElement.actsAsElementId) {
+        nextActsAsOverrides[id] = publishedElement.actsAsElementId;
+      }
+      continue;
+    }
 
     // Derive a readable name from the id: custom_honey_pot -> Honey Pot
     const name = id
@@ -915,6 +938,7 @@ function recoverLostElements(state: GameState): GameState {
   const nextState = withActivePlanetFields({
     ...state,
     customElements: nextCustom,
+    actsAsOverrides: nextActsAsOverrides,
   });
 
   return nextState;
