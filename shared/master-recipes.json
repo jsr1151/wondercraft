@@ -1,6 +1,4121 @@
 {
-  "updatedAt": 1773097103645,
+  "updatedAt": 1773171767565,
   "recipes": [
+    {
+      "id": "m_1773100447559_7qhpif",
+      "inputA": "internet",
+      "inputB": "custom_social_media",
+      "output": "meme",
+      "createdAt": 1773100447559,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773100459100_ij6aug",
+      "inputA": "custom_social_media",
+      "inputB": "custom_writing",
+      "output": "meme",
+      "createdAt": 1773100459100,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773100473822_p0wit5",
+      "inputA": "earth",
+      "inputB": "satellite",
+      "output": "moon",
+      "createdAt": 1773100473822
+    },
+    {
+      "id": "m_1773100484117_aivnhn",
+      "inputA": "planet",
+      "inputB": "satellite",
+      "output": "moon",
+      "createdAt": 1773100484117
+    },
+    {
+      "id": "m_1773100503541_po6nqb",
+      "inputA": "earth",
+      "inputB": "custom_sky",
+      "output": "moon",
+      "createdAt": 1773100503541
+    },
+    {
+      "id": "m_1773100532727_yjvuzg",
+      "inputA": "galaxy",
+      "inputB": "galaxy",
+      "output": "nebula",
+      "createdAt": 1773100532727,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773100540382_nna64o",
+      "inputA": "nebula",
+      "inputB": "nebula",
+      "output": "cosmos",
+      "createdAt": 1773100540382
+    },
+    {
+      "id": "m_1773100551462_yvhebk",
+      "inputA": "planet",
+      "inputB": "star",
+      "output": "galaxy",
+      "createdAt": 1773100551462
+    },
+    {
+      "id": "m_1773100593102_85n5em",
+      "inputA": "galaxy",
+      "inputB": "void",
+      "output": "custom_black_hole",
+      "createdAt": 1773100593102,
+      "outputElement": {
+        "id": "custom_black_hole",
+        "name": "Black Hole",
+        "category": "Cosmic",
+        "description": "Nothing can escape it",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/mlkx8ecnjga31uez8j3qyjsj0usa"
+      }
+    },
+    {
+      "id": "m_1773100610187_dd4hi1",
+      "inputA": "dust",
+      "inputB": "galaxy",
+      "output": "nebula",
+      "createdAt": 1773100610187,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773100619011_2hoyvp",
+      "inputA": "dust",
+      "inputB": "cosmos",
+      "output": "nebula",
+      "createdAt": 1773100619011,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773100626833_hsoxs9",
+      "inputA": "cloud",
+      "inputB": "star",
+      "output": "nebula",
+      "createdAt": 1773100626833,
+      "outputWorldEffects": {
+        "magic": 1
+      }
+    },
+    {
+      "id": "m_1773100639502_y97cpe",
+      "inputA": "copper",
+      "inputB": "custom_alloy",
+      "output": "bronze",
+      "createdAt": 1773100639502
+    },
+    {
+      "id": "m_1773100648678_e0pryy",
+      "inputA": "copper",
+      "inputB": "metal",
+      "output": "bronze",
+      "createdAt": 1773100648678
+    },
+    {
+      "id": "m_1773100660620_0189ic",
+      "inputA": "custom_ore",
+      "inputB": "copper",
+      "output": "bronze",
+      "createdAt": 1773100660620
+    },
+    {
+      "id": "m_1773100689872_lbxox1",
+      "inputA": "ocean",
+      "inputB": "stone",
+      "output": "coral",
+      "createdAt": 1773100689872,
+      "outputWorldEffects": {
+        "water": 1,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773100708030_jskzen",
+      "inputA": "custom_fossil",
+      "inputB": "time",
+      "output": "oil",
+      "createdAt": 1773100708030,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773100716149_idt5p0",
+      "inputA": "custom_fossil",
+      "inputB": "mud",
+      "output": "oil",
+      "createdAt": 1773100716149,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773100726203_q7xf7x",
+      "inputA": "climate",
+      "inputB": "pollution",
+      "output": "climate_change",
+      "createdAt": 1773100726203,
+      "outputWorldEffects": {
+        "heat": 2,
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773100735019_qo4tcx",
+      "inputA": "climate",
+      "inputB": "factory",
+      "output": "climate_change",
+      "createdAt": 1773100735019,
+      "outputWorldEffects": {
+        "heat": 2,
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773100744392_7tv72k",
+      "inputA": "atmosphere",
+      "inputB": "pollution",
+      "output": "climate_change",
+      "createdAt": 1773100744392,
+      "outputWorldEffects": {
+        "heat": 2,
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773100752651_hgyzs8",
+      "inputA": "custom_hourglass",
+      "inputB": "sun",
+      "output": "time",
+      "createdAt": 1773100752651
+    },
+    {
+      "id": "m_1773100761897_0yvytp",
+      "inputA": "evolution",
+      "inputB": "custom_hourglass",
+      "output": "time",
+      "createdAt": 1773100761897
+    },
+    {
+      "id": "m_1773100770901_yg40dz",
+      "inputA": "planet",
+      "inputB": "custom_hourglass",
+      "output": "time",
+      "createdAt": 1773100770901
+    },
+    {
+      "id": "m_1773100787611_0x9ie3",
+      "inputA": "custom_meteor",
+      "inputB": "stone",
+      "output": "asteroid",
+      "createdAt": 1773100787611
+    },
+    {
+      "id": "m_1773100795833_xcjq8v",
+      "inputA": "comet",
+      "inputB": "stone",
+      "output": "asteroid",
+      "createdAt": 1773100795833
+    },
+    {
+      "id": "m_1773100839430_cf0635",
+      "inputA": "stone",
+      "inputB": "water",
+      "output": "concrete",
+      "createdAt": 1773100839430,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773100846196_duxeow",
+      "inputA": "brick",
+      "inputB": "water",
+      "output": "concrete",
+      "createdAt": 1773100846196,
+      "outputWorldEffects": {
+        "civilization": 1
+      }
+    },
+    {
+      "id": "m_1773100881797_nfy65c",
+      "inputA": "atmosphere",
+      "inputB": "ocean",
+      "output": "climate",
+      "createdAt": 1773100881797,
+      "outputWorldEffects": {
+        "atmosphere": 2
+      }
+    },
+    {
+      "id": "m_1773100894499_ceft6k",
+      "inputA": "cosmos",
+      "inputB": "singularity",
+      "output": "void",
+      "createdAt": 1773100894499
+    },
+    {
+      "id": "m_1773100904945_xhfso6",
+      "inputA": "galaxy",
+      "inputB": "singularity",
+      "output": "void",
+      "createdAt": 1773100904945
+    },
+    {
+      "id": "m_1773100914371_7hdj11",
+      "inputA": "chaos",
+      "inputB": "cosmos",
+      "output": "void",
+      "createdAt": 1773100914371
+    },
+    {
+      "id": "m_1773100925475_1yti0x",
+      "inputA": "plant",
+      "inputB": "bacteria",
+      "output": "mushroom",
+      "createdAt": 1773100925475,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773100934570_dzyjva",
+      "inputA": "forest",
+      "inputB": "bacteria",
+      "output": "mushroom",
+      "createdAt": 1773100934570,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773100943998_kuw9cw",
+      "inputA": "tree",
+      "inputB": "bacteria",
+      "output": "mushroom",
+      "createdAt": 1773100943998,
+      "outputWorldEffects": {
+        "vegetation": 1
+      }
+    },
+    {
+      "id": "m_1773100971526_ymjti2",
+      "inputA": "plant",
+      "inputB": "earth",
+      "output": "grass",
+      "createdAt": 1773100971526,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1773101000368_zeomwu",
+      "inputA": "earth",
+      "inputB": "wheat",
+      "output": "grass",
+      "createdAt": 1773101000368,
+      "outputWorldEffects": {
+        "vegetation": 2
+      }
+    },
+    {
+      "id": "m_1773101029384_dicr8o",
+      "inputA": "forest",
+      "inputB": "custom_heatwave",
+      "output": "jungle",
+      "createdAt": 1773101029384,
+      "outputWorldEffects": {
+        "vegetation": 4,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101064675_qkfs18",
+      "inputA": "custom_rainforest",
+      "inputB": "tree",
+      "output": "jungle",
+      "createdAt": 1773101064675,
+      "outputWorldEffects": {
+        "vegetation": 4,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101084825_q0cq88",
+      "inputA": "flower",
+      "inputB": "tree",
+      "output": "fruit",
+      "createdAt": 1773101084825
+    },
+    {
+      "id": "m_1773101123872_vbjm00",
+      "inputA": "tree",
+      "inputB": "seed",
+      "output": "fruit",
+      "createdAt": 1773101123872
+    },
+    {
+      "id": "m_1773101135922_9ghz58",
+      "inputA": "iron",
+      "inputB": "coal",
+      "output": "steel",
+      "createdAt": 1773101135922
+    },
+    {
+      "id": "m_1773101143516_n0gkfl",
+      "inputA": "iron",
+      "inputB": "custom_forge",
+      "output": "steel",
+      "createdAt": 1773101143516
+    },
+    {
+      "id": "m_1773101151830_gqj2xh",
+      "inputA": "metal",
+      "inputB": "coal",
+      "output": "steel",
+      "createdAt": 1773101151830
+    },
+    {
+      "id": "m_1773101162416_0z6i2k",
+      "inputA": "oil",
+      "inputB": "factory",
+      "output": "plastic",
+      "createdAt": 1773101162416,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773101171663_rkznnh",
+      "inputA": "oil",
+      "inputB": "custom_bottle",
+      "output": "plastic",
+      "createdAt": 1773101171663,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773101181353_qt0w7e",
+      "inputA": "oil",
+      "inputB": "custom_machine",
+      "output": "plastic",
+      "createdAt": 1773101181353,
+      "outputWorldEffects": {
+        "pollution": 1
+      }
+    },
+    {
+      "id": "m_1773101195681_cuihsi",
+      "inputA": "mud",
+      "inputB": "custom_health",
+      "output": "bacteria",
+      "createdAt": 1773101195681
+    },
+    {
+      "id": "m_1773101241284_p2xyui",
+      "inputA": "animal",
+      "inputB": "custom_worm",
+      "output": "insect",
+      "createdAt": 1773101241284,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773101248558_9wi73p",
+      "inputA": "custom_egg",
+      "inputB": "custom_worm",
+      "output": "insect",
+      "createdAt": 1773101248558,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773101259854_ekoea0",
+      "inputA": "animal",
+      "inputB": "grass",
+      "output": "insect",
+      "createdAt": 1773101259854,
+      "outputWorldEffects": {
+        "vegetation": 1,
+        "life": 1
+      }
+    },
+    {
+      "id": "m_1773101273328_ribk3q",
+      "inputA": "mammal",
+      "inputB": "ocean",
+      "output": "whale",
+      "createdAt": 1773101273328,
+      "outputWorldEffects": {
+        "water": 1,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101281382_2y1x6a",
+      "inputA": "fish",
+      "inputB": "mammal",
+      "output": "whale",
+      "createdAt": 1773101281382,
+      "outputWorldEffects": {
+        "water": 1,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101294480_2pzpse",
+      "inputA": "mammal",
+      "inputB": "water",
+      "output": "whale",
+      "createdAt": 1773101294480,
+      "outputWorldEffects": {
+        "water": 1,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101308032_v6v23g",
+      "inputA": "reptile",
+      "inputB": "time",
+      "output": "dinosaur",
+      "createdAt": 1773101308032,
+      "outputWorldEffects": {
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101318945_ejjfaw",
+      "inputA": "custom_fossil",
+      "inputB": "life",
+      "output": "dinosaur",
+      "createdAt": 1773101318945,
+      "outputWorldEffects": {
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101347474_ltl7lp",
+      "inputA": "medicine",
+      "inputB": "custom_syringe",
+      "output": "vaccine",
+      "createdAt": 1773101347474,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101358684_uqkzb8",
+      "inputA": "bacteria",
+      "inputB": "medicine",
+      "output": "vaccine",
+      "createdAt": 1773101358684,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101368118_eapgot",
+      "inputA": "custom_health",
+      "inputB": "custom_syringe",
+      "output": "vaccine",
+      "createdAt": 1773101368118,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101391751_5ul6b1",
+      "inputA": "chaos",
+      "inputB": "knowledge",
+      "output": "order",
+      "createdAt": 1773101391751
+    },
+    {
+      "id": "m_1773101400199_4n03zw",
+      "inputA": "chaos",
+      "inputB": "philosophy",
+      "output": "order",
+      "createdAt": 1773101400199
+    },
+    {
+      "id": "m_1773101418772_bk5zel",
+      "inputA": "custom_book",
+      "inputB": "knowledge",
+      "output": "philosophy",
+      "createdAt": 1773101418772
+    },
+    {
+      "id": "m_1773101442102_cdd8bq",
+      "inputA": "library",
+      "inputB": "knowledge",
+      "output": "philosophy",
+      "createdAt": 1773101442102
+    },
+    {
+      "id": "m_1773101453073_b01frb",
+      "inputA": "chaos",
+      "inputB": "order",
+      "output": "balance",
+      "createdAt": 1773101453073,
+      "outputWorldEffects": {
+        "atmosphere": 1,
+        "pollution": -1
+      }
+    },
+    {
+      "id": "m_1773101467132_f663fi",
+      "inputA": "custom_feng_shui",
+      "inputB": "order",
+      "output": "balance",
+      "createdAt": 1773101467132,
+      "outputWorldEffects": {
+        "atmosphere": 1,
+        "pollution": -1
+      }
+    },
+    {
+      "id": "m_1773101477455_7px9ek",
+      "inputA": "life",
+      "inputB": "order",
+      "output": "balance",
+      "createdAt": 1773101477455,
+      "outputWorldEffects": {
+        "atmosphere": 1,
+        "pollution": -1
+      }
+    },
+    {
+      "id": "m_1773101486991_v43kji",
+      "inputA": "life",
+      "inputB": "time",
+      "output": "evolution",
+      "createdAt": 1773101486991,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101500691_andoxd",
+      "inputA": "animal",
+      "inputB": "time",
+      "output": "evolution",
+      "createdAt": 1773101500691,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101511471_r686ud",
+      "inputA": "bacteria",
+      "inputB": "time",
+      "output": "evolution",
+      "createdAt": 1773101511471,
+      "outputWorldEffects": {
+        "life": 3
+      }
+    },
+    {
+      "id": "m_1773101518941_76d985",
+      "inputA": "sun",
+      "inputB": "void",
+      "output": "star",
+      "createdAt": 1773101518941,
+      "outputWorldEffects": {
+        "brightness": 4
+      }
+    },
+    {
+      "id": "m_1773101526699_lixa3j",
+      "inputA": "fire",
+      "inputB": "custom_sky",
+      "output": "sun",
+      "createdAt": 1773101526699,
+      "outputWorldEffects": {
+        "brightness": 10,
+        "heat": 3,
+        "life": 2
+      }
+    },
+    {
+      "id": "m_1773101535574_ozkcdf",
+      "inputA": "sun",
+      "inputB": "cosmos",
+      "output": "star",
+      "createdAt": 1773101535574,
+      "outputWorldEffects": {
+        "brightness": 4
+      }
+    },
+    {
+      "id": "m_1773101540834_p0nss3",
+      "inputA": "sun",
+      "inputB": "galaxy",
+      "output": "star",
+      "createdAt": 1773101540834,
+      "outputWorldEffects": {
+        "brightness": 4
+      }
+    },
+    {
+      "id": "m_1773101553761_52t6zp",
+      "inputA": "star",
+      "inputB": "star",
+      "output": "galaxy",
+      "createdAt": 1773101553761
+    },
+    {
+      "id": "m_1773101561167_s1mg32",
+      "inputA": "star",
+      "inputB": "cosmos",
+      "output": "galaxy",
+      "createdAt": 1773101561167
+    },
+    {
+      "id": "m_1773101569440_nblvhi",
+      "inputA": "nebula",
+      "inputB": "star",
+      "output": "galaxy",
+      "createdAt": 1773101569440
+    },
+    {
+      "id": "m_1773101580086_df77em",
+      "inputA": "earth",
+      "inputB": "cosmos",
+      "output": "planet",
+      "createdAt": 1773101580086
+    },
+    {
+      "id": "m_1773101589692_941blg",
+      "inputA": "earth",
+      "inputB": "galaxy",
+      "output": "planet",
+      "createdAt": 1773101589692
+    },
+    {
+      "id": "m_1773101599915_3x0kkv",
+      "inputA": "asteroid",
+      "inputB": "atmosphere",
+      "output": "custom_meteor",
+      "createdAt": 1773101599915,
+      "outputElement": {
+        "id": "custom_meteor",
+        "name": "Meteor",
+        "category": "Weird",
+        "description": "A flaming ball of rock",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/uuh8c1l6dmwbtvp5cfg5qo6fz4kp"
+      }
+    },
+    {
+      "id": "m_1773101612393_grsj0j",
+      "inputA": "custom_artificial_intelligence",
+      "inputB": "evolution",
+      "output": "singularity",
+      "createdAt": 1773101612393,
+      "outputWorldEffects": {
+        "technology": 10
+      }
+    },
+    {
+      "id": "m_1773101622894_vkwnyj",
+      "inputA": "custom_artificial_intelligence",
+      "inputB": "time",
+      "output": "singularity",
+      "createdAt": 1773101622894,
+      "outputWorldEffects": {
+        "technology": 10
+      }
+    },
+    {
+      "id": "m_1773101633407_xjr4yc",
+      "inputA": "custom_artificial_intelligence",
+      "inputB": "void",
+      "output": "singularity",
+      "createdAt": 1773101633407,
+      "outputWorldEffects": {
+        "technology": 10
+      }
+    },
+    {
+      "id": "m_1773101640658_6mv44q",
+      "inputA": "custom_black_hole",
+      "inputB": "custom_black_hole",
+      "output": "singularity",
+      "createdAt": 1773101640658,
+      "outputWorldEffects": {
+        "technology": 10
+      }
+    },
+    {
+      "id": "m_1773101652079_ii1w8j",
+      "inputA": "plastic",
+      "inputB": "ocean",
+      "output": "microplastic",
+      "createdAt": 1773101652079,
+      "outputWorldEffects": {
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773101660831_o0goxr",
+      "inputA": "plastic",
+      "inputB": "pollution",
+      "output": "microplastic",
+      "createdAt": 1773101660831,
+      "outputWorldEffects": {
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773101668285_gv5xyt",
+      "inputA": "plastic",
+      "inputB": "whale",
+      "output": "microplastic",
+      "createdAt": 1773101668285,
+      "outputWorldEffects": {
+        "pollution": 2,
+        "life": -1
+      }
+    },
+    {
+      "id": "m_1773102538344_rmgon4",
+      "inputA": "custom_driver",
+      "inputB": "custom_firewall",
+      "output": "custom_roadblock",
+      "createdAt": 1773102538344,
+      "outputElement": {
+        "id": "custom_roadblock",
+        "name": "Roadblock",
+        "category": "Structures",
+        "description": "You shall not pass",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/p7ovb3dwxiv04j6tpr195gc4x2u4"
+      }
+    },
+    {
+      "id": "m_1773102615946_3ug8kz",
+      "inputA": "custom_alien",
+      "inputB": "custom_leather",
+      "output": "custom_xenomorph",
+      "createdAt": 1773102615946,
+      "outputElement": {
+        "id": "custom_xenomorph",
+        "name": "Xenomorph",
+        "category": "Pop Culture",
+        "description": "Alien parasite species",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/iz3sqmxod1wk48hnm1ri0z5f3298"
+      }
+    },
+    {
+      "id": "m_1773102709182_66qzvt",
+      "inputA": "custom_gps",
+      "inputB": "sand",
+      "output": "custom_treasure_map",
+      "createdAt": 1773102709182,
+      "outputElement": {
+        "id": "custom_treasure_map",
+        "name": "Treasure Map",
+        "category": "Tools",
+        "description": "X marks the spot",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d1g1d8bbhj92zhahcxplgshm08ui"
+      }
+    },
+    {
+      "id": "m_1773102759194_myj5sz",
+      "inputA": "electricity",
+      "inputB": "custom_hotwheels",
+      "output": "custom_electric_car",
+      "createdAt": 1773102759194,
+      "outputElement": {
+        "id": "custom_electric_car",
+        "name": "Electric Car",
+        "category": "Transportation",
+        "description": "A car that runs on... You guessed it",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/bn4fkw8lfuj2dyejdjbjhdj9wvpk"
+      }
+    },
+    {
+      "id": "m_1773102885340_7igve8",
+      "inputA": "custom_godzilla",
+      "inputB": "moss",
+      "output": "custom_swamp_thing",
+      "createdAt": 1773102885340,
+      "outputElement": {
+        "id": "custom_swamp_thing",
+        "name": "Swamp Thing",
+        "category": "Pop Culture",
+        "description": "The man of the swamp",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/f1hnycekr1phaiys595g3usso7b8"
+      }
+    },
+    {
+      "id": "m_1773102974665_w8fou9",
+      "inputA": "custom_fire_flower",
+      "inputB": "star",
+      "output": "custom_superstar",
+      "createdAt": 1773102974665,
+      "outputElement": {
+        "id": "custom_superstar",
+        "name": "Superstar",
+        "category": "Video Game",
+        "description": "Grants you invincibility for a short amount of time",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/w4obqeaxt4zz3qracp9ockb7oqj4"
+      }
+    },
+    {
+      "id": "m_1773103083510_4d3xkv",
+      "inputA": "air_purifier",
+      "inputB": "custom_treant",
+      "output": "custom_oxygen",
+      "createdAt": 1773103083510,
+      "outputElement": {
+        "id": "custom_oxygen",
+        "name": "Oxygen",
+        "category": "Nature",
+        "description": "We need it to breath!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/39bgw2lk69jd4y9el1mgqxwqz94g"
+      }
+    },
+    {
+      "id": "m_1773103176893_yiqb6d",
+      "inputA": "reptile",
+      "inputB": "custom_puddle",
+      "output": "custom_amphibian",
+      "createdAt": 1773103176893,
+      "outputElement": {
+        "id": "custom_amphibian",
+        "name": "Amphibian",
+        "category": "Animals",
+        "description": "Like water reptiles!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/21jmtuku2gtevsifnoz2kn3wdya9"
+      }
+    },
+    {
+      "id": "m_1773103253434_2kvqba",
+      "inputA": "human",
+      "inputB": "custom_terminator",
+      "output": "custom_arnold_schwarzenegger",
+      "createdAt": 1773103253434,
+      "outputElement": {
+        "id": "custom_arnold_schwarzenegger",
+        "name": "Arnold Schwarzenegger",
+        "category": "Humans",
+        "description": "The former governor of California",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/gcay8fsxvqtg568qhsik1ripvq2a"
+      }
+    },
+    {
+      "id": "m_1773103294266_qovup7",
+      "inputA": "custom_explosion",
+      "inputB": "copper",
+      "output": "custom_firework",
+      "createdAt": 1773103294266,
+      "outputElement": {
+        "id": "custom_firework",
+        "name": "Firework",
+        "category": "Civilization",
+        "description": "Ooooo Aaaaaa",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/8hjqkobm1daasb5x9eszhzg5juax"
+      }
+    },
+    {
+      "id": "m_1773103324292_swe1x8",
+      "inputA": "custom_platypus",
+      "inputB": "reptile",
+      "output": "custom_egg",
+      "createdAt": 1773103324292,
+      "outputElement": {
+        "id": "custom_egg",
+        "name": "Egg",
+        "category": "Weird",
+        "description": "The shell that contains life",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9ddhrsb3dhk5riq6427t109z5nze"
+      }
+    },
+    {
+      "id": "m_1773103346851_mnxb0e",
+      "inputA": "custom_cyborg",
+      "inputB": "custom_drone",
+      "output": "custom_terminator",
+      "createdAt": 1773103346851,
+      "outputElement": {
+        "id": "custom_terminator",
+        "name": "Terminator",
+        "category": "Weird",
+        "description": "I'll be back",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/w2gtcp7qascp44on4yjvfre2mmlv"
+      }
+    },
+    {
+      "id": "m_1773103359194_oe1fzx",
+      "inputA": "custom_kiln",
+      "inputB": "custom_pond",
+      "output": "custom_pottery",
+      "createdAt": 1773103359194,
+      "outputElement": {
+        "id": "custom_pottery",
+        "name": "Pottery",
+        "category": "Weird",
+        "description": "Beautiful decor that serves a purpose",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/886x3e0epwnkh43dnygvbid1m4n3"
+      }
+    },
+    {
+      "id": "m_1773103565812_mvx0ra",
+      "inputA": "custom_cookie",
+      "inputB": "singularity",
+      "output": "custom_cookie_clicker",
+      "createdAt": 1773103565812,
+      "outputElement": {
+        "id": "custom_cookie_clicker",
+        "name": "Cookie Clicker",
+        "category": "Video Game",
+        "description": "A game about baking infinite cookies",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2xzkva2l7w9sp9x6qbkv3hso2zhi"
+      }
+    },
+    {
+      "id": "m_1773104098728_dwt8vz",
+      "inputA": "custom_scientist",
+      "inputB": "custom_workshop",
+      "output": "custom_laboratory",
+      "createdAt": 1773104098728,
+      "outputElement": {
+        "id": "custom_laboratory",
+        "name": "Laboratory",
+        "category": "Technology",
+        "description": "Yeah! Science!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/idgx9yvroy74exxtvkvmqflxk4qv"
+      }
+    },
+    {
+      "id": "m_1773104109533_pf8y6j",
+      "inputA": "medicine",
+      "inputB": "custom_workshop",
+      "output": "custom_laboratory",
+      "createdAt": 1773104109533,
+      "outputElement": {
+        "id": "custom_laboratory",
+        "name": "Laboratory",
+        "category": "Technology",
+        "description": "Yeah! Science!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/idgx9yvroy74exxtvkvmqflxk4qv"
+      }
+    },
+    {
+      "id": "m_1773104229110_9np1xn",
+      "inputA": "custom_laboratory",
+      "inputB": "custom_bottle",
+      "output": "custom_chemistry",
+      "createdAt": 1773104229110,
+      "outputElement": {
+        "id": "custom_chemistry",
+        "name": "Chemistry",
+        "category": "Abstract",
+        "description": "The science of atoms and molecules",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/j3ts0k67ucarxrmmx8bemlc7y9bz"
+      }
+    },
+    {
+      "id": "m_1773104244400_mdrubq",
+      "inputA": "custom_scientist",
+      "inputB": "custom_bottle",
+      "output": "custom_chemistry",
+      "createdAt": 1773104244400,
+      "outputElement": {
+        "id": "custom_chemistry",
+        "name": "Chemistry",
+        "category": "Abstract",
+        "description": "The science of atoms and molecules",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/j3ts0k67ucarxrmmx8bemlc7y9bz"
+      }
+    },
+    {
+      "id": "m_1773104255001_55luej",
+      "inputA": "custom_book",
+      "inputB": "custom_chemist",
+      "output": "custom_chemistry",
+      "createdAt": 1773104255001,
+      "outputElement": {
+        "id": "custom_chemistry",
+        "name": "Chemistry",
+        "category": "Abstract",
+        "description": "The science of atoms and molecules",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/j3ts0k67ucarxrmmx8bemlc7y9bz"
+      }
+    },
+    {
+      "id": "m_1773104335249_bwvpsl",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_machine",
+      "output": "custom_microscope",
+      "createdAt": 1773104335249,
+      "outputElement": {
+        "id": "custom_microscope",
+        "name": "Microscope",
+        "category": "Technology",
+        "description": "Getting up close and personal",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/csaqn3zz2q28vp0dnc59mhnz4a3e"
+      }
+    },
+    {
+      "id": "m_1773104345099_ip8kqr",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_lens",
+      "output": "custom_microscope",
+      "createdAt": 1773104345099,
+      "outputElement": {
+        "id": "custom_microscope",
+        "name": "Microscope",
+        "category": "Technology",
+        "description": "Getting up close and personal",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/csaqn3zz2q28vp0dnc59mhnz4a3e"
+      }
+    },
+    {
+      "id": "m_1773104353513_1us94c",
+      "inputA": "custom_chemist",
+      "inputB": "custom_machine",
+      "output": "custom_microscope",
+      "createdAt": 1773104353513,
+      "outputElement": {
+        "id": "custom_microscope",
+        "name": "Microscope",
+        "category": "Technology",
+        "description": "Getting up close and personal",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/csaqn3zz2q28vp0dnc59mhnz4a3e"
+      }
+    },
+    {
+      "id": "m_1773104365744_bj1yze",
+      "inputA": "custom_chemist",
+      "inputB": "custom_lens",
+      "output": "custom_microscope",
+      "createdAt": 1773104365744,
+      "outputElement": {
+        "id": "custom_microscope",
+        "name": "Microscope",
+        "category": "Technology",
+        "description": "Getting up close and personal",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/csaqn3zz2q28vp0dnc59mhnz4a3e"
+      }
+    },
+    {
+      "id": "m_1773104411258_uotv4q",
+      "inputA": "dust",
+      "inputB": "custom_microscope",
+      "output": "custom_atom",
+      "createdAt": 1773104411258,
+      "outputElement": {
+        "id": "custom_atom",
+        "name": "Atom",
+        "category": "Technology",
+        "description": "A tiny, tiny particle",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/w4x4mv2uear9meqmwzwqyyao961g"
+      }
+    },
+    {
+      "id": "m_1773104420847_jrguj2",
+      "inputA": "custom_microscope",
+      "inputB": "energy",
+      "output": "custom_atom",
+      "createdAt": 1773104420847,
+      "outputElement": {
+        "id": "custom_atom",
+        "name": "Atom",
+        "category": "Technology",
+        "description": "A tiny, tiny particle",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/w4x4mv2uear9meqmwzwqyyao961g"
+      }
+    },
+    {
+      "id": "m_1773104431707_dcs3te",
+      "inputA": "custom_microscope",
+      "inputB": "electricity",
+      "output": "custom_atom",
+      "createdAt": 1773104431707,
+      "outputElement": {
+        "id": "custom_atom",
+        "name": "Atom",
+        "category": "Technology",
+        "description": "A tiny, tiny particle",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/w4x4mv2uear9meqmwzwqyyao961g"
+      }
+    },
+    {
+      "id": "m_1773104564491_4gwbbv",
+      "inputA": "custom_atom",
+      "inputB": "energy",
+      "output": "custom_proton",
+      "createdAt": 1773104564491,
+      "outputElement": {
+        "id": "custom_proton",
+        "name": "Proton",
+        "category": "Technology",
+        "description": "Supplies positive energy to an atom",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/pqkhm75rcpedhzspe1zypth4id0z"
+      }
+    },
+    {
+      "id": "m_1773104705509_j1bqlj",
+      "inputA": "custom_atom",
+      "inputB": "balance",
+      "output": "custom_neutron",
+      "createdAt": 1773104705509,
+      "outputElement": {
+        "id": "custom_neutron",
+        "name": "Neutron",
+        "category": "Technology",
+        "description": "Uncharged subatomic particles",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/tw7umv1qa9bbic8buxmeg0v7o3yq"
+      }
+    },
+    {
+      "id": "m_1773104848703_5bynvm",
+      "inputA": "custom_atom",
+      "inputB": "cloud",
+      "output": "custom_electron",
+      "createdAt": 1773104848703,
+      "outputElement": {
+        "id": "custom_electron",
+        "name": "Electron",
+        "category": "Technology",
+        "description": "Negatively charged subatomic particle",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1603hvon4cvhbzfz1brmxxa6oapq"
+      }
+    },
+    {
+      "id": "m_1773104859532_0456ab",
+      "inputA": "custom_atom",
+      "inputB": "rain",
+      "output": "custom_electron",
+      "createdAt": 1773104859532,
+      "outputElement": {
+        "id": "custom_electron",
+        "name": "Electron",
+        "category": "Technology",
+        "description": "Negatively charged subatomic particle",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1603hvon4cvhbzfz1brmxxa6oapq"
+      }
+    },
+    {
+      "id": "m_1773105014353_nlsw8v",
+      "inputA": "star",
+      "inputB": "energy",
+      "output": "custom_plasma",
+      "createdAt": 1773105014353,
+      "outputWorldEffects": {
+        "brightness": 1,
+        "air": 1,
+        "heat": 1
+      },
+      "outputElement": {
+        "id": "custom_plasma",
+        "name": "Plasma",
+        "category": "Technology",
+        "description": "The fourth state of matter",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v91c7w9dvc0d67zs2gb75v7akeff",
+        "worldEffects": {
+          "brightness": 1,
+          "air": 1,
+          "heat": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773105026181_6hoj6v",
+      "inputA": "custom_atom",
+      "inputB": "custom_explosion",
+      "output": "custom_atomic_bomb",
+      "createdAt": 1773105026181,
+      "outputElement": {
+        "id": "custom_atomic_bomb",
+        "name": "Atomic Bomb",
+        "category": "Warfare",
+        "description": "Split the atom",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1xybnr6spe67sgu3slpseyuho25t"
+      }
+    },
+    {
+      "id": "m_1773105035757_ccgqkn",
+      "inputA": "custom_atom",
+      "inputB": "lightning",
+      "output": "custom_atomic_bomb",
+      "createdAt": 1773105035757,
+      "outputElement": {
+        "id": "custom_atomic_bomb",
+        "name": "Atomic Bomb",
+        "category": "Warfare",
+        "description": "Split the atom",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1xybnr6spe67sgu3slpseyuho25t"
+      }
+    },
+    {
+      "id": "m_1773105080222_b19vah",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_book",
+      "output": "custom_periodic_table",
+      "createdAt": 1773105080222,
+      "outputElement": {
+        "id": "custom_periodic_table",
+        "name": "Periodic Table",
+        "category": "Tools",
+        "description": "A nice guide to all the elements",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m3bb4k89pmkxo05whxx238ei5yo8"
+      }
+    },
+    {
+      "id": "m_1773105088894_gowj23",
+      "inputA": "custom_atom",
+      "inputB": "custom_book",
+      "output": "custom_periodic_table",
+      "createdAt": 1773105088894,
+      "outputElement": {
+        "id": "custom_periodic_table",
+        "name": "Periodic Table",
+        "category": "Tools",
+        "description": "A nice guide to all the elements",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m3bb4k89pmkxo05whxx238ei5yo8"
+      }
+    },
+    {
+      "id": "m_1773105318221_3dd0a9",
+      "inputA": "metal",
+      "inputB": "battery",
+      "output": "custom_magnet",
+      "createdAt": 1773105318221,
+      "outputElement": {
+        "id": "custom_magnet",
+        "name": "Magnet",
+        "category": "Technology",
+        "description": "Still no idea how they work",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/v90axrgx1otan8t7ozx1uskny7an"
+      }
+    },
+    {
+      "id": "m_1773105379247_0a1umn",
+      "inputA": "mushroom",
+      "inputB": "custom_bottle",
+      "output": "custom_poison",
+      "createdAt": 1773105379247,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "life": -1
+      },
+      "outputElement": {
+        "id": "custom_poison",
+        "name": "Poison",
+        "category": "Warfare",
+        "description": "An evil concoction",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9pyhnrb2r3upd9wj1j38xlsxe8bd",
+        "worldEffects": {
+          "pollution": 1,
+          "life": -1
+        }
+      }
+    },
+    {
+      "id": "m_1773105389729_evgyev",
+      "inputA": "bacteria",
+      "inputB": "custom_bottle",
+      "output": "custom_poison",
+      "createdAt": 1773105389729,
+      "outputWorldEffects": {
+        "pollution": 1,
+        "life": -1
+      },
+      "outputElement": {
+        "id": "custom_poison",
+        "name": "Poison",
+        "category": "Warfare",
+        "description": "An evil concoction",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9pyhnrb2r3upd9wj1j38xlsxe8bd",
+        "worldEffects": {
+          "pollution": 1,
+          "life": -1
+        }
+      }
+    },
+    {
+      "id": "m_1773105481642_wg11u7",
+      "inputA": "water",
+      "inputB": "custom_atom",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105481642,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105523819_p20run",
+      "inputA": "custom_puddle",
+      "inputB": "custom_atom",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105523819,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105530613_o49ohx",
+      "inputA": "ocean",
+      "inputB": "custom_atom",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105530613,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105607513_7x42id",
+      "inputA": "air",
+      "inputB": "custom_atom",
+      "output": "custom_helium",
+      "createdAt": 1773105607513,
+      "outputElement": {
+        "id": "custom_helium",
+        "name": "Helium",
+        "category": "Technology",
+        "description": "Used for balloons and producing squeaky voices",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qdfdz17gylw4ozp7ythdjnh26mph"
+      }
+    },
+    {
+      "id": "m_1773105618863_9682qc",
+      "inputA": "wind",
+      "inputB": "custom_atom",
+      "output": "custom_helium",
+      "createdAt": 1773105618863,
+      "outputElement": {
+        "id": "custom_helium",
+        "name": "Helium",
+        "category": "Technology",
+        "description": "Used for balloons and producing squeaky voices",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qdfdz17gylw4ozp7ythdjnh26mph"
+      }
+    },
+    {
+      "id": "m_1773105707706_fzm2t4",
+      "inputA": "battery",
+      "inputB": "custom_atom",
+      "output": "custom_lithium",
+      "createdAt": 1773105707706,
+      "outputElement": {
+        "id": "custom_lithium",
+        "name": "Lithium",
+        "category": "Technology",
+        "description": "Used in batteries and mood-stabilizers",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a33gs4w55dp8k4vfrcyrawve108e"
+      }
+    },
+    {
+      "id": "m_1773105738930_3so3m6",
+      "inputA": "battery",
+      "inputB": "custom_proton",
+      "output": "custom_lithium",
+      "createdAt": 1773105738930,
+      "outputElement": {
+        "id": "custom_lithium",
+        "name": "Lithium",
+        "category": "Technology",
+        "description": "Used in batteries and mood-stabilizers",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a33gs4w55dp8k4vfrcyrawve108e"
+      }
+    },
+    {
+      "id": "m_1773105747069_3djds1",
+      "inputA": "custom_chemistry",
+      "inputB": "water",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105747069,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105755901_6j5o3i",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_puddle",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105755901,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105764387_meq0pq",
+      "inputA": "custom_chemistry",
+      "inputB": "ocean",
+      "output": "custom_hydrogen",
+      "createdAt": 1773105764387,
+      "outputElement": {
+        "id": "custom_hydrogen",
+        "name": "Hydrogen",
+        "category": "Technology",
+        "description": "An element with only one proton",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qmsi8cqt00zv5nsavf00ob34lxr0"
+      }
+    },
+    {
+      "id": "m_1773105780881_nyr9d0",
+      "inputA": "custom_chemistry",
+      "inputB": "air",
+      "output": "custom_helium",
+      "createdAt": 1773105780881,
+      "outputElement": {
+        "id": "custom_helium",
+        "name": "Helium",
+        "category": "Technology",
+        "description": "Used for balloons and producing squeaky voices",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qdfdz17gylw4ozp7ythdjnh26mph"
+      }
+    },
+    {
+      "id": "m_1773105788661_368bs6",
+      "inputA": "custom_chemistry",
+      "inputB": "wind",
+      "output": "custom_helium",
+      "createdAt": 1773105788661,
+      "outputElement": {
+        "id": "custom_helium",
+        "name": "Helium",
+        "category": "Technology",
+        "description": "Used for balloons and producing squeaky voices",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qdfdz17gylw4ozp7ythdjnh26mph"
+      }
+    },
+    {
+      "id": "m_1773105801797_cxl34e",
+      "inputA": "custom_chemistry",
+      "inputB": "battery",
+      "output": "custom_lithium",
+      "createdAt": 1773105801797,
+      "outputElement": {
+        "id": "custom_lithium",
+        "name": "Lithium",
+        "category": "Technology",
+        "description": "Used in batteries and mood-stabilizers",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a33gs4w55dp8k4vfrcyrawve108e"
+      }
+    },
+    {
+      "id": "m_1773106021506_pjry4i",
+      "inputA": "custom_chemistry",
+      "inputB": "satellite",
+      "output": "custom_beryllium",
+      "createdAt": 1773106021506,
+      "outputElement": {
+        "id": "custom_beryllium",
+        "name": "Beryllium",
+        "category": "Technology",
+        "description": "Tough, durable metal used in military defense",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6btz2mxnh6jsivgn3obrwvt1xipe"
+      }
+    },
+    {
+      "id": "m_1773106034703_5q8jtv",
+      "inputA": "custom_atom",
+      "inputB": "satellite",
+      "output": "custom_beryllium",
+      "createdAt": 1773106034703,
+      "outputElement": {
+        "id": "custom_beryllium",
+        "name": "Beryllium",
+        "category": "Technology",
+        "description": "Tough, durable metal used in military defense",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6btz2mxnh6jsivgn3obrwvt1xipe"
+      }
+    },
+    {
+      "id": "m_1773106042303_69s46n",
+      "inputA": "custom_atom",
+      "inputB": "rocket",
+      "output": "custom_beryllium",
+      "createdAt": 1773106042303,
+      "outputElement": {
+        "id": "custom_beryllium",
+        "name": "Beryllium",
+        "category": "Technology",
+        "description": "Tough, durable metal used in military defense",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6btz2mxnh6jsivgn3obrwvt1xipe"
+      }
+    },
+    {
+      "id": "m_1773106056886_xbyu1o",
+      "inputA": "custom_chemistry",
+      "inputB": "rocket",
+      "output": "custom_beryllium",
+      "createdAt": 1773106056886,
+      "outputElement": {
+        "id": "custom_beryllium",
+        "name": "Beryllium",
+        "category": "Technology",
+        "description": "Tough, durable metal used in military defense",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/6btz2mxnh6jsivgn3obrwvt1xipe"
+      }
+    },
+    {
+      "id": "m_1773106193159_xv8dix",
+      "inputA": "plant",
+      "inputB": "custom_atom",
+      "output": "custom_boron",
+      "createdAt": 1773106193159,
+      "outputElement": {
+        "id": "custom_boron",
+        "name": "Boron",
+        "category": "Weird",
+        "description": "Crucial element in plant cell walls and glass",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/gkd7carvm4jrl9sxb4fc2t7wyp28"
+      }
+    },
+    {
+      "id": "m_1773106200014_81pdfh",
+      "inputA": "custom_chemistry",
+      "inputB": "plant",
+      "output": "custom_boron",
+      "createdAt": 1773106200014,
+      "outputElement": {
+        "id": "custom_boron",
+        "name": "Boron",
+        "category": "Weird",
+        "description": "Crucial element in plant cell walls and glass",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/gkd7carvm4jrl9sxb4fc2t7wyp28"
+      }
+    },
+    {
+      "id": "m_1773106207442_4ft1n1",
+      "inputA": "custom_chemistry",
+      "inputB": "glass",
+      "output": "custom_boron",
+      "createdAt": 1773106207442,
+      "outputElement": {
+        "id": "custom_boron",
+        "name": "Boron",
+        "category": "Weird",
+        "description": "Crucial element in plant cell walls and glass",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/gkd7carvm4jrl9sxb4fc2t7wyp28"
+      }
+    },
+    {
+      "id": "m_1773106221962_vzaohr",
+      "inputA": "custom_atom",
+      "inputB": "glass",
+      "output": "custom_boron",
+      "createdAt": 1773106221962,
+      "outputElement": {
+        "id": "custom_boron",
+        "name": "Boron",
+        "category": "Weird",
+        "description": "Crucial element in plant cell walls and glass",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/gkd7carvm4jrl9sxb4fc2t7wyp28"
+      }
+    },
+    {
+      "id": "m_1773106285083_ep7mdw",
+      "inputA": "custom_atom",
+      "inputB": "coal",
+      "output": "custom_carbon",
+      "createdAt": 1773106285083,
+      "outputElement": {
+        "id": "custom_carbon",
+        "name": "Carbon",
+        "category": "Technology",
+        "description": "The element of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ioiuafwyry1zcd547ah6qae0ibhb"
+      }
+    },
+    {
+      "id": "m_1773106293130_1wz1q6",
+      "inputA": "custom_chemistry",
+      "inputB": "coal",
+      "output": "custom_carbon",
+      "createdAt": 1773106293130,
+      "outputElement": {
+        "id": "custom_carbon",
+        "name": "Carbon",
+        "category": "Technology",
+        "description": "The element of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ioiuafwyry1zcd547ah6qae0ibhb"
+      }
+    },
+    {
+      "id": "m_1773106302280_z6f1pw",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_charcoal",
+      "output": "custom_carbon",
+      "createdAt": 1773106302280,
+      "outputElement": {
+        "id": "custom_carbon",
+        "name": "Carbon",
+        "category": "Technology",
+        "description": "The element of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ioiuafwyry1zcd547ah6qae0ibhb"
+      }
+    },
+    {
+      "id": "m_1773106317950_vj8m03",
+      "inputA": "custom_atom",
+      "inputB": "custom_charcoal",
+      "output": "custom_carbon",
+      "createdAt": 1773106317950,
+      "outputElement": {
+        "id": "custom_carbon",
+        "name": "Carbon",
+        "category": "Technology",
+        "description": "The element of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ioiuafwyry1zcd547ah6qae0ibhb"
+      }
+    },
+    {
+      "id": "m_1773106375559_2tbyqf",
+      "inputA": "atmosphere",
+      "inputB": "custom_atom",
+      "output": "custom_nitrogen",
+      "createdAt": 1773106375559,
+      "outputElement": {
+        "id": "custom_nitrogen",
+        "name": "Nitrogen",
+        "category": "Technology",
+        "description": "Comprises most of the atmosphere",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/oycccz17jcahi6wm3gu3py4ngyy1"
+      }
+    },
+    {
+      "id": "m_1773106386047_x1rnfq",
+      "inputA": "custom_chemistry",
+      "inputB": "atmosphere",
+      "output": "custom_nitrogen",
+      "createdAt": 1773106386047,
+      "outputElement": {
+        "id": "custom_nitrogen",
+        "name": "Nitrogen",
+        "category": "Technology",
+        "description": "Comprises most of the atmosphere",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/oycccz17jcahi6wm3gu3py4ngyy1"
+      }
+    },
+    {
+      "id": "m_1773106393061_lye4az",
+      "inputA": "custom_atom",
+      "inputB": "custom_sky",
+      "output": "custom_nitrogen",
+      "createdAt": 1773106393061,
+      "outputElement": {
+        "id": "custom_nitrogen",
+        "name": "Nitrogen",
+        "category": "Technology",
+        "description": "Comprises most of the atmosphere",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/oycccz17jcahi6wm3gu3py4ngyy1"
+      }
+    },
+    {
+      "id": "m_1773106402761_s3bzix",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_sky",
+      "output": "custom_nitrogen",
+      "createdAt": 1773106402761,
+      "outputElement": {
+        "id": "custom_nitrogen",
+        "name": "Nitrogen",
+        "category": "Technology",
+        "description": "Comprises most of the atmosphere",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/oycccz17jcahi6wm3gu3py4ngyy1"
+      }
+    },
+    {
+      "id": "m_1773106425382_1anhyx",
+      "inputA": "custom_atom",
+      "inputB": "life",
+      "output": "custom_oxygen",
+      "createdAt": 1773106425382,
+      "outputElement": {
+        "id": "custom_oxygen",
+        "name": "Oxygen",
+        "category": "Nature",
+        "description": "We need it to breath!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/39bgw2lk69jd4y9el1mgqxwqz94g"
+      }
+    },
+    {
+      "id": "m_1773106433876_9lgzzt",
+      "inputA": "custom_chemistry",
+      "inputB": "life",
+      "output": "custom_oxygen",
+      "createdAt": 1773106433876,
+      "outputElement": {
+        "id": "custom_oxygen",
+        "name": "Oxygen",
+        "category": "Nature",
+        "description": "We need it to breath!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/39bgw2lk69jd4y9el1mgqxwqz94g"
+      }
+    },
+    {
+      "id": "m_1773106443589_7lwysd",
+      "inputA": "custom_atom",
+      "inputB": "custom_breath",
+      "output": "custom_oxygen",
+      "createdAt": 1773106443589,
+      "outputElement": {
+        "id": "custom_oxygen",
+        "name": "Oxygen",
+        "category": "Nature",
+        "description": "We need it to breath!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/39bgw2lk69jd4y9el1mgqxwqz94g"
+      }
+    },
+    {
+      "id": "m_1773106455744_83iky5",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_breath",
+      "output": "custom_oxygen",
+      "createdAt": 1773106455744,
+      "outputElement": {
+        "id": "custom_oxygen",
+        "name": "Oxygen",
+        "category": "Nature",
+        "description": "We need it to breath!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/39bgw2lk69jd4y9el1mgqxwqz94g"
+      }
+    },
+    {
+      "id": "m_1773106579736_jj4voa",
+      "inputA": "custom_atom",
+      "inputB": "custom_health",
+      "output": "custom_fluorine",
+      "createdAt": 1773106579736,
+      "outputElement": {
+        "id": "custom_fluorine",
+        "name": "Fluorine",
+        "category": "Technology",
+        "description": "Element used in dental care and non-stick coatings",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a3s2x2omi55vra4xatmtexcy73zg"
+      }
+    },
+    {
+      "id": "m_1773106590031_3fvucd",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_health",
+      "output": "custom_fluorine",
+      "createdAt": 1773106590031,
+      "outputElement": {
+        "id": "custom_fluorine",
+        "name": "Fluorine",
+        "category": "Technology",
+        "description": "Element used in dental care and non-stick coatings",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a3s2x2omi55vra4xatmtexcy73zg"
+      }
+    },
+    {
+      "id": "m_1773106646118_ega1z2",
+      "inputA": "custom_atom",
+      "inputB": "custom_light_bulb",
+      "output": "custom_neon",
+      "createdAt": 1773106646118,
+      "outputElement": {
+        "id": "custom_neon",
+        "name": "Neon",
+        "category": "Technology",
+        "description": "Element of light parties",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jhtnp1h03ve9nc8nwt3kx50ozjel"
+      }
+    },
+    {
+      "id": "m_1773106654213_xjc0io",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_light_bulb",
+      "output": "custom_neon",
+      "createdAt": 1773106654213,
+      "outputElement": {
+        "id": "custom_neon",
+        "name": "Neon",
+        "category": "Technology",
+        "description": "Element of light parties",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jhtnp1h03ve9nc8nwt3kx50ozjel"
+      }
+    },
+    {
+      "id": "m_1773106669834_5nk12i",
+      "inputA": "custom_atom",
+      "inputB": "electricity",
+      "output": "custom_neon",
+      "createdAt": 1773106669834,
+      "outputElement": {
+        "id": "custom_neon",
+        "name": "Neon",
+        "category": "Technology",
+        "description": "Element of light parties",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jhtnp1h03ve9nc8nwt3kx50ozjel"
+      }
+    },
+    {
+      "id": "m_1773106683031_td9f5d",
+      "inputA": "custom_chemistry",
+      "inputB": "electricity",
+      "output": "custom_neon",
+      "createdAt": 1773106683031,
+      "outputElement": {
+        "id": "custom_neon",
+        "name": "Neon",
+        "category": "Technology",
+        "description": "Element of light parties",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jhtnp1h03ve9nc8nwt3kx50ozjel"
+      }
+    },
+    {
+      "id": "m_1773106745836_uk2911",
+      "inputA": "custom_atom",
+      "inputB": "salt",
+      "output": "custom_sodium",
+      "createdAt": 1773106745836,
+      "outputElement": {
+        "id": "custom_sodium",
+        "name": "Sodium",
+        "category": "Weird",
+        "description": "A new element born from atom + salt.",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "•"
+      }
+    },
+    {
+      "id": "m_1773106759149_kh3dqg",
+      "inputA": "custom_chemistry",
+      "inputB": "salt",
+      "output": "custom_sodium",
+      "createdAt": 1773106759149,
+      "outputElement": {
+        "id": "custom_sodium",
+        "name": "Sodium",
+        "category": "Weird",
+        "description": "A new element born from atom + salt.",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/4w3fsy5r3y2rj8zsy3sebvhbl9yz"
+      }
+    },
+    {
+      "id": "m_1773106957199_iy6kdk",
+      "inputA": "custom_vitamin",
+      "inputB": "custom_atom",
+      "output": "custom_magnesium",
+      "createdAt": 1773106957199,
+      "outputElement": {
+        "id": "custom_magnesium",
+        "name": "Magnesium",
+        "category": "Technology",
+        "description": "Element crucial for bodily function",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/s1y2ipqcdylrupyvy3nacxfqd4wx"
+      }
+    },
+    {
+      "id": "m_1773106968399_gwzrvs",
+      "inputA": "custom_vitamin",
+      "inputB": "custom_chemistry",
+      "output": "custom_magnesium",
+      "createdAt": 1773106968399,
+      "outputElement": {
+        "id": "custom_magnesium",
+        "name": "Magnesium",
+        "category": "Technology",
+        "description": "Element crucial for bodily function",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/s1y2ipqcdylrupyvy3nacxfqd4wx"
+      }
+    },
+    {
+      "id": "m_1773107062964_i0qje3",
+      "inputA": "metal",
+      "inputB": "custom_atom",
+      "output": "custom_aluminum",
+      "createdAt": 1773107062964,
+      "outputElement": {
+        "id": "custom_aluminum",
+        "name": "Aluminum",
+        "category": "Technology",
+        "description": "Lightweight, durable, conductive, and super useful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d0nq2vo3yb8fsi734d61g2vnr57e"
+      }
+    },
+    {
+      "id": "m_1773107085309_pyiz34",
+      "inputA": "custom_chemistry",
+      "inputB": "metal",
+      "output": "custom_aluminum",
+      "createdAt": 1773107085309,
+      "outputElement": {
+        "id": "custom_aluminum",
+        "name": "Aluminum",
+        "category": "Technology",
+        "description": "Lightweight, durable, conductive, and super useful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d0nq2vo3yb8fsi734d61g2vnr57e"
+      }
+    },
+    {
+      "id": "m_1773107099264_xhfdkn",
+      "inputA": "airplane",
+      "inputB": "custom_atom",
+      "output": "custom_aluminum",
+      "createdAt": 1773107099264,
+      "outputElement": {
+        "id": "custom_aluminum",
+        "name": "Aluminum",
+        "category": "Technology",
+        "description": "Lightweight, durable, conductive, and super useful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d0nq2vo3yb8fsi734d61g2vnr57e"
+      }
+    },
+    {
+      "id": "m_1773107109347_edq9kb",
+      "inputA": "custom_chemistry",
+      "inputB": "airplane",
+      "output": "custom_aluminum",
+      "createdAt": 1773107109347,
+      "outputElement": {
+        "id": "custom_aluminum",
+        "name": "Aluminum",
+        "category": "Technology",
+        "description": "Lightweight, durable, conductive, and super useful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d0nq2vo3yb8fsi734d61g2vnr57e"
+      }
+    },
+    {
+      "id": "m_1773107237513_130sdl",
+      "inputA": "computer",
+      "inputB": "custom_atom",
+      "output": "custom_silicon",
+      "createdAt": 1773107237513,
+      "outputElement": {
+        "id": "custom_silicon",
+        "name": "Silicon",
+        "category": "Technology",
+        "description": "Earth's second most abundant element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m9k92ed0h4xur21ay5sjkffgh6v8"
+      }
+    },
+    {
+      "id": "m_1773107246662_c6elwg",
+      "inputA": "computer",
+      "inputB": "custom_chemistry",
+      "output": "custom_silicon",
+      "createdAt": 1773107246662,
+      "outputElement": {
+        "id": "custom_silicon",
+        "name": "Silicon",
+        "category": "Technology",
+        "description": "Earth's second most abundant element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m9k92ed0h4xur21ay5sjkffgh6v8"
+      }
+    },
+    {
+      "id": "m_1773107265386_mg9qmv",
+      "inputA": "sand",
+      "inputB": "custom_atom",
+      "output": "custom_silicon",
+      "createdAt": 1773107265386,
+      "outputElement": {
+        "id": "custom_silicon",
+        "name": "Silicon",
+        "category": "Technology",
+        "description": "Earth's second most abundant element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m9k92ed0h4xur21ay5sjkffgh6v8"
+      }
+    },
+    {
+      "id": "m_1773107272838_yomcwp",
+      "inputA": "sand",
+      "inputB": "custom_chemistry",
+      "output": "custom_silicon",
+      "createdAt": 1773107272838,
+      "outputElement": {
+        "id": "custom_silicon",
+        "name": "Silicon",
+        "category": "Technology",
+        "description": "Earth's second most abundant element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/m9k92ed0h4xur21ay5sjkffgh6v8"
+      }
+    },
+    {
+      "id": "m_1773107351225_yvxlwq",
+      "inputA": "fire",
+      "inputB": "custom_atom",
+      "output": "custom_phosphorus",
+      "createdAt": 1773107351225,
+      "outputElement": {
+        "id": "custom_phosphorus",
+        "name": "Phosphorus",
+        "category": "Technology",
+        "description": "Element of incendiary, fertilizer, and preservatives",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ou6pai6z3fo5723yk7vo2suseqqe"
+      }
+    },
+    {
+      "id": "m_1773107358898_iokrf6",
+      "inputA": "fire",
+      "inputB": "custom_chemistry",
+      "output": "custom_phosphorus",
+      "createdAt": 1773107358898,
+      "outputElement": {
+        "id": "custom_phosphorus",
+        "name": "Phosphorus",
+        "category": "Technology",
+        "description": "Element of incendiary, fertilizer, and preservatives",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ou6pai6z3fo5723yk7vo2suseqqe"
+      }
+    },
+    {
+      "id": "m_1773107494660_4zxgad",
+      "inputA": "volcano",
+      "inputB": "custom_atom",
+      "output": "custom_sulfur",
+      "createdAt": 1773107494660,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107502535_ft98j9",
+      "inputA": "volcano",
+      "inputB": "custom_chemistry",
+      "output": "custom_sulfur",
+      "createdAt": 1773107502535,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107517932_i40aoy",
+      "inputA": "smog",
+      "inputB": "custom_atom",
+      "output": "custom_sulfur",
+      "createdAt": 1773107517932,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107527285_pgs1co",
+      "inputA": "smog",
+      "inputB": "custom_chemistry",
+      "output": "custom_sulfur",
+      "createdAt": 1773107527285,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107534825_5ezyck",
+      "inputA": "insect",
+      "inputB": "custom_atom",
+      "output": "custom_sulfur",
+      "createdAt": 1773107534825,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107547065_8cauin",
+      "inputA": "insect",
+      "inputB": "custom_chemistry",
+      "output": "custom_sulfur",
+      "createdAt": 1773107547065,
+      "outputElement": {
+        "id": "custom_sulfur",
+        "name": "Sulfur",
+        "category": "Technology",
+        "description": "Often found in insecticides and fungicides",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ctofqic33zi3xcrejyk3sca4jd36"
+      }
+    },
+    {
+      "id": "m_1773107780785_27ua0t",
+      "inputA": "custom_window",
+      "inputB": "custom_atom",
+      "output": "custom_argon",
+      "createdAt": 1773107780785,
+      "outputElement": {
+        "id": "custom_argon",
+        "name": "Argon",
+        "category": "Technology",
+        "description": "Purple noble gas",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/h5seyjdbvf5qr2ku8dijpflpnnkq"
+      }
+    },
+    {
+      "id": "m_1773107788048_aiagdw",
+      "inputA": "custom_window",
+      "inputB": "custom_chemistry",
+      "output": "custom_argon",
+      "createdAt": 1773107788048,
+      "outputElement": {
+        "id": "custom_argon",
+        "name": "Argon",
+        "category": "Technology",
+        "description": "Purple noble gas",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/h5seyjdbvf5qr2ku8dijpflpnnkq"
+      }
+    },
+    {
+      "id": "m_1773107915865_gup82w",
+      "inputA": "fruit",
+      "inputB": "custom_atom",
+      "output": "custom_potassium",
+      "createdAt": 1773107915865,
+      "outputElement": {
+        "id": "custom_potassium",
+        "name": "Potassium",
+        "category": "Technology",
+        "description": "The banana element!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/kg6d0fkdebfkaapmvb5uhz5khsel"
+      }
+    },
+    {
+      "id": "m_1773107927136_l2jop0",
+      "inputA": "fruit",
+      "inputB": "custom_chemistry",
+      "output": "custom_potassium",
+      "createdAt": 1773107927136,
+      "outputElement": {
+        "id": "custom_potassium",
+        "name": "Potassium",
+        "category": "Technology",
+        "description": "The banana element!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/kg6d0fkdebfkaapmvb5uhz5khsel"
+      }
+    },
+    {
+      "id": "m_1773108056276_cakukm",
+      "inputA": "stone",
+      "inputB": "custom_atom",
+      "output": "custom_calcium",
+      "createdAt": 1773108056276,
+      "outputElement": {
+        "id": "custom_calcium",
+        "name": "Calcium",
+        "category": "Technology",
+        "description": "Critical for bone health",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/dazt6z9m7hamnb1xkeanypnogfya"
+      }
+    },
+    {
+      "id": "m_1773108064840_zdqp04",
+      "inputA": "stone",
+      "inputB": "custom_chemistry",
+      "output": "custom_calcium",
+      "createdAt": 1773108064840,
+      "outputElement": {
+        "id": "custom_calcium",
+        "name": "Calcium",
+        "category": "Technology",
+        "description": "Critical for bone health",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/dazt6z9m7hamnb1xkeanypnogfya"
+      }
+    },
+    {
+      "id": "m_1773108164921_c14wzp",
+      "inputA": "custom_bicycle",
+      "inputB": "custom_atom",
+      "output": "custom_scandium",
+      "createdAt": 1773108164921,
+      "outputElement": {
+        "id": "custom_scandium",
+        "name": "Scandium",
+        "category": "Technology",
+        "description": "Structure enhancer used for sports equipment and space transportation",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/mmjvledsrcb7prfblpvyxf4ft2ew"
+      }
+    },
+    {
+      "id": "m_1773108175584_e0c09s",
+      "inputA": "custom_bicycle",
+      "inputB": "custom_chemistry",
+      "output": "custom_scandium",
+      "createdAt": 1773108175584,
+      "outputElement": {
+        "id": "custom_scandium",
+        "name": "Scandium",
+        "category": "Technology",
+        "description": "Structure enhancer used for sports equipment and space transportation",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/mmjvledsrcb7prfblpvyxf4ft2ew"
+      }
+    },
+    {
+      "id": "m_1773108417115_k4jbrw",
+      "inputA": "custom_space_ship",
+      "inputB": "custom_atom",
+      "output": "custom_titanium",
+      "createdAt": 1773108417115,
+      "outputElement": {
+        "id": "custom_titanium",
+        "name": "Titanium",
+        "category": "Technology",
+        "description": "Very strong metal element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3tup1j57wju58wcc2qqvgr956lqx"
+      }
+    },
+    {
+      "id": "m_1773108427385_1b28jk",
+      "inputA": "custom_space_ship",
+      "inputB": "custom_chemistry",
+      "output": "custom_titanium",
+      "createdAt": 1773108427385,
+      "outputElement": {
+        "id": "custom_titanium",
+        "name": "Titanium",
+        "category": "Technology",
+        "description": "Very strong metal element",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3tup1j57wju58wcc2qqvgr956lqx"
+      }
+    },
+    {
+      "id": "m_1773108527468_rn63e8",
+      "inputA": "custom_minecart",
+      "inputB": "custom_atom",
+      "output": "custom_vanadium",
+      "createdAt": 1773108527468,
+      "outputElement": {
+        "id": "custom_vanadium",
+        "name": "Vanadium",
+        "category": "Technology",
+        "description": "Rare metal that strengthens titanium alloys",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/hu6fh05m0psrew3en1azfcriocnv"
+      }
+    },
+    {
+      "id": "m_1773108538223_gvim67",
+      "inputA": "custom_minecart",
+      "inputB": "custom_chemistry",
+      "output": "custom_vanadium",
+      "createdAt": 1773108538223,
+      "outputElement": {
+        "id": "custom_vanadium",
+        "name": "Vanadium",
+        "category": "Technology",
+        "description": "Rare metal that strengthens titanium alloys",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/hu6fh05m0psrew3en1azfcriocnv"
+      }
+    },
+    {
+      "id": "m_1773108723743_naloye",
+      "inputA": "seed",
+      "inputB": "custom_atom",
+      "output": "custom_manganese",
+      "createdAt": 1773108723743,
+      "outputElement": {
+        "id": "custom_manganese",
+        "name": "Manganese",
+        "category": "Technology",
+        "description": "An element that supplements blood clotting and immune function",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9g01ua65cqmiyk9df0tzvsdbewtg"
+      }
+    },
+    {
+      "id": "m_1773108730835_zbo5r2",
+      "inputA": "seed",
+      "inputB": "custom_chemistry",
+      "output": "custom_manganese",
+      "createdAt": 1773108730835,
+      "outputElement": {
+        "id": "custom_manganese",
+        "name": "Manganese",
+        "category": "Technology",
+        "description": "An element that supplements blood clotting and immune function",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9g01ua65cqmiyk9df0tzvsdbewtg"
+      }
+    },
+    {
+      "id": "m_1773108762682_kcy8xo",
+      "inputA": "custom_ore",
+      "inputB": "coal",
+      "output": "iron",
+      "createdAt": 1773108762682
+    },
+    {
+      "id": "m_1773108791408_u2dkag",
+      "inputA": "metal",
+      "inputB": "stone",
+      "output": "iron",
+      "createdAt": 1773108791408
+    },
+    {
+      "id": "m_1773108875841_x9mtk0",
+      "inputA": "engine",
+      "inputB": "custom_atom",
+      "output": "custom_cobalt",
+      "createdAt": 1773108875841,
+      "outputElement": {
+        "id": "custom_cobalt",
+        "name": "Cobalt",
+        "category": "Technology",
+        "description": "Blue element used in electric vehicles, smartphones, and jet engines",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/apocob0uwdqfaaq6n88f7vdygayj"
+      }
+    },
+    {
+      "id": "m_1773108885891_av7i6f",
+      "inputA": "engine",
+      "inputB": "custom_chemistry",
+      "output": "custom_cobalt",
+      "createdAt": 1773108885891,
+      "outputElement": {
+        "id": "custom_cobalt",
+        "name": "Cobalt",
+        "category": "Technology",
+        "description": "Blue element used in electric vehicles, smartphones, and jet engines",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/apocob0uwdqfaaq6n88f7vdygayj"
+      }
+    },
+    {
+      "id": "m_1773108910079_aftr4v",
+      "inputA": "custom_turbine",
+      "inputB": "custom_atom",
+      "output": "custom_cobalt",
+      "createdAt": 1773108910079,
+      "outputElement": {
+        "id": "custom_cobalt",
+        "name": "Cobalt",
+        "category": "Technology",
+        "description": "Blue element used in electric vehicles, smartphones, and jet engines",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/apocob0uwdqfaaq6n88f7vdygayj"
+      }
+    },
+    {
+      "id": "m_1773108920751_lgp7ah",
+      "inputA": "custom_turbine",
+      "inputB": "custom_chemistry",
+      "output": "custom_cobalt",
+      "createdAt": 1773108920751,
+      "outputElement": {
+        "id": "custom_cobalt",
+        "name": "Cobalt",
+        "category": "Technology",
+        "description": "Blue element used in electric vehicles, smartphones, and jet engines",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/apocob0uwdqfaaq6n88f7vdygayj"
+      }
+    },
+    {
+      "id": "m_1773108989497_w4v1r2",
+      "inputA": "custom_alloy",
+      "inputB": "custom_atom",
+      "output": "custom_nickel",
+      "createdAt": 1773108989497,
+      "outputElement": {
+        "id": "custom_nickel",
+        "name": "Nickel",
+        "category": "Technology",
+        "description": "An element that makes great alloys",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/pjozbso28f4z5l1xgoedply596pj"
+      }
+    },
+    {
+      "id": "m_1773108997232_6kvvof",
+      "inputA": "custom_alloy",
+      "inputB": "custom_chemistry",
+      "output": "custom_nickel",
+      "createdAt": 1773108997232,
+      "outputElement": {
+        "id": "custom_nickel",
+        "name": "Nickel",
+        "category": "Technology",
+        "description": "An element that makes great alloys",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/pjozbso28f4z5l1xgoedply596pj"
+      }
+    },
+    {
+      "id": "m_1773109098853_12pebw",
+      "inputA": "medicine",
+      "inputB": "custom_atom",
+      "output": "custom_zinc",
+      "createdAt": 1773109098853,
+      "outputElement": {
+        "id": "custom_zinc",
+        "name": "Zinc",
+        "category": "Technology",
+        "description": "Superhero element used for wound healing and cell division",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9ujssi99fcfs236t7trhky34z9jw"
+      }
+    },
+    {
+      "id": "m_1773109107948_mqhwoc",
+      "inputA": "medicine",
+      "inputB": "custom_chemistry",
+      "output": "custom_zinc",
+      "createdAt": 1773109107948,
+      "outputElement": {
+        "id": "custom_zinc",
+        "name": "Zinc",
+        "category": "Technology",
+        "description": "Superhero element used for wound healing and cell division",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/9ujssi99fcfs236t7trhky34z9jw"
+      }
+    },
+    {
+      "id": "m_1773109219073_a5x1xp",
+      "inputA": "custom_heat_pack",
+      "inputB": "custom_atom",
+      "output": "custom_gallium",
+      "createdAt": 1773109219073,
+      "outputElement": {
+        "id": "custom_gallium",
+        "name": "Gallium",
+        "category": "Technology",
+        "description": "It's melting point is so low it'll melt in your hands",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3vz6tf725u9gtj9dyswufu50anwr"
+      }
+    },
+    {
+      "id": "m_1773109228113_i7ufse",
+      "inputA": "custom_heat_pack",
+      "inputB": "custom_chemistry",
+      "output": "custom_gallium",
+      "createdAt": 1773109228113,
+      "outputElement": {
+        "id": "custom_gallium",
+        "name": "Gallium",
+        "category": "Technology",
+        "description": "It's melting point is so low it'll melt in your hands",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3vz6tf725u9gtj9dyswufu50anwr"
+      }
+    },
+    {
+      "id": "m_1773109239659_78dilt",
+      "inputA": "custom_heatwave",
+      "inputB": "custom_atom",
+      "output": "custom_gallium",
+      "createdAt": 1773109239659,
+      "outputElement": {
+        "id": "custom_gallium",
+        "name": "Gallium",
+        "category": "Technology",
+        "description": "It's melting point is so low it'll melt in your hands",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3vz6tf725u9gtj9dyswufu50anwr"
+      }
+    },
+    {
+      "id": "m_1773109257617_t2ssua",
+      "inputA": "custom_heatwave",
+      "inputB": "custom_chemistry",
+      "output": "custom_gallium",
+      "createdAt": 1773109257617,
+      "outputElement": {
+        "id": "custom_gallium",
+        "name": "Gallium",
+        "category": "Technology",
+        "description": "It's melting point is so low it'll melt in your hands",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/3vz6tf725u9gtj9dyswufu50anwr"
+      }
+    },
+    {
+      "id": "m_1773109360117_e12v7x",
+      "inputA": "custom_solar_cell",
+      "inputB": "custom_atom",
+      "output": "custom_germanium",
+      "createdAt": 1773109360117,
+      "outputElement": {
+        "id": "custom_germanium",
+        "name": "Germanium",
+        "category": "Technology",
+        "description": "Element used in solar panels and cells",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/4vifbtobo54q8uy3bukl20epzz9i"
+      }
+    },
+    {
+      "id": "m_1773109374184_9rnej2",
+      "inputA": "custom_solar_cell",
+      "inputB": "custom_chemistry",
+      "output": "custom_germanium",
+      "createdAt": 1773109374184,
+      "outputElement": {
+        "id": "custom_germanium",
+        "name": "Germanium",
+        "category": "Technology",
+        "description": "Element used in solar panels and cells",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/4vifbtobo54q8uy3bukl20epzz9i"
+      }
+    },
+    {
+      "id": "m_1773109382684_idnuy3",
+      "inputA": "solar_panel",
+      "inputB": "custom_atom",
+      "output": "custom_germanium",
+      "createdAt": 1773109382684,
+      "outputElement": {
+        "id": "custom_germanium",
+        "name": "Germanium",
+        "category": "Technology",
+        "description": "Element used in solar panels and cells",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/4vifbtobo54q8uy3bukl20epzz9i"
+      }
+    },
+    {
+      "id": "m_1773109393056_131ij2",
+      "inputA": "solar_panel",
+      "inputB": "custom_chemistry",
+      "output": "custom_germanium",
+      "createdAt": 1773109393056,
+      "outputElement": {
+        "id": "custom_germanium",
+        "name": "Germanium",
+        "category": "Technology",
+        "description": "Element used in solar panels and cells",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/4vifbtobo54q8uy3bukl20epzz9i"
+      }
+    },
+    {
+      "id": "m_1773109454386_ummyh7",
+      "inputA": "custom_fart",
+      "inputB": "custom_atom",
+      "output": "custom_chlorine",
+      "createdAt": 1773109454386,
+      "outputElement": {
+        "id": "custom_chlorine",
+        "name": "Chlorine",
+        "category": "Technology",
+        "description": "Very toxic, reactive gas",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a4pleoib08veam6rjivw101zgdgc"
+      }
+    },
+    {
+      "id": "m_1773109462102_7fy249",
+      "inputA": "custom_fart",
+      "inputB": "custom_chemistry",
+      "output": "custom_chlorine",
+      "createdAt": 1773109462102,
+      "outputElement": {
+        "id": "custom_chlorine",
+        "name": "Chlorine",
+        "category": "Technology",
+        "description": "Very toxic, reactive gas",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/a4pleoib08veam6rjivw101zgdgc"
+      }
+    },
+    {
+      "id": "m_1773109479585_ivs9ev",
+      "inputA": "custom_poison",
+      "inputB": "custom_atom",
+      "output": "custom_arsenic",
+      "createdAt": 1773109479585,
+      "outputElement": {
+        "id": "custom_arsenic",
+        "name": "Arsenic",
+        "category": "Technology",
+        "description": "One of the most toxic elements",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/bpcj4wv4kg3dcy7tm0pjouf9xb2h"
+      }
+    },
+    {
+      "id": "m_1773109489025_f6zmx0",
+      "inputA": "custom_poison",
+      "inputB": "custom_chemistry",
+      "output": "custom_arsenic",
+      "createdAt": 1773109489025,
+      "outputElement": {
+        "id": "custom_arsenic",
+        "name": "Arsenic",
+        "category": "Technology",
+        "description": "One of the most toxic elements",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/bpcj4wv4kg3dcy7tm0pjouf9xb2h"
+      }
+    },
+    {
+      "id": "m_1773154230957_ee44fx",
+      "inputA": "sun",
+      "inputB": "custom_atom",
+      "output": "custom_selenium",
+      "createdAt": 1773154230957,
+      "outputElement": {
+        "id": "custom_selenium",
+        "name": "Selenium",
+        "category": "Weird",
+        "description": "A new element born from sun + atom.",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "•"
+      }
+    },
+    {
+      "id": "m_1773154239729_ut8ad8",
+      "inputA": "custom_chemistry",
+      "inputB": "sun",
+      "output": "custom_selenium",
+      "createdAt": 1773154239729,
+      "outputElement": {
+        "id": "custom_selenium",
+        "name": "Selenium",
+        "category": "Weird",
+        "description": "A new element born from sun + atom.",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "✨"
+      }
+    },
+    {
+      "id": "m_1773154450733_qme5rn",
+      "inputA": "lake",
+      "inputB": "custom_atom",
+      "output": "custom_bromine",
+      "createdAt": 1773154450733,
+      "outputElement": {
+        "id": "custom_bromine",
+        "name": "Bromine",
+        "category": "Technology",
+        "description": "Found in brine, seawater, and salt lakes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/zpg57vgyty0dxjc0d76nunm77eq0"
+      }
+    },
+    {
+      "id": "m_1773154459855_n6qs4c",
+      "inputA": "lake",
+      "inputB": "custom_chemistry",
+      "output": "custom_bromine",
+      "createdAt": 1773154459855,
+      "outputElement": {
+        "id": "custom_bromine",
+        "name": "Bromine",
+        "category": "Technology",
+        "description": "Found in brine, seawater, and salt lakes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/zpg57vgyty0dxjc0d76nunm77eq0"
+      }
+    },
+    {
+      "id": "m_1773154477161_c5yenq",
+      "inputA": "swamp",
+      "inputB": "custom_atom",
+      "output": "custom_bromine",
+      "createdAt": 1773154477161,
+      "outputElement": {
+        "id": "custom_bromine",
+        "name": "Bromine",
+        "category": "Technology",
+        "description": "Found in brine, seawater, and salt lakes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/zpg57vgyty0dxjc0d76nunm77eq0"
+      }
+    },
+    {
+      "id": "m_1773154486473_5gbqgs",
+      "inputA": "swamp",
+      "inputB": "custom_chemistry",
+      "output": "custom_bromine",
+      "createdAt": 1773154486473,
+      "outputElement": {
+        "id": "custom_bromine",
+        "name": "Bromine",
+        "category": "Technology",
+        "description": "Found in brine, seawater, and salt lakes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/zpg57vgyty0dxjc0d76nunm77eq0"
+      }
+    },
+    {
+      "id": "m_1773154726714_caohds",
+      "inputA": "custom_light_bulb",
+      "inputB": "custom_wave",
+      "output": "custom_laser",
+      "createdAt": 1773154726714,
+      "outputElement": {
+        "id": "custom_laser",
+        "name": "Laser",
+        "category": "Technology",
+        "description": "Concentrated light energy",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/kmdxwa7scr17uox8cl7wwx4aph3l"
+      }
+    },
+    {
+      "id": "m_1773155035486_kfew1t",
+      "inputA": "custom_laser",
+      "inputB": "custom_light_bulb",
+      "output": "custom_krypton",
+      "createdAt": 1773155035486,
+      "outputElement": {
+        "id": "custom_krypton",
+        "name": "Krypton",
+        "category": "Technology",
+        "description": "Not to be confused with Kryptonite",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2z50r9w5409xjv30j7vmf6eow9oa"
+      }
+    },
+    {
+      "id": "m_1773155045443_phwnfe",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_laser",
+      "output": "custom_krypton",
+      "createdAt": 1773155045443,
+      "outputElement": {
+        "id": "custom_krypton",
+        "name": "Krypton",
+        "category": "Technology",
+        "description": "Not to be confused with Kryptonite",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2z50r9w5409xjv30j7vmf6eow9oa"
+      }
+    },
+    {
+      "id": "m_1773155507216_yvaugw",
+      "inputA": "custom_gps",
+      "inputB": "custom_atom",
+      "output": "custom_rubidium",
+      "createdAt": 1773155507216,
+      "outputElement": {
+        "id": "custom_rubidium",
+        "name": "Rubidium",
+        "category": "Technology",
+        "description": "High precision element used in GPS and atomic clocks",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/7hsxv66nl7ye4mokg010efd311rf"
+      }
+    },
+    {
+      "id": "m_1773155514321_4gejn7",
+      "inputA": "custom_gps",
+      "inputB": "custom_chemistry",
+      "output": "custom_rubidium",
+      "createdAt": 1773155514321,
+      "outputElement": {
+        "id": "custom_rubidium",
+        "name": "Rubidium",
+        "category": "Technology",
+        "description": "High precision element used in GPS and atomic clocks",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/7hsxv66nl7ye4mokg010efd311rf"
+      }
+    },
+    {
+      "id": "m_1773155522111_22bllv",
+      "inputA": "custom_ceramic",
+      "inputB": "custom_atom",
+      "output": "custom_rubidium",
+      "createdAt": 1773155522111,
+      "outputElement": {
+        "id": "custom_rubidium",
+        "name": "Rubidium",
+        "category": "Technology",
+        "description": "High precision element used in GPS and atomic clocks",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/7hsxv66nl7ye4mokg010efd311rf"
+      }
+    },
+    {
+      "id": "m_1773155531953_sbih07",
+      "inputA": "custom_ceramic",
+      "inputB": "custom_chemistry",
+      "output": "custom_rubidium",
+      "createdAt": 1773155531953,
+      "outputElement": {
+        "id": "custom_rubidium",
+        "name": "Rubidium",
+        "category": "Technology",
+        "description": "High precision element used in GPS and atomic clocks",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/7hsxv66nl7ye4mokg010efd311rf"
+      }
+    },
+    {
+      "id": "m_1773155982438_hg90rj",
+      "inputA": "custom_magnet",
+      "inputB": "custom_atom",
+      "output": "custom_strontium",
+      "createdAt": 1773155982438,
+      "outputElement": {
+        "id": "custom_strontium",
+        "name": "Strontium",
+        "category": "Technology",
+        "description": "Element used in magnets and television tubes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1blrbm5abnue55zv9f4pc6e87yuv"
+      }
+    },
+    {
+      "id": "m_1773155990068_2j2411",
+      "inputA": "custom_magnet",
+      "inputB": "custom_chemistry",
+      "output": "custom_strontium",
+      "createdAt": 1773155990068,
+      "outputElement": {
+        "id": "custom_strontium",
+        "name": "Strontium",
+        "category": "Technology",
+        "description": "Element used in magnets and television tubes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1blrbm5abnue55zv9f4pc6e87yuv"
+      }
+    },
+    {
+      "id": "m_1773155999182_j2w3ta",
+      "inputA": "custom_television",
+      "inputB": "custom_atom",
+      "output": "custom_strontium",
+      "createdAt": 1773155999182,
+      "outputElement": {
+        "id": "custom_strontium",
+        "name": "Strontium",
+        "category": "Technology",
+        "description": "Element used in magnets and television tubes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1blrbm5abnue55zv9f4pc6e87yuv"
+      }
+    },
+    {
+      "id": "m_1773156009516_5dgm85",
+      "inputA": "custom_television",
+      "inputB": "custom_chemistry",
+      "output": "custom_strontium",
+      "createdAt": 1773156009516,
+      "outputElement": {
+        "id": "custom_strontium",
+        "name": "Strontium",
+        "category": "Technology",
+        "description": "Element used in magnets and television tubes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/1blrbm5abnue55zv9f4pc6e87yuv"
+      }
+    },
+    {
+      "id": "m_1773161431429_a2du46",
+      "inputA": "custom_oven",
+      "inputB": "custom_wave",
+      "output": "custom_microwave",
+      "createdAt": 1773161431429,
+      "outputElement": {
+        "id": "custom_microwave",
+        "name": "Microwave",
+        "category": "Technology",
+        "description": "Beep beep beep!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/pknmsmhuzh20bfieorcrkul5kpg0"
+      }
+    },
+    {
+      "id": "m_1773161481071_teps7w",
+      "inputA": "custom_microwave",
+      "inputB": "custom_atom",
+      "output": "custom_yttrium",
+      "createdAt": 1773161481071,
+      "outputElement": {
+        "id": "custom_yttrium",
+        "name": "Yttrium",
+        "category": "Technology",
+        "description": "Rare metal element used in LED screens, microwaves, and superconductors",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2acbxomnevonu7wqbbp9oz7l9y1h"
+      }
+    },
+    {
+      "id": "m_1773161489877_9lp0np",
+      "inputA": "custom_microwave",
+      "inputB": "custom_chemistry",
+      "output": "custom_yttrium",
+      "createdAt": 1773161489877,
+      "outputElement": {
+        "id": "custom_yttrium",
+        "name": "Yttrium",
+        "category": "Technology",
+        "description": "Rare metal element used in LED screens, microwaves, and superconductors",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2acbxomnevonu7wqbbp9oz7l9y1h"
+      }
+    },
+    {
+      "id": "m_1773161818153_xb0yy8",
+      "inputA": "custom_power_plant",
+      "inputB": "custom_atom",
+      "output": "custom_zirconium",
+      "createdAt": 1773161818153,
+      "outputElement": {
+        "id": "custom_zirconium",
+        "name": "Zirconium",
+        "category": "Technology",
+        "description": "Element used in making metal corrosion resistant and nuclear fuel rod cladding",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/48psvucnup3a5sqwoacsif4agozs"
+      }
+    },
+    {
+      "id": "m_1773161827417_sjt34g",
+      "inputA": "custom_power_plant",
+      "inputB": "custom_chemistry",
+      "output": "custom_zirconium",
+      "createdAt": 1773161827417,
+      "outputElement": {
+        "id": "custom_zirconium",
+        "name": "Zirconium",
+        "category": "Technology",
+        "description": "Element used in making metal corrosion resistant and nuclear fuel rod cladding",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/48psvucnup3a5sqwoacsif4agozs"
+      }
+    },
+    {
+      "id": "m_1773161940257_y4m3yx",
+      "inputA": "copper",
+      "inputB": "tool",
+      "output": "custom_wire",
+      "createdAt": 1773161940257,
+      "outputWorldEffects": {
+        "technology": 1
+      },
+      "outputElement": {
+        "id": "custom_wire",
+        "name": "Wire",
+        "category": "Weird",
+        "description": "Coils used to connect two things",
+        "tags": [
+          "custom",
+          "player-made",
+          "recovered"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/umku2lccfv7s69wse9g7eodda70y",
+        "worldEffects": {
+          "technology": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773162046260_kjp1px",
+      "inputA": "water",
+      "inputB": "custom_wire",
+      "output": "custom_pipe",
+      "createdAt": 1773162046260,
+      "outputElement": {
+        "id": "custom_pipe",
+        "name": "Pipe",
+        "category": "Tools",
+        "description": "Good for transporting fluid in a modern fashion",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/58p4hm4fb34sv1yzanl0u3xunzgl"
+      }
+    },
+    {
+      "id": "m_1773162097357_5wsq9h",
+      "inputA": "custom_pipe",
+      "inputB": "custom_pipe",
+      "output": "custom_pipeline",
+      "createdAt": 1773162097357,
+      "outputElement": {
+        "id": "custom_pipeline",
+        "name": "Pipeline",
+        "category": "Tools",
+        "description": "Interconnected pipes",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/dxtitrn0kgay4i2n3lwpzswp3o3e"
+      }
+    },
+    {
+      "id": "m_1773162918610_d39q0f",
+      "inputA": "custom_pipe",
+      "inputB": "custom_atom",
+      "output": "custom_niobium",
+      "createdAt": 1773162918610,
+      "outputElement": {
+        "id": "custom_niobium",
+        "name": "Niobium",
+        "category": "Technology",
+        "description": "Vital element in constructing pipelines and MRI scanners",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2y92ocxfq7icy3nzk4acqg208yoi"
+      }
+    },
+    {
+      "id": "m_1773162927757_c2qios",
+      "inputA": "custom_pipe",
+      "inputB": "custom_chemistry",
+      "output": "custom_niobium",
+      "createdAt": 1773162927757,
+      "outputElement": {
+        "id": "custom_niobium",
+        "name": "Niobium",
+        "category": "Technology",
+        "description": "Vital element in constructing pipelines and MRI scanners",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2y92ocxfq7icy3nzk4acqg208yoi"
+      }
+    },
+    {
+      "id": "m_1773162939468_iqq815",
+      "inputA": "custom_pipeline",
+      "inputB": "custom_atom",
+      "output": "custom_niobium",
+      "createdAt": 1773162939468,
+      "outputElement": {
+        "id": "custom_niobium",
+        "name": "Niobium",
+        "category": "Technology",
+        "description": "Vital element in constructing pipelines and MRI scanners",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2y92ocxfq7icy3nzk4acqg208yoi"
+      }
+    },
+    {
+      "id": "m_1773162947873_y8wt88",
+      "inputA": "custom_pipeline",
+      "inputB": "custom_chemistry",
+      "output": "custom_niobium",
+      "createdAt": 1773162947873,
+      "outputElement": {
+        "id": "custom_niobium",
+        "name": "Niobium",
+        "category": "Technology",
+        "description": "Vital element in constructing pipelines and MRI scanners",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/2y92ocxfq7icy3nzk4acqg208yoi"
+      }
+    },
+    {
+      "id": "m_1773163287216_vih811",
+      "inputA": "custom_atom",
+      "inputB": "tool",
+      "output": "custom_molybdenum",
+      "createdAt": 1773163287216,
+      "outputElement": {
+        "id": "custom_molybdenum",
+        "name": "Molybdenum",
+        "category": "Technology",
+        "description": "Element used in many tools across aerospace, automotive, and construction industries",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d8ktkmx7mqg0iofc7qn8e1loh7sl"
+      }
+    },
+    {
+      "id": "m_1773163297077_optsu0",
+      "inputA": "custom_chemistry",
+      "inputB": "tool",
+      "output": "custom_molybdenum",
+      "createdAt": 1773163297077,
+      "outputElement": {
+        "id": "custom_molybdenum",
+        "name": "Molybdenum",
+        "category": "Technology",
+        "description": "Element used in many tools across aerospace, automotive, and construction industries",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/d8ktkmx7mqg0iofc7qn8e1loh7sl"
+      }
+    },
+    {
+      "id": "m_1773163513600_btundi",
+      "inputA": "custom_atom",
+      "inputB": "custom_laboratory",
+      "output": "custom_technetium",
+      "createdAt": 1773163513600,
+      "outputElement": {
+        "id": "custom_technetium",
+        "name": "Technetium",
+        "category": "Technology",
+        "description": "Its isotope is widely used as a radioactive tracer in nuclear medicine",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/0h8h99a76lf6sov5m09hwofdogao"
+      }
+    },
+    {
+      "id": "m_1773163521958_acafnm",
+      "inputA": "custom_chemistry",
+      "inputB": "custom_laboratory",
+      "output": "custom_technetium",
+      "createdAt": 1773163521958,
+      "outputElement": {
+        "id": "custom_technetium",
+        "name": "Technetium",
+        "category": "Technology",
+        "description": "Its isotope is widely used as a radioactive tracer in nuclear medicine",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/0h8h99a76lf6sov5m09hwofdogao"
+      }
+    },
+    {
+      "id": "m_1773163782002_7muolw",
+      "inputA": "custom_writing",
+      "inputB": "tool",
+      "output": "custom_pen",
+      "createdAt": 1773163782002,
+      "outputElement": {
+        "id": "custom_pen",
+        "name": "Pen",
+        "category": "Tools",
+        "description": "Used to write",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/ppyz4w5j6h2t8krpp14vwaemje4k"
+      }
+    },
+    {
+      "id": "m_1773163823726_xvnmlo",
+      "inputA": "custom_pen",
+      "inputB": "custom_atom",
+      "output": "custom_ruthenium",
+      "createdAt": 1773163823726,
+      "outputElement": {
+        "id": "custom_ruthenium",
+        "name": "Ruthenium",
+        "category": "Technology",
+        "description": "Used in hard disks and pen nibs... A valiant duo",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/n32u659hpyefellr22sjhar1av7x"
+      }
+    },
+    {
+      "id": "m_1773163833906_2vocun",
+      "inputA": "custom_pen",
+      "inputB": "custom_chemistry",
+      "output": "custom_ruthenium",
+      "createdAt": 1773163833906,
+      "outputElement": {
+        "id": "custom_ruthenium",
+        "name": "Ruthenium",
+        "category": "Technology",
+        "description": "Used in hard disks and pen nibs... A valiant duo",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/n32u659hpyefellr22sjhar1av7x"
+      }
+    },
+    {
+      "id": "m_1773163939028_36z7ui",
+      "inputA": "wheel",
+      "inputB": "custom_atom",
+      "output": "custom_chromium",
+      "createdAt": 1773163939028,
+      "outputElement": {
+        "id": "custom_chromium",
+        "name": "Chromium",
+        "category": "Technology",
+        "description": "Used in steel plating for vehicles",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jideziff0ht9rov5wqxmrfdj6cq6"
+      }
+    },
+    {
+      "id": "m_1773163947632_f39pzt",
+      "inputA": "wheel",
+      "inputB": "custom_chemistry",
+      "output": "custom_chromium",
+      "createdAt": 1773163947632,
+      "outputElement": {
+        "id": "custom_chromium",
+        "name": "Chromium",
+        "category": "Technology",
+        "description": "Used in steel plating for vehicles",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/jideziff0ht9rov5wqxmrfdj6cq6"
+      }
+    },
+    {
+      "id": "m_1773163988848_d6ifeh",
+      "inputA": "custom_car",
+      "inputB": "custom_atom",
+      "output": "custom_rhodium",
+      "createdAt": 1773163988848,
+      "outputElement": {
+        "id": "custom_rhodium",
+        "name": "Rhodium",
+        "category": "Technology",
+        "description": "Primary metal used in catalytic converters",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qjcca0pm4gtwt07jacxiispvt66y"
+      }
+    },
+    {
+      "id": "m_1773163995332_5wjkfp",
+      "inputA": "custom_car",
+      "inputB": "custom_chemistry",
+      "output": "custom_rhodium",
+      "createdAt": 1773163995332,
+      "outputElement": {
+        "id": "custom_rhodium",
+        "name": "Rhodium",
+        "category": "Technology",
+        "description": "Primary metal used in catalytic converters",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/qjcca0pm4gtwt07jacxiispvt66y"
+      }
+    },
+    {
+      "id": "m_1773164247753_8ev17m",
+      "inputA": "pollution",
+      "inputB": "custom_atom",
+      "output": "custom_palladium",
+      "createdAt": 1773164247753,
+      "outputElement": {
+        "id": "custom_palladium",
+        "name": "Palladium",
+        "category": "Technology",
+        "description": "This element is useful for removing toxic chemicals from the air",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/mil6fo6xqqmjei7oh6jm4i2d2lt4"
+      }
+    },
+    {
+      "id": "m_1773164257086_i3w4f6",
+      "inputA": "pollution",
+      "inputB": "custom_chemistry",
+      "output": "custom_palladium",
+      "createdAt": 1773164257086,
+      "outputElement": {
+        "id": "custom_palladium",
+        "name": "Palladium",
+        "category": "Technology",
+        "description": "This element is useful for removing toxic chemicals from the air",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/mil6fo6xqqmjei7oh6jm4i2d2lt4"
+      }
+    },
+    {
+      "id": "m_1773164349126_xwi3ib",
+      "inputA": "metal",
+      "inputB": "moon",
+      "output": "custom_silver",
+      "createdAt": 1773164349126,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164360254_ym41df",
+      "inputA": "metal",
+      "inputB": "custom_mirror",
+      "output": "custom_silver",
+      "createdAt": 1773164360254,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164370896_58hjub",
+      "inputA": "custom_mirror",
+      "inputB": "custom_atom",
+      "output": "custom_silver",
+      "createdAt": 1773164370896,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164377912_85vnz0",
+      "inputA": "custom_mirror",
+      "inputB": "custom_chemistry",
+      "output": "custom_silver",
+      "createdAt": 1773164377912,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164384662_2acx6l",
+      "inputA": "custom_atom",
+      "inputB": "moon",
+      "output": "custom_silver",
+      "createdAt": 1773164384662,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164392358_0ebbn2",
+      "inputA": "custom_chemistry",
+      "inputB": "moon",
+      "output": "custom_silver",
+      "createdAt": 1773164392358,
+      "outputElement": {
+        "id": "custom_silver",
+        "name": "Silver",
+        "category": "Technology",
+        "description": "Precious metal known for being antibacterial... and beautiful!",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/80o6miiatwavlmafjf1arp1q25i6"
+      }
+    },
+    {
+      "id": "m_1773164700079_tf8y5o",
+      "inputA": "plastic",
+      "inputB": "custom_atom",
+      "output": "custom_cadmium",
+      "createdAt": 1773164700079,
+      "outputElement": {
+        "id": "custom_cadmium",
+        "name": "Cadmium",
+        "category": "Technology",
+        "description": "Element primarily used in paint and plastic... great",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/xrdalvag653kvbqiepp4wx9a6dr8"
+      }
+    },
+    {
+      "id": "m_1773164710328_4sxaei",
+      "inputA": "plastic",
+      "inputB": "custom_chemistry",
+      "output": "custom_cadmium",
+      "createdAt": 1773164710328,
+      "outputElement": {
+        "id": "custom_cadmium",
+        "name": "Cadmium",
+        "category": "Technology",
+        "description": "Element primarily used in paint and plastic... great",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/xrdalvag653kvbqiepp4wx9a6dr8"
+      }
+    },
     {
       "id": "m_1773082972504_cx3got",
       "inputA": "atmosphere",
@@ -2806,16 +6921,6 @@
       }
     },
     {
-      "id": "m_1773091467228_q291d2",
-      "inputA": "brick",
-      "inputB": "water",
-      "output": "clay",
-      "createdAt": 1773091467228,
-      "outputWorldEffects": {
-        "earthy": 1
-      }
-    },
-    {
       "id": "m_1773091474598_the89e",
       "inputA": "brick",
       "inputB": "earth",
@@ -4744,16 +8849,6 @@
       }
     },
     {
-      "id": "m_1772921279500_ujjv9m",
-      "inputA": "plant",
-      "inputB": "earth",
-      "output": "tree",
-      "createdAt": 1772921279500,
-      "outputWorldEffects": {
-        "vegetation": 3
-      }
-    },
-    {
       "id": "m_1772921378105_crphg0",
       "inputA": "tree",
       "inputB": "tool",
@@ -6581,16 +10676,6 @@
       "inputB": "tool",
       "output": "custom_statue",
       "createdAt": 1772944999226
-    },
-    {
-      "id": "m_1772945008344_4hme2g",
-      "inputA": "stone",
-      "inputB": "water",
-      "output": "sand",
-      "createdAt": 1772945008344,
-      "outputWorldEffects": {
-        "earthy": 1
-      }
     },
     {
       "id": "m_1772945022672_lvfp4p",
