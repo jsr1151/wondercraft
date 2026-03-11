@@ -1,6 +1,24 @@
 {
-  "updatedAt": 1773269655456,
+  "updatedAt": 1773269665428,
   "recipes": [
+    {
+      "id": "m_1773269665276_sx5hk3",
+      "inputA": "village",
+      "inputB": "custom_explosion",
+      "output": "custom_war",
+      "createdAt": 1773269665276,
+      "outputElement": {
+        "id": "custom_war",
+        "name": "War",
+        "category": "Ruin",
+        "description": "The inevitable truth of humanity",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/u7foqpbv1c7hy3i3e0xvbu03zs4r"
+      }
+    },
     {
       "id": "m_1773269655173_um3tzq",
       "inputA": "human",
