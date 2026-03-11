@@ -1,6 +1,24 @@
 {
-  "updatedAt": 1773269665428,
+  "updatedAt": 1773269716068,
   "recipes": [
+    {
+      "id": "m_1773269715835_3jeag5",
+      "inputA": "human",
+      "inputB": "custom_weapon",
+      "output": "custom_soldier",
+      "createdAt": 1773269715835,
+      "outputElement": {
+        "id": "custom_soldier",
+        "name": "Soldier",
+        "category": "Humans",
+        "description": "A human sent out for combat",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/t1r27vh2hmgj27yxgiihgvvt1sjr"
+      }
+    },
     {
       "id": "m_1773269665276_sx5hk3",
       "inputA": "village",
