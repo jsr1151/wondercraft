@@ -1,6 +1,288 @@
 {
-  "updatedAt": 1773269716068,
+  "updatedAt": 1773347741869,
   "recipes": [
+    {
+      "id": "m_1773272221444_344rja",
+      "inputA": "custom_pestilence",
+      "inputB": "human",
+      "output": "custom_death",
+      "createdAt": 1773272221444,
+      "outputWorldEffects": {
+        "life": -1
+      },
+      "outputElement": {
+        "id": "custom_death",
+        "name": "Death",
+        "category": "Abstract",
+        "description": "One of the certainties of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/atwa7p9beoz6j1ofg4hy3e6u383t",
+        "worldEffects": {
+          "life": -1
+        }
+      }
+    },
+    {
+      "id": "m_1773269732536_ynszsm",
+      "inputA": "custom_soldier",
+      "inputB": "custom_soldier",
+      "output": "custom_war",
+      "createdAt": 1773269732536,
+      "outputElement": {
+        "id": "custom_war",
+        "name": "War",
+        "category": "Ruin",
+        "description": "The inevitable truth of humanity",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/u7foqpbv1c7hy3i3e0xvbu03zs4r"
+      }
+    },
+    {
+      "id": "m_1773270449411_asav32",
+      "inputA": "plant",
+      "inputB": "drought",
+      "output": "custom_famine",
+      "createdAt": 1773270449411,
+      "outputWorldEffects": {
+        "ruin": 3
+      },
+      "outputElement": {
+        "id": "custom_famine",
+        "name": "Famine",
+        "category": "Ruin",
+        "description": "A state in which food is scarce",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/aczz02onl93bi9dk4gg67w91j46s",
+        "worldEffects": {
+          "ruin": 3
+        }
+      }
+    },
+    {
+      "id": "m_1773270469524_yd06hp",
+      "inputA": "village",
+      "inputB": "drought",
+      "output": "custom_famine",
+      "createdAt": 1773270469524,
+      "outputWorldEffects": {
+        "ruin": 3
+      },
+      "outputElement": {
+        "id": "custom_famine",
+        "name": "Famine",
+        "category": "Ruin",
+        "description": "A state in which food is scarce",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/aczz02onl93bi9dk4gg67w91j46s",
+        "worldEffects": {
+          "ruin": 3
+        }
+      }
+    },
+    {
+      "id": "m_1773270594958_si4gaj",
+      "inputA": "swamp",
+      "inputB": "human",
+      "output": "custom_disease",
+      "createdAt": 1773270594958,
+      "outputWorldEffects": {
+        "ruin": 2
+      },
+      "outputElement": {
+        "id": "custom_disease",
+        "name": "Disease",
+        "category": "ruin",
+        "description": "The stem of feeling down",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/x0b17eowl5xafys8hpdrgac8pw6c",
+        "worldEffects": {
+          "ruin": 2
+        }
+      }
+    },
+    {
+      "id": "m_1773271664006_yl6wlu",
+      "inputA": "custom_disease",
+      "inputB": "village",
+      "output": "custom_epidemic",
+      "createdAt": 1773271664006,
+      "outputWorldEffects": {
+        "ruin": 3
+      },
+      "outputElement": {
+        "id": "custom_epidemic",
+        "name": "Epidemic",
+        "category": "Ruin",
+        "description": "A widespread disease outbreak in a community",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/lin0jreiwoca2s3n9du0qq2d0t3w",
+        "worldEffects": {
+          "ruin": 3
+        }
+      }
+    },
+    {
+      "id": "m_1773271714220_ad2or9",
+      "inputA": "human",
+      "inputB": "custom_disease",
+      "output": "custom_virus",
+      "createdAt": 1773271714220,
+      "outputWorldEffects": {
+        "ruin": 1
+      },
+      "outputElement": {
+        "id": "custom_virus",
+        "name": "Virus",
+        "category": "Ruin",
+        "description": "A truly worthless discovery",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/of8ujriqeju6tt5l61kuu5ancswp",
+        "worldEffects": {
+          "ruin": 1
+        }
+      }
+    },
+    {
+      "id": "m_1773271722498_fpyqyj",
+      "inputA": "custom_virus",
+      "inputB": "custom_virus",
+      "output": "custom_epidemic",
+      "createdAt": 1773271722498,
+      "outputWorldEffects": {
+        "ruin": 3
+      },
+      "outputElement": {
+        "id": "custom_epidemic",
+        "name": "Epidemic",
+        "category": "Ruin",
+        "description": "A widespread disease outbreak in a community",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/lin0jreiwoca2s3n9du0qq2d0t3w",
+        "worldEffects": {
+          "ruin": 3
+        }
+      }
+    },
+    {
+      "id": "m_1773271774150_fqtnvu",
+      "inputA": "custom_epidemic",
+      "inputB": "custom_epidemic",
+      "output": "custom_pandemic",
+      "createdAt": 1773271774150,
+      "outputWorldEffects": {
+        "ruin": 6
+      },
+      "outputElement": {
+        "id": "custom_pandemic",
+        "name": "Pandemic",
+        "category": "Ruin",
+        "description": "A global epidemic",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/nvfwxlyp232v2qtmqyiiz3d3xibu",
+        "worldEffects": {
+          "ruin": 6
+        }
+      }
+    },
+    {
+      "id": "m_1773272078381_7r73fx",
+      "inputA": "custom_pandemic",
+      "inputB": "custom_epidemic",
+      "output": "custom_pestilence",
+      "createdAt": 1773272078381,
+      "outputWorldEffects": {
+        "ruin": 12
+      },
+      "outputElement": {
+        "id": "custom_pestilence",
+        "name": "Pestilence",
+        "category": "Ruin",
+        "description": "An indicator of a plague",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/y975aqbghgq4eskdo3tt7pnhz9c6",
+        "worldEffects": {
+          "ruin": 12
+        }
+      }
+    },
+    {
+      "id": "m_1773272093615_zsu163",
+      "inputA": "custom_pandemic",
+      "inputB": "custom_pandemic",
+      "output": "custom_pestilence",
+      "createdAt": 1773272093615,
+      "outputWorldEffects": {
+        "ruin": 12
+      },
+      "outputElement": {
+        "id": "custom_pestilence",
+        "name": "Pestilence",
+        "category": "Ruin",
+        "description": "An indicator of a plague",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/y975aqbghgq4eskdo3tt7pnhz9c6",
+        "worldEffects": {
+          "ruin": 12
+        }
+      }
+    },
+    {
+      "id": "m_1773272200107_7wo5fa",
+      "inputA": "human",
+      "inputB": "time",
+      "output": "custom_death",
+      "createdAt": 1773272200107,
+      "outputWorldEffects": {
+        "life": -1
+      },
+      "outputElement": {
+        "id": "custom_death",
+        "name": "Death",
+        "category": "Abstract",
+        "description": "One of the certainties of life",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/atwa7p9beoz6j1ofg4hy3e6u383t",
+        "worldEffects": {
+          "life": -1
+        }
+      }
+    },
     {
       "id": "m_1773269715835_3jeag5",
       "inputA": "human",
