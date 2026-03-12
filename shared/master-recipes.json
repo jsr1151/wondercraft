@@ -1,6 +1,24 @@
 {
-  "updatedAt": 1773351482619,
+  "updatedAt": 1773351499768,
   "recipes": [
+    {
+      "id": "m_1773351499619_4fnaca",
+      "inputA": "custom_death",
+      "inputB": "animal",
+      "output": "custom_corpse",
+      "createdAt": 1773351499619,
+      "outputElement": {
+        "id": "custom_corpse",
+        "name": "Corpse",
+        "category": "Ruin",
+        "description": "The remains of the dead",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/t91tcsq9t1t313l6x4fca8nkr8o2"
+      }
+    },
     {
       "id": "m_1773351482377_oskyxn",
       "inputA": "human",
