@@ -1,6 +1,24 @@
 {
-  "updatedAt": 1773351499768,
+  "updatedAt": 1773351552456,
   "recipes": [
+    {
+      "id": "m_1773351552150_k20umm",
+      "inputA": "custom_death",
+      "inputB": "earth",
+      "output": "custom_grave",
+      "createdAt": 1773351552150,
+      "outputElement": {
+        "id": "custom_grave",
+        "name": "Grave",
+        "category": "Civilization",
+        "description": "RIP",
+        "tags": [
+          "custom",
+          "player-made"
+        ],
+        "emoji": "https://imgproxy.attic.sh/insecure/f:png/plain/https://attic.sh/yftjnhu4awluy0owfol2pnfl1n43"
+      }
+    },
     {
       "id": "m_1773351499619_4fnaca",
       "inputA": "custom_death",
